@@ -3,26 +3,15 @@ title: "Week 1 — Intro"
 format:
   revealjs:
     toc: true
-  ipynb: default
-# (Optional) both outputs at once:
-# format: [revealjs, ipynb]
+# format: [revealjs]
 ---
 
-::: {.content-visible when-format="revealjs"}
+::: {}
 ## Course Overview
 - goals, schedule, grading
 :::
 
-::: {.content-visible when-format="ipynb"}
-# Week 1 Exercises
-
-This notebook is designed for Google Colab.  
-Click the badge below to open in Colab:
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/USER/REPO/blob/main/weeks/week-01/lesson.ipynb) #Replace with actual link
-:::
-
-::: {.content-visible when-format="revealjs"}
+::: {}
 ## Course Overview
 - goals, schedule, grading
 :::
