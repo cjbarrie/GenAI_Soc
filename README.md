@@ -1,2 +1,2 @@
-# GenAI_NYU
+# GenAI_Soc
 Course repo. for Gen AI class
