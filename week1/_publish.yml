@@ -1,0 +1,6 @@
+- source: week1.qmd
+  quarto-pub:
+    - id: bb9e5ddf-7dcc-475e-bfd2-26ccd20313d9
+      url: https://cjbarrie.quarto.pub/week-1-—-intro
+    - id: d311150c-5227-4d55-81e8-e5c06e3b0740
+      url: https://cjbarrie.quarto.pub/week1genai

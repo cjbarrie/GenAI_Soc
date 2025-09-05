@@ -1,17 +1,180 @@
 ---
-title: "Week 1 — Intro"
+title: "Week 1: Gen AI for Sociology"
 format:
   revealjs:
-    toc: true
+    toc: false
 # format: [revealjs]
 ---
 
-::: {}
+
 ## Course Overview
 - goals, schedule, grading
+
+## Discussion
+
+::: incremental
+- introductions
+- how do you use AI (LLMs)?
+- what are your interests?
+- is it stopping your from learning?
+- do you ever stop to question yourself?
+- how does it feel to be a grad. student in this moment?
 :::
 
-::: {}
-## Course Overview
-- goals, schedule, grading
+## AI "Policy"
+- Here's my thoughts...
+
+##
+
+![](images/statement.png){fig-align="center"}
+
+## AI is booming
+
+![](images/ajs.png){fig-align="center"}
+
+## AI is booming (part 2)
+
+![](images/asr.png){fig-align="center"}
+
+## AI is booming (part 3)
+
+![](images/smr.png){fig-align="center"}
+
+## Where do we place all of this stuff??
+
+Situating the field
+
+::: incremental
+- Text as data
+- Machine learning
+- Algorithmic bias
+- Simulation
 :::
+
+## Text as data
+
+::: incremental
+- Using text as a source of data for social science research
+- Coding according to rules and textual features
+:::
+
+## Some early examples
+
+![](images/franzosi.png){fig-align="center"}
+
+## Some early examples
+
+![](images/lasswell2.png){fig-align="center"}
+
+## Some early examples
+
+![](images/lasswell.png){fig-align="center"}
+
+## Some modern-day renewals
+
+![](images/stuhler.png){fig-align="center"}
+
+## Machine learning
+
+![](images/ml.png){fig-align="center"}
+
+## Some recent examples
+
+![](images/bonikowski.png){fig-align="center"}
+
+## Some recent examples
+
+![](images/bernasco.png){fig-align="center"}
+
+## Some recent examples
+
+![](images/do.png){fig-align="center"}
+
+## Algorithmic bias
+
+## Some recent examples
+
+![](images/rosen){fig-align="center"}
+
+## Some recent examples
+
+![](images/eiermann){fig-align="center"}
+
+## Some recent examples
+
+![](images/noble){fig-align="center"}
+
+## Simulation
+
+## Some early examples
+
+## Some early examples
+
+![](images/schelling){fig-align="center"}
+
+## Some early examples
+
+![](images/epstein){fig-align="center"}
+
+## Some more recent examples
+
+![](images/dellaposta){fig-align="center"}
+
+## So how do LLMs bring any of this together
+
+- LLMs both tool and object of inquiry (similar to ML)
+- LLMs can do (all? most?) of the above tasks
+
+## What am I talking about?
+
+## LLMs come from text as data
+
+:::incremental
+  - trained on massive corpora of text
+  - learn patterns in text
+  - generate text
+  - can follow codebooks
+:::
+
+## LLMs are also machine learning
+
+:::incremental
+  - trained using machine learning techniques
+  - can be fine-tuned for specific tasks
+  - can be used as components in larger ML systems
+:::
+
+## LLMs can also be used in simulations
+
+:::incremental
+  - agents can be powered by LLMs
+  - can simulate human-like behavior
+  - can generate realistic scenarios
+:::
+
+## LLMs can be objects of study
+
+:::incremental
+  - how do they reflect biases in training data?
+  - how do they impact society?
+  - what are the ethical implications?
+:::
+
+## This creates massive opportunities
+
+:::incremental
+- We can annotate text at scale
+- We can build complex models of social phenomena
+- We can simulate complex social systems
+- We can study the impact of AI on society
+:::
+
+## But also massive challenges
+
+:::incremental
+- Ethical considerations
+- Bias and fairness
+- Interpretability
+- Reproducibility
+:::
+
