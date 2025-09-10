@@ -1,0 +1,6 @@
+- source: week2.qmd
+  quarto-pub:
+    - id: 88e57862-f42f-4f84-8f68-81b8a4e9e5c2
+      url: https://cjbarrie.quarto.pub/week-2-gen-ai-for-sociology
+    - id: 59844837-74c5-46b9-9b5b-7c168d9ab990
+      url: https://cjbarrie.quarto.pub/week2genai

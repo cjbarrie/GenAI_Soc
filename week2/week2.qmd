@@ -1,0 +1,529 @@
+---
+title: "Week 2: Gen AI for Sociology"
+format:
+  revealjs:
+    toc: false
+    slide-number: true
+    incremental: false
+    transition: fade
+    code-line-numbers: false
+---
+
+## Introduction
+
+
+
+## Word embeddings
+### What are they?
+
+- Word embeddings represent text as points in **vector space**
+- Two main approaches:
+  - *Frequency-based embeddings*: matrix arithmetic & factorization (e.g., **SVD**)  
+  - *Prediction-based embeddings*: neural networks
+
+
+
+## Word embeddings
+### But why…?
+
+Enable analysis of **meaning** beyond Bag-of-Words  
+(e.g., frequency counts, dictionaries, topic models)
+
+
+
+## Word embeddings
+### How so?
+
+- Measure **closeness of words** in vector space  
+- Based on the **distributional hypothesis**:  
+
+> *“You shall know a word by the company it keeps.”*  
+> — Firth (1957)
+
+
+
+## Word embeddings
+### Key concepts
+
+- **Context window**: number of words around the target word we count  
+- **Co-occurrence**: frequency two words appear together in a window  
+
+
+
+## Word embeddings
+### Context window example (h = 2)
+
+::: columns
+::: column
+<p style="font-size:1.05em; line-height:1.4; margin-top:0.25rem;">
+<span style="color:#555;">Sentence:</span><br>
+I like doing <span style="color:#e53935; font-weight:700;">text</span> analysis with Chris
+</p>
+
+<p style="font-size:0.9em; margin:0.25rem 0 0;">
+<span style="color:#e53935; font-weight:700;">target</span> = <span style="color:#e53935; font-weight:700;">text</span><br>
+<span style="color:#00bcd4; font-weight:700;">context (±2)</span> = <span style="color:#00bcd4; font-weight:700;">doing</span>, <span style="color:#00bcd4; font-weight:700;">analysis</span>
+</p>
+:::
+
+::: column
+<table style="font-size:0.85em; border-collapse:collapse; text-align:center; white-space:nowrap;">
+  <thead>
+    <tr>
+      <th style="padding:2px 6px;">Word</th>
+      <th style="padding:2px 6px;">I</th>
+      <th style="padding:2px 6px;">like</th>
+      <th style="padding:2px 6px;">doing</th>
+      <th style="padding:2px 6px;">text</th>
+      <th style="padding:2px 6px;">analysis</th>
+      <th style="padding:2px 6px;">with</th>
+      <th style="padding:2px 6px;">Chris</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding:2px 6px; font-weight:700; color:#e53935;">text</td>
+      <td>0</td>
+      <td>0</td>
+      <td><span style="color:#00bcd4; font-weight:700;">1</span></td>
+      <td>0</td>
+      <td><span style="color:#00bcd4; font-weight:700;">1</span></td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+:::
+:::
+
+
+
+## Scaling up
+
+- For a **book** → V × V matrix (V = vocabulary size)  
+- For a **corpus** → compute **PMI** (Pairwise Mutual Information)  
+  → estimate embeddings with **SVD**
+- General approach: use something like word2vec and SGNS
+
+
+
+<!-- ## Estimating embeddings -->
+<!-- ### Approach 1: SVD -->
+
+<!-- - Build a co-occurrence / PPMI matrix   -->
+<!-- - Use **singular value decomposition**   -->
+<!-- - Get lower-dimensional vectors capturing word associations   -->
+
+
+
+<!-- ## Probabilities -->
+
+<!-- $$ -->
+<!-- P(i,j)=\frac{X_{ij}}{N}, \qquad -->
+<!-- P(i)=\frac{r_i}{N}, \qquad -->
+<!-- P(j)=\frac{c_j}{N}. -->
+<!-- $$ -->
+
+
+
+<!-- ## Pointwise Mutual Information (PMI) -->
+
+<!-- $$ -->
+<!-- \operatorname{PMI}(i,j)=\log\!\frac{P(i,j)}{P(i)\,P(j)}. -->
+<!-- $$ -->
+
+
+
+<!-- ## Positive PMI (PPMI) -->
+
+<!-- $$ -->
+<!-- \operatorname{PPMI}(i,j)=\max\!\big(\operatorname{PMI}(i,j),\,0\big). -->
+<!-- $$ -->
+
+
+
+<!-- ## Estimating embeddings — SVD on PPMI -->
+
+
+
+<!-- ## Define the matrix -->
+
+<!-- Let $M=\operatorname{PPMI}\in\mathbb{R}^{V\times V}$. -->
+
+
+
+<!-- ## Truncated SVD (rank $d$) -->
+
+<!-- $$ -->
+<!-- M \approx U_d\,S_d\,V_d^\top, -->
+<!-- $$ -->
+
+<!-- ## Embeddings -->
+
+<!-- $$ -->
+<!-- E = U_d\,S_d^{1/2}\quad\text{(word vectors)}, \qquad -->
+<!-- C = V_d\,S_d^{1/2}\quad\text{(context vectors)}. -->
+<!-- $$ -->
+
+
+<!-- ## Key property — visual dot = cell -->
+
+<!-- Dot product in the $d$-dimensional embedding space recovers a PPMI entry: -->
+<!-- $$ -->
+<!-- \color{red}{e_i}^\top\,\color{purple}{c_j} -->
+<!-- \;\approx\; -->
+<!-- \color{teal}{M_{ij}}. -->
+<!-- $$ -->
+
+<!-- Matrix picture: -->
+<!-- $$ -->
+<!-- \color{teal}{ -->
+<!-- \left[\begin{array}{cccc} -->
+<!-- \cdots & \cdots & \cdots & \cdots\\ -->
+<!-- \cdots & \boxed{\,M_{ij}\,} & \cdots & \cdots\\ -->
+<!-- \cdots & \cdots & \cdots & \cdots -->
+<!-- \end{array}\right]} -->
+<!-- \;\approx\; -->
+<!-- \underbrace{\color{red}{ -->
+<!-- \left[\begin{array}{c} -->
+<!-- \vdots\\ -->
+<!-- e_i^\top\\ -->
+<!-- \vdots -->
+<!-- \end{array}\right]}}_{\text{select row $i$ of }E} -->
+<!-- \;\cdot\; -->
+<!-- \underbrace{\color{purple}{ -->
+<!-- \left[\begin{array}{c} -->
+<!-- \vdots\\ -->
+<!-- c_j\\ -->
+<!-- \vdots -->
+<!-- \end{array}\right]}}_{\text{select column $j$ of }C^\top} -->
+<!-- $$ -->
+
+<!-- ## Key property -->
+
+<!-- - Dimensions: $\color{red}{e_i^\top}\in\mathbb{R}^{1\times d}$, $\color{purple}{c_j}\in\mathbb{R}^{d\times 1}$, result $\in\mathbb{R}^{1\times 1}$.   -->
+<!-- - Intuition: PPMI “lives” in a low-rank subspace; $E$ and $C$ are its coordinates. -->
+
+<!-- $$ -->
+<!-- e_i^\top c_j \;\approx\; M_{ij} \;=\; \operatorname{PPMI}(i,j). -->
+<!-- $$ -->
+
+
+
+
+
+
+
+
+
+<!-- ## Factorization picture {.smaller} -->
+
+<!-- $$ -->
+<!-- \underbrace{ -->
+<!-- \begin{bmatrix} -->
+<!-- \cdot & \cdots & \cdot\\ -->
+<!-- \vdots & \ddots & \vdots\\ -->
+<!-- \cdot & \cdots & \cdot -->
+<!-- \end{bmatrix} -->
+<!-- }_{\scriptsize E\ (V\times d)} -->
+<!-- \;\times\; -->
+<!-- \underbrace{ -->
+<!-- \begin{bmatrix} -->
+<!-- \cdot & \cdots & \cdot\\ -->
+<!-- \vdots & \ddots & \vdots\\ -->
+<!-- \cdot & \cdots & \cdot -->
+<!-- \end{bmatrix}^{\!\top} -->
+<!-- }_{\scriptsize C^\top\ (d\times V)} -->
+<!-- \;=\; -->
+<!-- \underbrace{ -->
+<!-- \begin{bmatrix} -->
+<!-- \cdot & \cdots & \cdots & \cdot\\ -->
+<!-- \vdots & \ddots &  & \vdots\\ -->
+<!-- \cdot & \cdots & \cdots & \cdot -->
+<!-- \end{bmatrix} -->
+<!-- }_{\scriptsize M\ (V\times V)} -->
+<!-- $$ -->
+
+<!-- - Shapes: $(V\times d)\cdot(d\times V)=(V\times V)$   -->
+<!-- - Goal: choose $E,C$ so that $E\,C^\top \approx M$. -->
+
+
+
+
+## Estimating embeddings
+### Approach : word2vec
+
+- Train a shallow neural net  
+- Skip-gram: predict **context words** from target  
+- CBOW: predict **target word** from context  
+
+
+
+## Key settings
+### Context window
+
+- **Small (2–5):** syntax, local relations  
+- **Large (5–10+):** semantics, topical similarity  
+
+
+
+## Key settings
+### Dimensionality
+
+- Typical: **100–300 dimensions**  
+- Higher = more nuance, more compute  
+
+## Estimating embeddings — word2vec (SGNS)
+
+## Overview
+
+- Two embedding tables (learned):
+  - $E_{\text{in}}\in\mathbb{R}^{V\times d}$ (centers)
+  - $E_{\text{out}}\in\mathbb{R}^{V\times d}$ (contexts)
+- Score a pair $(c,o)$ with a **dot product** $s_{co}=e_c^\top c_o$
+- Train a **binary classifier**: real $(c,o)$ pairs vs. random **negative** pairs
+
+## Embedding lookup as matrix arithmetic {.smaller}
+
+Let $\mathbf{1}_c\in\mathbb{R}^{V}$ be a one-hot vector for token $c$.
+
+$$
+\underbrace{\mathbf{1}_c^\top}_{1\times V}
+\;\underbrace{E_{\text{in}}}_{V\times d}
+\;=\;
+\underbrace{e_c^\top}_{1\times d},
+\qquad
+\underbrace{\mathbf{1}_o^\top}_{1\times V}
+\;\underbrace{E_{\text{out}}}_{V\times d}
+\;=\;
+\underbrace{c_o^\top}_{1\times d}.
+$$
+
+Visual:
+$$
+\left[\begin{array}{c}
+\vdots\\
+\color{red}{\mathbf{1}_c^\top}\\
+\vdots
+\end{array}\right]
+\!\!
+\left[\begin{array}{ccc}
+\cdot&\cdots&\cdot\\[-2pt]
+\vdots& &\vdots\\[-2pt]
+\cdot&\cdots&\cdot
+\end{array}\right]
+=
+\color{red}{\big[e_c^\top\big]}
+\qquad
+\left[\begin{array}{c}
+\vdots\\
+\color{purple}{\mathbf{1}_o^\top}\\
+\vdots
+\end{array}\right]
+\!\!
+\left[\begin{array}{ccc}
+\cdot&\cdots&\cdot\\[-2pt]
+\vdots& &\vdots\\[-2pt]
+\cdot&\cdots&\cdot
+\end{array}\right]
+=
+\color{purple}{\big[c_o^\top\big]}
+$$
+
+## Tiny numeric example {.smaller}
+
+Given $V=5$ and $d=3$. Suppose the **4th row** of $E_{\text{in}}$ is $[\,0.2,\,-1.0,\,0.5\,]$.
+
+**One-hot row for token $c$ (the 4th token):**
+$$
+\mathbf{1}_c^\top = \big[\,0\ \ 0\ \ 0\ \ 1\ \ 0\,\big].
+$$
+
+**Row selection via matrix multiply:**
+$$
+\underbrace{\big[\,0\ 0\ 0\ 1\ 0\,\big]}_{\mathbf{1}_c^\top}
+\;
+\underbrace{\begin{bmatrix}
+\cdot & \cdot & \cdot\\[-2pt]
+\cdot & \cdot & \cdot\\[-2pt]
+\cdot & \cdot & \cdot\\[-2pt]
+\color{teal}{0.2} & \color{teal}{-1.0} & \color{teal}{0.5}\\[-2pt]
+\cdot & \cdot & \cdot
+\end{bmatrix}}_{E_{\text{in}}}
+\;=\;
+\underbrace{\big[\,\color{teal}{0.2}\ \ \color{teal}{-1.0}\ \ \color{teal}{0.5}\,\big]}_{e_c^\top}.
+$$
+
+Same idea with $E_{\text{out}}$ picks out the context vector $c_o^\top$ (with embeddings initialized at random). 
+
+
+## Scoring a pair (center, context)
+
+Dot product score:
+$$
+s_{co}=e_c^\top c_o \in \mathbb{R}.
+$$
+
+Interpretation: large $s_{co}$ means “$o$ is a plausible context for $c$.”
+
+
+## Negative sampling (unigram$^{\,0.75}$)
+
+For each positive pair $(c,o)$, draw $K$ **negatives** $n_1,\dots,n_K$ i.i.d. from
+$$
+p_{\text{neg}}(w)\;\propto\; f(w)^{\,0.75},
+$$
+where $f(w)$ is the unigram count. This down-weights stopwords while keeping them in play.
+
+
+## Visual: dot = cell (like SVD)
+
+$$
+\color{teal}{
+\left[\begin{array}{cccc}
+\cdots & \cdots & \cdots & \cdots\\
+\cdots & \boxed{\,S_{co}\,} & \cdots & \cdots\\
+\cdots & \cdots & \cdots & \cdots
+\end{array}\right]}
+\;=\;
+\underbrace{\color{red}{
+\left[\begin{array}{c}
+\vdots\\
+e_c^\top\\
+\vdots
+\end{array}\right]}}_{\text{row $c$ of }E_{\text{in}}}
+\cdot
+\underbrace{\color{purple}{
+\left[\begin{array}{c}
+\vdots\\
+c_o\\
+\vdots
+\end{array}\right]}}_{\text{column $o$ of }E_{\text{out}}^\top}
+$$
+
+- SGNS **learns** the factorization via stochastic gradients  
+
+## Cosine similarity — definition
+
+Given two vectors $x,y\in\mathbb{R}^d$,
+
+$$
+\operatorname{cos}(x,y)
+\;=\;
+\frac{x^\top y}{\|x\|\,\|y\|}
+\;=\;
+\cos\theta,
+$$
+
+where $\theta$ is the angle between $x$ and $y$.
+
+- Range: $[-1,1]$  
+- $\;1$ = same direction, $\;0$ = orthogonal/unrelated, $\;-1$ = opposite meanings (rare in practice)
+
+## Quick numeric intuition
+
+Let $x=(1,0)$ and $y=(0.6,0.8)$:
+$$
+x^\top y = 0.6,\quad \|x\|=1,\ \|y\|=1 \Rightarrow \operatorname{cos}(x,y)=0.6.
+$$
+
+Scale $y' = 2y=(1.2,1.6)$:
+$$
+x^\top y' = 1.2\ \ (\text{doubles}),\quad
+\operatorname{cos}(x,y')=\frac{1.2}{1\cdot 2}=0.6\ \ (\text{unchanged}).
+$$
+
+Cosine measures **directional similarity**, not magnitude.
+
+## Look up two word vectors (row selection)
+
+Let $E\in\mathbb{R}^{V\times d}$ be the embedding table.  
+Pick two tokens with indices $a$ and $b$.
+
+$$
+\underbrace{\color{black}{
+\left[\begin{array}{ccc}
+\cdot & \cdots & \cdot\\
+\vdots & & \vdots\\
+\cdot & \cdots & \cdot
+\end{array}\right]}}_{\textbf{$E$ }(V\times d)}
+\quad\Rightarrow\quad
+\color{red}{e_a^\top}=\big[E\big]_{a:},\qquad
+\color{blue}{e_b^\top}=\big[E\big]_{b:}.
+$$
+
+
+## Normalize (make direction only)
+
+Row-wise L2 normalization makes vectors comparable by **angle**.
+
+$$
+\hat{E}_{i:}=\frac{E_{i:}}{\lVert E_{i:}\rVert}\quad\Longleftrightarrow\quad
+\hat{E}=D^{-1}E,\ \ D=\operatorname{diag}\!\big(\lVert E_{1:}\rVert,\dots,\lVert E_{V:}\rVert\big).
+$$
+
+So our two normalized vectors are $\ \color{red}{\hat e_a},\ \color{blue}{\hat e_b}$.
+
+---
+
+## Cosine similarity = dot product of normalized vectors
+
+$$
+\operatorname{cos}(\color{red}{e_a},\color{blue}{e_b})
+=\frac{\color{red}{e_a}^\top\color{blue}{e_b}}{\lVert e_a\rVert\,\lVert e_b\rVert}
+=\color{red}{\hat e_a}^\top\color{blue}{\hat e_b}\in[-1,1].
+$$
+
+- $1$ = same direction, $0$ = orthogonal, $-1$ = opposite.
+
+## Applications
+
+- **Linguistics**: study semantic relations  
+- **Social science**:  
+  - Bias, stereotypes, prejudice  
+  - Ideological placement  
+  - Cultural meaning  
+- **Machine learning**: features for NLP pipelines
+
+## Example (Week 2)
+
+> **“Semantics derived automatically from language corpora contain human-like biases.”**  
+> — Aylin Caliskan, Joanna J. Bryson, & Arvind Narayanan, *Science* (2017) 
+---
+
+
+## Example (Week 2)
+
+> **“The geometry of culture: Analyzing the meanings of class through word embeddings.”**  
+> — Austin C. Kozlowski, Matt Taddy, & James A. Evans, *American Sociological Review* (2019) 
+
+---
+
+
+## Word embeddings
+### Tracing associations over time
+
+- Use **dated corpora**  
+- Generate embeddings
+- Track associations with **cosine similarity** across time  
+
+## Extensions
+### Whole document embeddings
+
+- E.g., whole subreddits
+- Generate embeddings
+- Place in ideological space...
+
+##
+
+![](images/redditfig.png){fig-align="center"}
+
+
+## What's all this got to do with LLMs?
+
+:::incremental
+- Embeddings aren't just single word vectors...
+- In fact they used to be also things like counts of words
+- LLMs use embeddings for **words, subwords, tokens, sentences, images, …**
+- Embeddings are a **core building block** of LLMs
+:::
