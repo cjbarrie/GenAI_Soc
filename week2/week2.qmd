@@ -107,108 +107,106 @@ I like doing <span style="color:#e53935; font-weight:700;">text</span> analysis 
 
 
 
-## Estimating embeddings
-### Approach 1: SVD
+<!-- ## Estimating embeddings -->
+<!-- ### Approach 1: SVD -->
 
-- Build a co-occurrence / PPMI matrix
-- Use **singular value decomposition**
-- Get lower-dimensional vectors capturing word associations
-
-
-
-## Probabilities
-
-$$
-P(i,j)=\frac{X_{ij}}{N}, \qquad
-P(i)=\frac{r_i}{N}, \qquad
-P(j)=\frac{c_j}{N}.
-$$
+<!-- - Build a co-occurrence / PPMI matrix   -->
+<!-- - Use **singular value decomposition**   -->
+<!-- - Get lower-dimensional vectors capturing word associations   -->
 
 
 
-## Pointwise Mutual Information (PMI)
+<!-- ## Probabilities -->
 
-$$
-\operatorname{PMI}(i,j)=\log\!\frac{P(i,j)}{P(i)\,P(j)}.
-$$
-
-
-
-## Positive PMI (PPMI)
-
-$$
-\operatorname{PPMI}(i,j)=\max\!\big(\operatorname{PMI}(i,j),\,0\big).
-$$
+<!-- $$ -->
+<!-- P(i,j)=\frac{X_{ij}}{N}, \qquad -->
+<!-- P(i)=\frac{r_i}{N}, \qquad -->
+<!-- P(j)=\frac{c_j}{N}. -->
+<!-- $$ -->
 
 
 
-## Estimating embeddings — SVD on PPMI
+<!-- ## Pointwise Mutual Information (PMI) -->
+
+<!-- $$ -->
+<!-- \operatorname{PMI}(i,j)=\log\!\frac{P(i,j)}{P(i)\,P(j)}. -->
+<!-- $$ -->
 
 
 
-## Define the matrix
+<!-- ## Positive PMI (PPMI) -->
 
-Let $M=\operatorname{PPMI}\in\mathbb{R}^{V\times V}$.
-
-
-
-## Truncated SVD (rank $d$)
-
-$$
-M \approx U_d\,S_d\,V_d^\top,
-$$
-
-## Embeddings
-
-$$
-E = U_d\,S_d^{1/2}\quad\text{(word vectors)}, \qquad
-C = V_d\,S_d^{1/2}\quad\text{(context vectors)}.
-$$
+<!-- $$ -->
+<!-- \operatorname{PPMI}(i,j)=\max\!\big(\operatorname{PMI}(i,j),\,0\big). -->
+<!-- $$ -->
 
 
-## Key property — visual dot = cell
 
-Dot product in the $d$-dimensional embedding space recovers a PPMI entry:
-$$
-\color{red}{e_i}^\top\,\color{purple}{c_j}
-\;\approx\;
-\color{teal}{M_{ij}}.
-$$
-
-Matrix picture:
-$$
-\color{teal}{
-\left[\begin{array}{cccc}
-\cdots & \cdots & \cdots & \cdots\\
-\cdots & \boxed{\,M_{ij}\,} & \cdots & \cdots\\
-\cdots & \cdots & \cdots & \cdots
-\end{array}\right]}
-\;\approx\;
-\underbrace{\color{red}{
-\left[\begin{array}{c}
-\vdots\\
-e_i^\top\\
-\vdots
-\end{array}\right]}}_{\text{select row $i$ of }E}
-\;\cdot\;
-\underbrace{\color{purple}{
-\left[\begin{array}{c}
-\vdots\\
-c_j\\
-\vdots
-\end{array}\right]}}_{\text{select column $j$ of }C^\top}
-$$
-
-## Key property
-
-- Dimensions: $\color{red}{e_i^\top}\in\mathbb{R}^{1\times d}$, $\color{purple}{c_j}\in\mathbb{R}^{d\times 1}$, result $\in\mathbb{R}^{1\times 1}$.
-- Intuition: PPMI “lives” in a low-rank subspace; $E$ and $C$ are its coordinates.
-
-$$
-e_i^\top c_j \;\approx\; M_{ij} \;=\; \operatorname{PPMI}(i,j).
-$$
+<!-- ## Estimating embeddings — SVD on PPMI -->
 
 
+
+<!-- ## Define the matrix -->
+
+<!-- Let $M=\operatorname{PPMI}\in\mathbb{R}^{V\times V}$. -->
+
+
+
+<!-- ## Truncated SVD (rank $d$) -->
+
+<!-- $$ -->
+<!-- M \approx U_d\,S_d\,V_d^\top, -->
+<!-- $$ -->
+
+<!-- ## Embeddings -->
+
+<!-- $$ -->
+<!-- E = U_d\,S_d^{1/2}\quad\text{(word vectors)}, \qquad -->
+<!-- C = V_d\,S_d^{1/2}\quad\text{(context vectors)}. -->
+<!-- $$ -->
+
+
+<!-- ## Key property — visual dot = cell -->
+
+<!-- Dot product in the $d$-dimensional embedding space recovers a PPMI entry: -->
+<!-- $$ -->
+<!-- \color{red}{e_i}^\top\,\color{purple}{c_j} -->
+<!-- \;\approx\; -->
+<!-- \color{teal}{M_{ij}}. -->
+<!-- $$ -->
+
+<!-- Matrix picture: -->
+<!-- $$ -->
+<!-- \color{teal}{ -->
+<!-- \left[\begin{array}{cccc} -->
+<!-- \cdots & \cdots & \cdots & \cdots\\ -->
+<!-- \cdots & \boxed{\,M_{ij}\,} & \cdots & \cdots\\ -->
+<!-- \cdots & \cdots & \cdots & \cdots -->
+<!-- \end{array}\right]} -->
+<!-- \;\approx\; -->
+<!-- \underbrace{\color{red}{ -->
+<!-- \left[\begin{array}{c} -->
+<!-- \vdots\\ -->
+<!-- e_i^\top\\ -->
+<!-- \vdots -->
+<!-- \end{array}\right]}}_{\text{select row $i$ of }E} -->
+<!-- \;\cdot\; -->
+<!-- \underbrace{\color{purple}{ -->
+<!-- \left[\begin{array}{c} -->
+<!-- \vdots\\ -->
+<!-- c_j\\ -->
+<!-- \vdots -->
+<!-- \end{array}\right]}}_{\text{select column $j$ of }C^\top} -->
+<!-- $$ -->
+
+<!-- ## Key property -->
+
+<!-- - Dimensions: $\color{red}{e_i^\top}\in\mathbb{R}^{1\times d}$, $\color{purple}{c_j}\in\mathbb{R}^{d\times 1}$, result $\in\mathbb{R}^{1\times 1}$.   -->
+<!-- - Intuition: PPMI “lives” in a low-rank subspace; $E$ and $C$ are its coordinates. -->
+
+<!-- $$ -->
+<!-- e_i^\top c_j \;\approx\; M_{ij} \;=\; \operatorname{PPMI}(i,j). -->
+<!-- $$ -->
 
 
 
@@ -216,36 +214,38 @@ $$
 
 
 
-## Factorization picture {.smaller}
 
-$$
-\underbrace{
-\begin{bmatrix}
-\cdot & \cdots & \cdot\\
-\vdots & \ddots & \vdots\\
-\cdot & \cdots & \cdot
-\end{bmatrix}
-}_{\scriptsize E\ (V\times d)}
-\;\times\;
-\underbrace{
-\begin{bmatrix}
-\cdot & \cdots & \cdot\\
-\vdots & \ddots & \vdots\\
-\cdot & \cdots & \cdot
-\end{bmatrix}^{\!\top}
-}_{\scriptsize C^\top\ (d\times V)}
-\;=\;
-\underbrace{
-\begin{bmatrix}
-\cdot & \cdots & \cdots & \cdot\\
-\vdots & \ddots &  & \vdots\\
-\cdot & \cdots & \cdots & \cdot
-\end{bmatrix}
-}_{\scriptsize M\ (V\times V)}
-$$
 
-- Shapes: $(V\times d)\cdot(d\times V)=(V\times V)$
-- Goal: choose $E,C$ so that $E\,C^\top \approx M$.
+<!-- ## Factorization picture {.smaller} -->
+
+<!-- $$ -->
+<!-- \underbrace{ -->
+<!-- \begin{bmatrix} -->
+<!-- \cdot & \cdots & \cdot\\ -->
+<!-- \vdots & \ddots & \vdots\\ -->
+<!-- \cdot & \cdots & \cdot -->
+<!-- \end{bmatrix} -->
+<!-- }_{\scriptsize E\ (V\times d)} -->
+<!-- \;\times\; -->
+<!-- \underbrace{ -->
+<!-- \begin{bmatrix} -->
+<!-- \cdot & \cdots & \cdot\\ -->
+<!-- \vdots & \ddots & \vdots\\ -->
+<!-- \cdot & \cdots & \cdot -->
+<!-- \end{bmatrix}^{\!\top} -->
+<!-- }_{\scriptsize C^\top\ (d\times V)} -->
+<!-- \;=\; -->
+<!-- \underbrace{ -->
+<!-- \begin{bmatrix} -->
+<!-- \cdot & \cdots & \cdots & \cdot\\ -->
+<!-- \vdots & \ddots &  & \vdots\\ -->
+<!-- \cdot & \cdots & \cdots & \cdot -->
+<!-- \end{bmatrix} -->
+<!-- }_{\scriptsize M\ (V\times V)} -->
+<!-- $$ -->
+
+<!-- - Shapes: $(V\times d)\cdot(d\times V)=(V\times V)$   -->
+<!-- - Goal: choose $E,C$ so that $E\,C^\top \approx M$. -->
 
 
 

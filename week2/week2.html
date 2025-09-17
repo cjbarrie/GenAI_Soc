@@ -257,129 +257,103 @@ text
 → estimate embeddings with <strong>SVD</strong></li>
 <li>General approach: use something like word2vec and SGNS</li>
 </ul>
+<!-- ## Estimating embeddings -->
+<!-- ### Approach 1: SVD -->
+<!-- - Build a co-occurrence / PPMI matrix   -->
+<!-- - Use **singular value decomposition**   -->
+<!-- - Get lower-dimensional vectors capturing word associations   -->
+<!-- ## Probabilities -->
+<!-- $$ -->
+<!-- P(i,j)=\frac{X_{ij}}{N}, \qquad -->
+<!-- P(i)=\frac{r_i}{N}, \qquad -->
+<!-- P(j)=\frac{c_j}{N}. -->
+<!-- $$ -->
+<!-- ## Pointwise Mutual Information (PMI) -->
+<!-- $$ -->
+<!-- \operatorname{PMI}(i,j)=\log\!\frac{P(i,j)}{P(i)\,P(j)}. -->
+<!-- $$ -->
+<!-- ## Positive PMI (PPMI) -->
+<!-- $$ -->
+<!-- \operatorname{PPMI}(i,j)=\max\!\big(\operatorname{PMI}(i,j),\,0\big). -->
+<!-- $$ -->
+<!-- ## Estimating embeddings — SVD on PPMI -->
+<!-- ## Define the matrix -->
+<!-- Let $M=\operatorname{PPMI}\in\mathbb{R}^{V\times V}$. -->
+<!-- ## Truncated SVD (rank $d$) -->
+<!-- $$ -->
+<!-- M \approx U_d\,S_d\,V_d^\top, -->
+<!-- $$ -->
+<!-- ## Embeddings -->
+<!-- $$ -->
+<!-- E = U_d\,S_d^{1/2}\quad\text{(word vectors)}, \qquad -->
+<!-- C = V_d\,S_d^{1/2}\quad\text{(context vectors)}. -->
+<!-- $$ -->
+<!-- ## Key property — visual dot = cell -->
+<!-- Dot product in the $d$-dimensional embedding space recovers a PPMI entry: -->
+<!-- $$ -->
+<!-- \color{red}{e_i}^\top\,\color{purple}{c_j} -->
+<!-- \;\approx\; -->
+<!-- \color{teal}{M_{ij}}. -->
+<!-- $$ -->
+<!-- Matrix picture: -->
+<!-- $$ -->
+<!-- \color{teal}{ -->
+<!-- \left[\begin{array}{cccc} -->
+<!-- \cdots & \cdots & \cdots & \cdots\\ -->
+<!-- \cdots & \boxed{\,M_{ij}\,} & \cdots & \cdots\\ -->
+<!-- \cdots & \cdots & \cdots & \cdots -->
+<!-- \end{array}\right]} -->
+<!-- \;\approx\; -->
+<!-- \underbrace{\color{red}{ -->
+<!-- \left[\begin{array}{c} -->
+<!-- \vdots\\ -->
+<!-- e_i^\top\\ -->
+<!-- \vdots -->
+<!-- \end{array}\right]}}_{\text{select row $i$ of }E} -->
+<!-- \;\cdot\; -->
+<!-- \underbrace{\color{purple}{ -->
+<!-- \left[\begin{array}{c} -->
+<!-- \vdots\\ -->
+<!-- c_j\\ -->
+<!-- \vdots -->
+<!-- \end{array}\right]}}_{\text{select column $j$ of }C^\top} -->
+<!-- $$ -->
+<!-- ## Key property -->
+<!-- - Dimensions: $\color{red}{e_i^\top}\in\mathbb{R}^{1\times d}$, $\color{purple}{c_j}\in\mathbb{R}^{d\times 1}$, result $\in\mathbb{R}^{1\times 1}$.   -->
+<!-- - Intuition: PPMI “lives” in a low-rank subspace; $E$ and $C$ are its coordinates. -->
+<!-- $$ -->
+<!-- e_i^\top c_j \;\approx\; M_{ij} \;=\; \operatorname{PPMI}(i,j). -->
+<!-- $$ -->
+<!-- ## Factorization picture {.smaller} -->
+<!-- $$ -->
+<!-- \underbrace{ -->
+<!-- \begin{bmatrix} -->
+<!-- \cdot & \cdots & \cdot\\ -->
+<!-- \vdots & \ddots & \vdots\\ -->
+<!-- \cdot & \cdots & \cdot -->
+<!-- \end{bmatrix} -->
+<!-- }_{\scriptsize E\ (V\times d)} -->
+<!-- \;\times\; -->
+<!-- \underbrace{ -->
+<!-- \begin{bmatrix} -->
+<!-- \cdot & \cdots & \cdot\\ -->
+<!-- \vdots & \ddots & \vdots\\ -->
+<!-- \cdot & \cdots & \cdot -->
+<!-- \end{bmatrix}^{\!\top} -->
+<!-- }_{\scriptsize C^\top\ (d\times V)} -->
+<!-- \;=\; -->
+<!-- \underbrace{ -->
+<!-- \begin{bmatrix} -->
+<!-- \cdot & \cdots & \cdots & \cdot\\ -->
+<!-- \vdots & \ddots &  & \vdots\\ -->
+<!-- \cdot & \cdots & \cdots & \cdot -->
+<!-- \end{bmatrix} -->
+<!-- }_{\scriptsize M\ (V\times V)} -->
+<!-- $$ -->
+<!-- - Shapes: $(V\times d)\cdot(d\times V)=(V\times V)$   -->
+<!-- - Goal: choose $E,C$ so that $E\,C^\top \approx M$. -->
 </section>
 <section id="estimating-embeddings" class="slide level2">
-<h2>Estimating embeddings</h2>
-<h3 id="approach-1-svd">Approach 1: SVD</h3>
-<ul>
-<li>Build a co-occurrence / PPMI matrix</li>
-<li>Use <strong>singular value decomposition</strong></li>
-<li>Get lower-dimensional vectors capturing word associations</li>
-</ul>
-</section>
-<section id="probabilities" class="slide level2">
-<h2>Probabilities</h2>
-<p><span class="math display">\[
-P(i,j)=\frac{X_{ij}}{N}, \qquad
-P(i)=\frac{r_i}{N}, \qquad
-P(j)=\frac{c_j}{N}.
-\]</span></p>
-</section>
-<section id="pointwise-mutual-information-pmi" class="slide level2">
-<h2>Pointwise Mutual Information (PMI)</h2>
-<p><span class="math display">\[
-\operatorname{PMI}(i,j)=\log\!\frac{P(i,j)}{P(i)\,P(j)}.
-\]</span></p>
-</section>
-<section id="positive-pmi-ppmi" class="slide level2">
-<h2>Positive PMI (PPMI)</h2>
-<p><span class="math display">\[
-\operatorname{PPMI}(i,j)=\max\!\big(\operatorname{PMI}(i,j),\,0\big).
-\]</span></p>
-</section>
-<section id="estimating-embeddings-svd-on-ppmi" class="slide level2">
-<h2>Estimating embeddings — SVD on PPMI</h2>
-</section>
-<section id="define-the-matrix" class="slide level2">
-<h2>Define the matrix</h2>
-<p>Let <span class="math inline">\(M=\operatorname{PPMI}\in\mathbb{R}^{V\times V}\)</span>.</p>
-</section>
-<section id="truncated-svd-rank-d" class="slide level2">
-<h2>Truncated SVD (rank <span class="math inline">\(d\)</span>)</h2>
-<p><span class="math display">\[
-M \approx U_d\,S_d\,V_d^\top,
-\]</span></p>
-</section>
-<section id="embeddings" class="slide level2">
-<h2>Embeddings</h2>
-<p><span class="math display">\[
-E = U_d\,S_d^{1/2}\quad\text{(word vectors)}, \qquad
-C = V_d\,S_d^{1/2}\quad\text{(context vectors)}.
-\]</span></p>
-</section>
-<section id="key-property-visual-dot-cell" class="slide level2">
-<h2>Key property — visual dot = cell</h2>
-<p>Dot product in the <span class="math inline">\(d\)</span>-dimensional embedding space recovers a PPMI entry: <span class="math display">\[
-\color{red}{e_i}^\top\,\color{purple}{c_j}
-\;\approx\;
-\color{teal}{M_{ij}}.
-\]</span></p>
-<p>Matrix picture: <span class="math display">\[
-\color{teal}{
-\left[\begin{array}{cccc}
-\cdots &amp; \cdots &amp; \cdots &amp; \cdots\\
-\cdots &amp; \boxed{\,M_{ij}\,} &amp; \cdots &amp; \cdots\\
-\cdots &amp; \cdots &amp; \cdots &amp; \cdots
-\end{array}\right]}
-\;\approx\;
-\underbrace{\color{red}{
-\left[\begin{array}{c}
-\vdots\\
-e_i^\top\\
-\vdots
-\end{array}\right]}}_{\text{select row $i$ of }E}
-\;\cdot\;
-\underbrace{\color{purple}{
-\left[\begin{array}{c}
-\vdots\\
-c_j\\
-\vdots
-\end{array}\right]}}_{\text{select column $j$ of }C^\top}
-\]</span></p>
-</section>
-<section id="key-property" class="slide level2">
-<h2>Key property</h2>
-<ul>
-<li>Dimensions: <span class="math inline">\(\color{red}{e_i^\top}\in\mathbb{R}^{1\times d}\)</span>, <span class="math inline">\(\color{purple}{c_j}\in\mathbb{R}^{d\times 1}\)</span>, result <span class="math inline">\(\in\mathbb{R}^{1\times 1}\)</span>.</li>
-<li>Intuition: PPMI “lives” in a low-rank subspace; <span class="math inline">\(E\)</span> and <span class="math inline">\(C\)</span> are its coordinates.</li>
-</ul>
-<p><span class="math display">\[
-e_i^\top c_j \;\approx\; M_{ij} \;=\; \operatorname{PPMI}(i,j).
-\]</span></p>
-</section>
-<section id="factorization-picture" class="slide level2 smaller">
-<h2>Factorization picture</h2>
-<p><span class="math display">\[
-\underbrace{
-\begin{bmatrix}
-\cdot &amp; \cdots &amp; \cdot\\
-\vdots &amp; \ddots &amp; \vdots\\
-\cdot &amp; \cdots &amp; \cdot
-\end{bmatrix}
-}_{\scriptsize E\ (V\times d)}
-\;\times\;
-\underbrace{
-\begin{bmatrix}
-\cdot &amp; \cdots &amp; \cdot\\
-\vdots &amp; \ddots &amp; \vdots\\
-\cdot &amp; \cdots &amp; \cdot
-\end{bmatrix}^{\!\top}
-}_{\scriptsize C^\top\ (d\times V)}
-\;=\;
-\underbrace{
-\begin{bmatrix}
-\cdot &amp; \cdots &amp; \cdots &amp; \cdot\\
-\vdots &amp; \ddots &amp;  &amp; \vdots\\
-\cdot &amp; \cdots &amp; \cdots &amp; \cdot
-\end{bmatrix}
-}_{\scriptsize M\ (V\times V)}
-\]</span></p>
-<ul>
-<li>Shapes: <span class="math inline">\((V\times d)\cdot(d\times V)=(V\times V)\)</span></li>
-<li>Goal: choose <span class="math inline">\(E,C\)</span> so that <span class="math inline">\(E\,C^\top \approx M\)</span>.</li>
-</ul>
-</section>
-<section id="estimating-embeddings-1" class="slide level2">
 <h2>Estimating embeddings</h2>
 <h3 id="approach-word2vec">Approach : word2vec</h3>
 <ul>

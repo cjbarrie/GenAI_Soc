@@ -1,0 +1,388 @@
+---
+title: "Week 3: Gen AI for Sociology"
+format:
+  revealjs:
+    toc: false
+    slide-number: true
+    incremental: false
+    transition: fade
+    code-line-numbers: false
+---
+
+## Introduction
+
+- Last week: **static embeddings** (word2vec / SVD / SGNS)
+- This week: **contextual embeddings** via **Transformers**
+- Deliverables:
+  - Understand **self‑attention**, **multi‑head attention**, **positional encodings**
+  - Move from word vectors → **token-in-context** representations
+  - Apply to **sociological text** with Hugging Face (DistilBERT)
+
+---
+
+## From static to contextual
+
+### Why change the representation?
+
+- Static embeddings: **one vector per word type**
+  - “bank” (river vs. finance) → **same** vector
+- Contextual embeddings: **one vector per token occurrence**
+  - “bank” meaning depends on **surrounding tokens**
+- Consequence: downstream measures (similarity, typicality, ideology) become **context‑sensitive**
+
+---
+
+## The bridge: same math, richer inputs
+
+- We still live in **vector spaces** and compare with **cosine**
+- But now each token gets a **context‑conditioned** vector (layer × position)
+- Pooling those token vectors → **sentence / document** embeddings
+- Transformers provide the **mechanism** to compute these vectors efficiently
+
+---
+
+## From static to contextual: the bridge
+
+::: columns
+::: column
+#### Static (word2vec / GloVe)
+- One vector **per word type**
+- Learned from **global co‑occurrence** / local windows
+- Fast to use; no context at inference
+- Captures broad semantics, but **polysemy problem**
+:::
+::: column
+#### Contextual (Transformers)
+- One vector **per token occurrence**
+- Computed **on the fly** from surrounding words
+- Can disambiguate senses; supports **long‑range** links
+- Heavier compute, richer representation
+:::
+:::
+
+---
+
+## Transformer: the big idea (vs word2vec)
+
+- Replace recurrence/convolutions with **attention‑only** computation
+- Compute **all‑pairs interactions** between tokens **in parallel**
+- Stack layers: each layer refines token vectors using **multi‑head attention** + **feed‑forward**
+
+---
+
+## Transformer: the big idea (vs word2vec)
+
+::: callout-note
+**How this differs from word2vec**
+
+- word2vec trains two lookup tables (**input** and **output** embeddings) to score *(center, context)* pairs with a **dot product**; once trained, a word’s vector is **fixed**.
+
+- Transformers **recompute** a vector for each token using *the other tokens in the same sequence* at every layer. The representation is **context‑conditioned**.
+:::
+
+---
+
+
+## Self‑attention (core equation)
+
+::: callout-note
+**Relation to word2vec**
+
+- In SGNS, similarity is a dot product between *pretrained* center/context vectors.
+
+- In self‑attention, similarity is a dot product **inside the sequence** between **projected** token features, so the “context” is **sequence‑specific** and **position‑aware**.
+
+- Effectively: attention learns a **data‑dependent co‑occurrence matrix** for each sequence and layer.
+:::
+
+---
+
+## Multi‑head attention (intuition)
+
+- Run attention **H** times with different learned projections
+- Each head can specialize (syntax, coreference, discourse, topic, negation)
+- Concatenate head outputs → linear projection → **richer** representation
+
+---
+
+## Multi‑head attention (intuition)
+
+::: callout-note
+**Analogy to word2vec**
+
+- Think of heads as learning **multiple subspaces** of “co‑occurrence,” instead of one shared space.
+
+- Multiple heads ≈ capturing **different neighborhood logics** simultaneously.
+:::
+
+---
+
+## Where do embeddings appear?
+
+1. **Token embeddings**: lookup table for wordpieces/subwords (like word2vec’s table)
+2. **Positional encodings**: add order information (word2vec uses a *window* but loses absolute positions)
+3. After each layer: **new contextual embeddings** (token‑in‑context vectors)
+4. **Pooling** (CLS / mean / attention‑weighted) → sentence or document vectors for analysis
+
+---
+
+## Where do embeddings appear?
+
+::: callout-note
+**Key difference:** In word2vec, the vector you analyze is the same regardless of sentence. In Transformers, the vector you analyze depends on **the sentence and the layer**.
+:::
+
+---
+
+## Visual mental model
+
+- Each layer = a **fully connected graph** over tokens
+- **Edge weights** = learned attention scores (who informs whom)
+- **Node features** = token vectors updated by **messages** from neighbors
+
+---
+
+## A Better Visual Model
+
+[Tranformers Explained](https://poloclub.github.io/transformer-explainer/)
+
+## From Transforming to Annotating
+
+- **What changes from “encoder” to “annotator”?** We add a tiny **classification head** on top of the encoder output.
+- For **sequence labels** (e.g., sentiment, frame): use the final hidden state of `[CLS]` (or mean pool) as a **sentence vector**, then a linear layer + softmax/sigmoid.
+- For **token labels** (e.g., NER, stance cues): apply a per‑token classifier to each final hidden state.
+
+---
+
+## What is a classification head? 
+
+- A tiny layer on top of the encoder that turns a sentence vector into label scores.
+- Then we use **softmax** to convert scores into probabilities (e.g., 80% Positive).
+- During fine-tuning, we adjust this tiny layer — and often the encoder — so sentences from different classes are easy to separate with a straight line.
+
+---
+
+## Mini project: DistilBERT annotation — roadmap
+
+- **Goal:** classify short texts into `{protest, discrimination, solidarity}`
+- **Pipeline:**
+  1) Define labels & toy texts  
+  2) Tokenize + build a tiny `Dataset`  
+  3) Train with AdamW; validate  
+  4) **Annotate** new texts (softmax → label + probabilities)
+
+---
+
+## Labels & toy data
+
+- We make **string↔id** maps so the model knows class indices and we can print readable names later.
+
+```python
+label_names = ["protest", "discrimination", "solidarity"]
+label2id = {n:i for i,n in enumerate(label_names)}
+id2label = {i:n for n,i in label2id.items()}
+
+train_texts = [...]; train_labels = [...]
+val_texts   = [...]; val_labels   = [...]
+```
+
+::: callout-note
+Why this matters:
+- These mappings are stored in the model config (`label2id`, `id2label`) → cleaner logs & correct class order.
+:::
+
+---
+
+## Tokenizer + tiny Dataset
+
+- Turn raw strings into **model inputs** (`input_ids`, `attention_mask`) and attach **labels**.
+
+```python
+from transformers import AutoTokenizer
+from torch.utils.data import Dataset
+
+tok = AutoTokenizer.from_pretrained("distilbert-base-uncased")
+
+class SimpleTextDataset(Dataset):
+    def __init__(self, texts, labels, tokenizer, max_length=128):
+        self.texts, self.labels, self.tok = texts, labels, tokenizer
+        self.max_length = max_length
+    def __len__(self): return len(self.texts)
+    def __getitem__(self, i):
+        enc = self.tok(self.texts[i], truncation=True, max_length=self.max_length, return_tensors="pt")
+        item = {k: v.squeeze(0) for k,v in enc.items()}
+        item["labels"] = torch.tensor(self.labels[i], dtype=torch.long)
+        return item
+```
+
+---
+
+## Model: encoder + classification head
+
+- DistilBERT encoder with a **linear head** for 3 classes.
+
+```python
+import torch
+from transformers import AutoModelForSequenceClassification
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = AutoModelForSequenceClassification.from_pretrained(
+    "distilbert-base-uncased",
+    num_labels=len(label_names),
+    id2label=id2label, label2id=label2id
+).to(device)
+```
+
+---
+
+## Optimizer
+
+- `AdamW` is the standard choice for Transformers.
+
+```python
+optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5, weight_decay=0.01)
+```
+
+::: callout-tip
+Small LR (e.g., `2e-5`) is typical when fine-tuning pretrained encoders.
+:::
+
+---
+
+## Training loop (HF-style forward)
+
+```python
+def evaluate():
+    model.eval(); correct = total = 0
+    with torch.no_grad():
+        for batch in val_loader:
+            batch = {k: v.to(device) for k,v in batch.items()}
+            out   = model(**batch)              # no labels → logits only
+            preds = out.logits.argmax(-1)
+            correct += (preds == batch["labels"]).sum().item()
+            total   += batch["labels"].numel()
+    return correct / max(1,total)
+
+epochs = 3
+model.train()
+for epoch in range(1, epochs+1):
+    running_loss = 0.0
+    for batch in train_loader:
+        batch = {k: v.to(device) for k,v in batch.items()}
+        out   = model(**batch)                  # labels included → out.loss set
+        out.loss.backward()
+        optimizer.step(); optimizer.zero_grad()
+        running_loss += out.loss.item()
+    print(f"Epoch {epoch}: loss={running_loss/len(train_loader):.4f}  val_acc={evaluate():.3f}")
+```
+
+---
+
+## Inference = Annotation
+
+- Turn texts into probabilities and pick the **argmax** class.
+- Keep probabilities for **triage** (send low-confidence to humans).
+
+
+## Inference = Annotation
+
+```python
+test_samples = [
+    "Thousands gathered in front of parliament.",
+    "Volunteers cleaned the park and cooked for neighbors.",
+    "He yelled slurs at a woman on the tram."
+]
+
+enc = tok(test_samples, padding=True, truncation=True, return_tensors="pt").to(device)
+model.eval()
+with torch.no_grad():
+    logits = model(**enc).logits
+probs = torch.softmax(logits, dim=-1).cpu()
+
+for text, p in zip(test_samples, probs):
+    pred_id = int(torch.argmax(p))
+    print("\nTEXT:", text)
+    print("PRED:", id2label[pred_id])
+    for name, prob in zip(label_names, p.tolist()):
+        print(f"  {name:15s} {prob:.3f}")
+```
+
+---
+
+## What came before all of this?
+
+:::incremental
+- i.e., 10 years ago a.k.a the dark ages
+- training from scratch
+  - e.g., random forest, tree-based etc.
+:::
+
+## Why was this such a revolution?
+
+:::incremental
+1. Massive performance increases in ML
+2. Led to "zero-shot" revolution down the line (next week)
+:::
+
+---
+
+## Paper spotlight — Bonikowski, Luo & Stuhler (2022)
+
+- Use neural language models to measure **populism, nationalism, authoritarianism**
+- Analyze **U.S. presidential campaigns (1952–2020)**
+- Show how discursive frames vary across parties/candidates/eras
+- Use **Active Learning** to efficiently label data
+
+--- 
+
+## Paper spotlight — Bonikowski, Luo & Stuhler (2022)
+
+![](images/bonikowski1.png){fig-align="center"}
+
+## Paper spotlight — Bonikowski, Luo & Stuhler (2022)
+
+![](images/bonikowski2.png){fig-align="center"}
+
+## Paper spotlight — Bonikowski, Luo & Stuhler (2022)
+
+![](images/bonikowski3.png){fig-align="center"}
+
+
+
+## Paper spotlight — Le Mens et al. (2023)
+
+- Train text classifier and derive **typicality measures** from BERT‑based model
+- Compare model‑based typicality to **human judgments** across genres
+- Key result: **high correspondence** between model and human typicality
+- Takeaway: contextual models can **approximate cultural prototypes**
+
+---
+
+## Paper spotlight — Le Mens et al. (2023)
+
+![](images/lemens1.png){fig-align="center"}
+
+
+## Okay but do people still use these?
+
+:::incremental
+- These are now out of date (more than a week old)
+- But they illustrate the power of pre-training
+- And form the foundation for generative LMs like ChatGPT...
+:::
+
+---
+
+## After Le Mens (2023)... Le Mens (2023)
+
+![](images/lemens2.png){fig-align="center"}
+
+## Limitations
+
+:::incremental
+- Interpretability (despite advances)
+- Biases in training data
+- Computational cost
+- Data requirements for fine-tuning
+
+:::

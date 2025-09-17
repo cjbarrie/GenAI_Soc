@@ -1,0 +1,4 @@
+- source: week3.qmd
+  quarto-pub:
+    - id: 58ae4543-4fc7-45fa-9fb0-e2dd94a44ec4
+      url: https://cjbarrie.quarto.pub/week3genai
