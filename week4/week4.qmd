@@ -1,0 +1,562 @@
+---
+title: "Week 4: Gen AI for Sociology"
+format:
+  revealjs:
+    toc: false
+    slide-number: true
+    incremental: false
+    transition: fade
+    code-line-numbers: false
+---
+
+## Introduction
+
+- Last week: **contextual embeddings** via Transformers (BERT/DistilBERT)
+- This week: **Large Language Models (LLMs)** — *zero‑shot* reasoning & generation
+
+---
+
+## Introduction
+
+- Learning goals
+  - Understand **why zero‑shot** was a big change for applied social science
+  - Connect LLMs to the **Transformer** architecture you already know
+  - Learn **practical ways** to run LLMs (web UI, APIs, locally, OpenRouter, cluster)
+  - Build a **robust annotation pipeline** (parameters, prompting, validation)
+
+---
+
+## Zero‑shot: why it changed the game
+
+- **Before**: train‑and‑serve task‑specific models (e.g., sentiment, topic, NER)
+  - Requires **labeled data**, feature engineering, repeated training per task
+- **After**: a single pretrained LLM can **perform new tasks with prompts only**
+  - **Zero‑shot**: *no* task‑specific labels; rely on general instruction following
+  - **Few‑shot**: small in‑prompt exemplars instead of full supervised training
+
+---
+
+## Zero‑shot: why it changed the game
+
+- Consequences for research
+  - Drastically lower **data/engineering cost** for prototypes & exploratory studies
+  - Faster path from **concept → measurement → analysis**
+  - Enables **structured outputs** (JSON, labels) directly from text
+
+::: callout-note
+**Key shift**: Moving from *model training as the default* to *prompt engineering as the default*.
+:::
+
+---
+
+## How LLMs basically work (high level)
+
+- LLMs are **auto‑regressive**: learn \\( p_\\theta(x_t \\,|\\, x_{<t}) \\) and generate token‑by‑token
+- Use a **Transformer** backbone: self‑attention layers + feed‑forward blocks
+- During inference:
+  1. Encode the **prompt/context** (system + user + few‑shot examples)
+  2. Sample the **next token** from the model’s distribution
+  3. Append token; repeat until **stop** (EOS, stop sequence, max tokens)
+
+---
+
+## Connection to Transformers (recap)
+
+- Same **self‑attention** mechanism as BERT‑like encoders
+- But LLMs use **causal masking** (no peeking ahead) for generation
+
+---
+
+## Connection to Transformers (recap)
+
+- Training: next‑token prediction on large corpora
+- Instruction‑tuning + RLHF / DPO → better *helpfulness*, *safety*, *format adherence*
+
+::: callout-note
+**Mental model**: LLMs = *Transformer decoder stacks* trained for **auto‑regressive** generation.  
+Encoders (BERT) are great for **annotation as classification**; LLMs add **text generation & instruction following**.
+:::
+
+---
+
+## Instruction Tuning (a.k.a. SFT)
+
+- **What it is:** Supervised fine-tuning of a pretrained **Transformer** on *(instruction → response)* pairs.
+- **Why it matters:** Teaches a next-token predictor to **follow instructions**, be concise, and format outputs.
+- **Data:** mixtures of task prompts, chain-of-thought (optional), tool-use exemplars, safety/refusal patterns.
+- **Effect:** Converts a general LM into a **helpful assistant**; dramatically improves **zero/few-shot** behavior.
+- **Connection:** Same Transformer backbone; we just **continue training** with a new loss on human-written targets.
+
+::: callout-note
+**Pipeline:** Pretrained LM → **SFT on instructions** → better adherence to prompts & JSON schemas.
+:::
+
+---
+
+## 
+
+```
+Write a five-sentence sci-fi plot hook in the style of Dr Seuss:
+
+The Frog King!
+Write a five-sentence sci-fi plot hook in the style of Dr Seuss:
+
+He will not die, he will not disappear, he will never fall. He will be the hero that we all want him to be.
+
+The more you can think of this as a fictionalized version of the human condition, the more likely you are to think of it as the
+```
+
+## 
+
+```
+In a land where the stars twinkle bright,  
+Lived a creature named Zibble, who danced with delight.  
+But one fateful night, a strange ship did land,  
+With robots and gadgets all made by hand.  
+Now Zibble must choose: stay safe in his nook,  
+Or venture with friends to explore the great book!
+
+```
+
+---
+
+## RLHF (Reinforcement Learning from Human Feedback)
+
+- **Goal:** Make the SFT model **prefer** helpful, honest, safe answers.
+- **How:**  
+  1) Collect **human preference** rankings over model responses  
+  2) Train a **reward model (RM)** to predict those preferences  
+  3) **Optimize** the LM with PPO/DPO to maximize RM while staying close to SFT
+
+---
+
+## RLHF (Reinforcement Learning from Human Feedback)
+
+- **Result:** ChatGPT-style behavior: follows system rules, refuses risky requests, maintains tone.
+
+::: callout-note
+**Big picture:** Transformer pretraining → **Instruction tuning (SFT)** → **RLHF** ⇒ the chat experience you expect.
+:::
+
+---
+
+## What are the inputs?
+
+- **System role** *(a.k.a. system prompt)*  
+  The **contract**: who the model is, non‑negotiable rules, output format (e.g., JSON only), tone/scope/safety.
+- **User role** *(a.k.a. user message)*  
+  The **task instance**: concrete instruction and the input text to operate on.
+- **Prompt** *(the full request)*  
+  What the model actually sees: **system** + **user** (and optional examples/tools), serialized into one sequence.
+
+---
+
+## What are the inputs?
+
+::: callout-note
+- **System = policy & persona** 
+- **User = task content** 
+- **Prompt = combined input** sent to the model.
+:::
+
+---
+
+## How do they relate?
+
+1. The runtime builds the **prompt** by concatenating messages in order:
+   **System → (optional assistant/tool/example messages) → User**.
+2. **Precedence:** system rules apply **globally** and can override user wording (e.g., “return JSON only”).  
+3. **Few‑shot examples** (optional) live with the user content to shape behavior on *this* task.
+4. The model encodes the combined prompt and generates tokens; decoding settings (e.g., **temperature**, **top_p**) control variability.
+
+---
+
+
+## How do they relate?
+
+::: callout-note
+- **Mental model:** System sets the **guardrails**; 
+- User provides the **problem**; 
+- together they form the **prompt** that is fed to the model.
+:::
+
+---
+
+## Minimal patterns
+
+**System (stable)**
+```text
+You are a careful annotator. Return ONLY valid JSON:
+{"label":"...","rationale":"..."}.
+Labels: protest, discrimination, solidarity, uncertain.
+Follow definitions neutrally; if ambiguous, use "uncertain".
+```
+
+---
+
+
+## Minimal patterns
+
+**User (per item/batch)**
+```text
+Decide the label for the text and return ONLY the JSON object.
+Text: "Thousands gathered in front of parliament."
+```
+
+---
+
+## Using LLMs in practice — overview
+
+1. **Web UI**: quick exploration, manual labeling, prompt prototyping  
+2. **APIs**: programmatic access; integrate into pipelines & apps  
+3. **Running locally**: privacy, cost control; e.g., **Ollama**, **llama.cpp**, **Transformers**  
+4. **OpenRouter**: unified API to many models/providers under one key  
+5. **Clusters**: serve models at scale via **vLLM**, **TGI**, **Ray**, **Kubernetes**
+
+---
+
+## Web UI
+
+![](images/chatgpt.png){fig-align="center"}
+
+## Web UI
+
+- Use vendor UIs (e.g., ChatGPT, Claude, Gemini) for **prompt drafting**
+- Save **prompt templates** with explicit JSON schemas & label taxonomies
+- Manual **quality checks**: copy/paste a small corpus and sanity‑check outputs
+
+::: callout-tip
+Prototype in a UI (**maybe**), then **freeze** the prompt and move to code for reproducibility.
+:::
+
+---
+
+## APIs
+
+![](images/chatgpt2.png){fig-align="center"}
+
+
+## APIs (generic pattern)
+
+```python
+POST /v1/annotations HTTP/1.1
+Host: api.example.com
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+
+{"text":"Thousands gathered in front of parliament."}
+
+```
+
+## APIs (generic pattern)
+
+```python
+curl https://api.example.com/v1/annotations \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"text":"..."}'
+
+```
+
+## APIs (generic pattern)
+
+```python
+import requests
+r = requests.post(
+  "https://api.example.com/v1/annotations",
+  headers={"Authorization":"Bearer YOUR_API_KEY"},
+  json={"text":"..."}
+)
+print(r.status_code, r.json())
+
+```
+
+## APIs (generic pattern)
+
+```python
+curl -X POST "https://api.example.com/v1/annotations" -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{"text": "Thousands gathered in front of parliament."}'
+
+```
+
+---
+
+## APIs (generic pattern)
+
+- Most providers expose a **chat/completions** HTTP endpoint
+- Core request fields (common pattern):
+  - **model**, **messages** / **prompt**
+  - **temperature**, **top_p**, **top_k**, **max_tokens**
+  - **stop** sequences, **response_format** (e.g., JSON)
+  - Optional: **seed**, **frequency/presence penalties**, **logit bias**
+
+---
+
+## APIs (generic pattern)
+
+- Authentication via **Bearer token** header
+- Prefer **streaming** when annotating large corpora
+
+---
+
+## APIs (generic pattern)
+
+```python
+
+import os, json, requests
+
+API_BASE = os.getenv("LLM_API_BASE")      # e.g., https://api.openai.com/v1
+API_KEY  = os.getenv("LLM_API_KEY")
+MODEL    = os.getenv("LLM_MODEL", "gpt-4o-mini")
+
+def chat(messages, temperature=0.2, top_p=1.0, max_tokens=256, response_format=None, seed=None):
+    url = f"{API_BASE}/chat/completions"  # adjust if provider differs
+    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+    body = {
+        "model": MODEL,
+        "messages": messages,
+        "temperature": temperature,
+        "top_p": top_p,
+        "max_tokens": max_tokens,
+    }
+    if response_format: body["response_format"] = response_format
+    if seed is not None: body["seed"] = seed
+    r = requests.post(url, headers=headers, json=body, timeout=60)
+    r.raise_for_status()
+    return r.json()
+```
+
+---
+
+## Running locally
+
+- **Ollama**: one‑line model management & local HTTP server
+  - `ollama run llama3:8b` (interactive) or `ollama serve` (API on `:11434`)
+- **llama.cpp**: highly optimized CPU/GPU inference for GGUF models
+- **Transformers** (Hugging Face): full Python stack; great for research
+- When local models are “good enough”: privacy, control, and cost benefits
+
+---
+
+## Running locally
+
+![](images/ollama.png){fig-align="center"}
+
+
+---
+
+## Running locally
+
+```bash
+# Minimal Ollama chat via HTTP (JSON)
+curl http://localhost:11434/api/chat -d '{
+  "model": "llama3:8b",
+  "messages": [{"role":"user", "content":"Summarize this paragraph in 2 sentences..."}],
+  "stream": false
+}'
+```
+
+## Running locally
+
+![](images/hf.png){fig-align="center"}
+
+## Running locally
+
+```python
+# Local generation with Transformers (causal LM)
+from transformers import AutoTokenizer, AutoModelForCausalLM
+import torch
+
+model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
+tok = AutoTokenizer.from_pretrained(model_id)
+m   = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16, device_map="auto")
+
+prompt = "Classify the following text as protest / discrimination / solidarity: ..."
+inputs = tok(prompt, return_tensors="pt").to(m.device)
+out = m.generate(**inputs, max_new_tokens=128, temperature=0.2, do_sample=True, top_p=0.9)
+print(tok.decode(out[0], skip_special_tokens=True))
+```
+
+---
+
+## OpenRouter (multi‑provider access)
+
+- One API key to access **many models** (OpenAI, Anthropic, Meta, etc.)
+- Useful for **model comparison** & **cost/performance trade‑offs**
+- Typical pattern mirrors chat completion with `Authorization: Bearer <key>`
+
+## OpenRouter (multi‑provider access)
+
+```bash
+# Example: POST to OpenRouter (adjust model name as needed)
+curl https://openrouter.ai/api/v1/chat/completions \
+  -H "Authorization: Bearer $OPENROUTER_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "meta-llama/llama-3-70b-instruct",
+    "messages": [{"role": "user", "content": "Classify: ..."}],
+    "temperature": 0.2,
+    "top_p": 0.9
+  }'
+```
+
+---
+
+## Running on a cluster
+
+- **vLLM**: high‑throughput serving, paged attention; easy **OpenAI‑compatible** API
+- **TGI (Text Generation Inference)**: performant server from Hugging Face
+- **Ray/Kubernetes**: autoscaling & orchestration for batch annotation jobs
+
+---
+
+## Running on a cluster
+
+- Recipe:
+  1. Deploy vLLM/TGI with your model (GPU nodes)  
+  2. Expose an **OpenAI‑style** endpoint behind your VPC  
+  3. Point your annotation script at the cluster URL (same code path)
+
+---
+
+## Running on a cluster
+
+```bash
+# vLLM server (example; check docs for auth & persistence)
+python -m vllm.entrypoints.api_server \
+  --model meta-llama/Meta-Llama-3-8B-Instruct \
+  --tensor-parallel-size 2 \
+  --port 8000
+```
+
+---
+
+## From generating to annotating
+
+- Goal: turn free text into **variables** you can analyze
+- Strategy:
+  - **Schema first**: define labels, definitions, edge cases, and examples
+  - **Constrained outputs**: JSON only, one object per input
+  - **Calibrate**: temperature ↓, **seed** fixed for determinism
+  - **Validate**: automatic parsers + fallback/repair passes
+- Prompt template (classification):
+
+## From generating to annotating
+
+```text
+You are a careful social science annotator.
+Task: assign one of {protest, discrimination, solidarity}.
+Return ONLY JSON: {"label": "...", "rationale": "..."}
+Guidelines:
+- protest: ...
+- discrimination: ...
+- solidarity: ...
+Edge cases: ...
+```
+
+---
+
+## Parameters that matter (and why)
+
+- **temperature**: randomness of token sampling (↓ = more deterministic)
+- **top_p**: keeps smallest set of tokens whose cumulative prob ≥ *p*
+- **top_k**: limit to *k* most probable tokens
+- **max_tokens**: cap on generated length (budget, truncation risk)
+- **stop**: strings that halt generation (protect JSON shape)
+
+---
+
+## Parameters that matter (and why)
+
+- **frequency/presence penalties**: reduce repetition
+- **seed**: when supported, makes sampling **repeatable**
+- **response_format / JSON mode**: enforce valid JSON (when available)
+- **system prompt**: role & constraints (e.g., “You are a cautious annotator”)
+
+::: callout-tip
+For annotation, start with **temperature = 0–0.2**, **top_p = 0.9–1.0**, **seed fixed**, **max_tokens** sized for your JSON.
+:::
+
+---
+
+## 
+
+![](images/structured.png){fig-align="center"}
+
+
+## Code: minimal annotation pipeline (Python)
+
+```python
+import os, json, pandas as pd, requests, time
+
+API_BASE = os.getenv("LLM_API_BASE")
+API_KEY  = os.getenv("LLM_API_KEY")
+MODEL    = os.getenv("LLM_MODEL", "gpt-4o-mini")
+
+def classify(text):
+    messages = [
+        {"role": "system", "content": "You are a careful social science annotator. Return ONLY JSON."},
+        {"role": "user", "content": f"Task: assign one of {{protest, discrimination, solidarity}}.\nText: {text}\nReturn JSON with fields: label, rationale."}
+    ]
+    r = requests.post(f"{API_BASE}/chat/completions",
+                      headers={"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"},
+                      json={"model": MODEL, "messages": messages, "temperature": 0.1, "top_p": 0.95, "max_tokens": 200, "seed": 7})
+    r.raise_for_status()
+    content = r.json()["choices"][0]["message"]["content"]
+    try:
+        return json.loads(content)
+    except Exception:
+        # simple repair pass
+        content = content.strip().splitlines()
+        content = "\n".join([ln for ln in content if ln.strip().startswith("{") or ln.strip().startswith('"') or ":" in ln])
+        return json.loads(content)
+
+df = pd.DataFrame({"text": [
+    "Thousands gathered in front of parliament.",
+    "Volunteers cleaned the park and cooked for neighbors.",
+    "He yelled slurs at a woman on the tram."
+]})
+out = []
+for t in df["text"]:
+    try:
+        out.append(classify(t))
+    except Exception as e:
+        out.append({"label": None, "rationale": f"ERROR: {e}"})
+    time.sleep(0.1)  # be polite / rate limits
+df_out = pd.concat([df, pd.json_normalize(out)], axis=1)
+print(df_out)
+```
+
+---
+
+## Robustness & validation
+
+:::incremental
+- **Replicability**: fix **seed**, freeze **prompt**, log **model version** & **parameters**
+- **Holdout validation** against **human labels**; measure agreement (accuracy, F1, κ)
+- **Stability tests**: paraphrases, ordering, synonym swaps
+- **Sensitivity analysis**: alternate prompts, models, decoding parameters
+:::
+
+## Robustness & validation
+
+![](images/lm-params-combinatorics.png){fig-align="center"}
+
+---
+
+## Ethics & bias
+
+:::incremental
+- **Measurement bias**: models can mirror or amplify stereotypes; test **subgroups** & report **disparities** (accuracy/F1/κ by group).
+- **Construct validity**: ensure labels align with **theory & definitions**; publish a **codebook** + **edge cases**.
+- **Privacy & consent**: avoid PII; follow IRB/ethics review; document **data sources**, **consent**, and **retention**.
+:::
+
+## Ethics & bias
+
+:::incremental
+- **Safety & harm**: set refusal rules; triage **low-confidence** cases to humans; avoid sensitive inferences without consent.
+- **Drift & provenance**: log model **name/version**, **date**, **seed/params**; freeze prompts; keep **hashes** of inputs/outputs.
+- **Governance**: access controls; audit trails; dataset statements & model cards.
+:::
+
+
