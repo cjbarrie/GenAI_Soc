@@ -1,0 +1,241 @@
+---
+title: "Week 5: Gen AI for Sociology"
+format:
+  revealjs:
+    toc: false
+    slide-number: true
+    incremental: true
+    transition: fade
+    code-line-numbers: false
+---
+
+## Introduction
+
+- Last week: **Large Language Models (LLMs)** — *zero‑shot* reasoning & generation
+- This week **Using LLMs for Qualitative Inquiry**
+
+---
+
+## Introduction
+
+- Learning goals
+  - Situate GenAI within computational + qualitative traditions
+  - Extract practical workflows (prompts, validation, UI pilots)
+  - Surface limits/ethics and ask how *qualitative* this all is (?)
+
+---
+
+## Computational × Qualitative: Earlier Approaches (I)
+
+- **Text-as-Data (TAD)**: dictionaries & supervised ML for scaling qualitative insights
+- Goal: *accuracy + scale* while keeping interpretability
+- High bar: significant **programming/statistics** skill
+
+---
+
+## 
+
+![](images/grimmer.png){fig-align="center"}
+
+## 
+
+![](images/nelson.png){fig-align="center"}
+
+---
+
+## Computational × Qualitative: Earlier Approaches (II)
+
+- Classic workflow: **codebooks** + training RAs → iterative refinement
+- Strength: *holistic*, concept-rich labeling across long-form texts
+- Cost: time, money, and coordination
+- But computers *were* adopted early on...
+
+---
+
+## 
+
+![](images/glaser.png){fig-align="center"}
+
+---
+
+## 
+
+![](images/caqdas.png){fig-align="center"}
+
+---
+
+## 
+
+![](images/deterding.png){fig-align="center"}
+
+
+---
+
+## What GenAI Changes (Than et al.)
+
+- **Representations**: from bag-of-words to **deep, distributed** embeddings
+- **Transfer learning**: large pre-trained models cut data/compute needs
+- **Natural language interfaces**: prompt in plain language; outputs in natural language
+
+---
+
+## An example of a difficult text...
+
+![](images/text.png){fig-align="center"}
+
+
+---
+
+## Workflow: Researcher → LLM → Researcher
+
+- Convert **codebooks** into **structured prompts** (definitions, criteria, outputs)
+- Iterate **prompts & models**; use **agreement** (inter-prompt/inter-model) to triage cases
+- Keep **human validation**: sample audits; resolve disagreements
+
+---
+
+## 
+
+![](images/chatgpt.png){fig-align="center"}
+
+
+---
+
+
+## Piloting via UI (and Why to Be Careful)
+
+- **Token limits & long docs** make few-shot brittle; zero-shot often competitive
+- **Prompt sensitivity** → researcher degrees-of-freedom; document **prompt variants**
+- Use **majority voting** + targeted review; treat high-agreement docs as *triage*, not truth
+
+---
+
+<video class="stretch" src="videos/prompt_interview.mov" controls muted playsinline></video>
+
+---
+
+## Iterative Coding with LLMs (What They Did)
+
+- **Derive definitions** two ways: researcher-written *and* LLM-generated from the guide
+- Test **zero vs. few-shot**; place **commands at the end**; prefer structured prompts
+- Use **agreement metrics** to guide where to invest hand-coding
+
+---
+
+## 
+
+![](images/workflow.png){fig-align="center"}
+
+
+---
+
+## Practical “Return Codes & Update” Loop
+
+- Start with a **baseline prompt** (no definition) → run on a dev set
+- Add **definition variants** (human/LLM) → compare outputs & rationales
+- **Revise codebook & prompts**; re-run; log changes for replicability (a bit like transfer learning)
+
+---
+
+## De Paoli: Inductive Thematic Analysis with GPT-3.5
+
+- Implements **Braun & Clarke** phases with chunked interviews (API workflow)
+- LLM **recovers many main themes** seen in prior human analyses
+- Takeaway: **viable** for inductive TA with caveats on setup/validation
+
+---
+
+## De Paoli: Memory & Workflow Limits
+
+- **No memory** across prompts → chunking (≈2.5k tokens)
+- Repetition & "hallucinated" codes during code reduction
+- **Temperature/control** matters for reproducibility vs. exploration
+
+---
+
+## 
+
+![](images/depaoli.png){fig-align="center"}
+
+
+---
+
+## Example: Thematic Coding vs. Information Extraction
+
+- **Thematic TA** (De Paoli): open-ended, inductive, pattern-finding
+- **Prompt-based IE** (Stuhler et al.): fill **templates** (e.g., age, occupation) at scale
+- Complementary: TA for concepts; IE for **structured variables** → mixed methods
+
+---
+
+## From Codebooks to Promptbooks (Stuhler et al.)
+
+- **Promptbooks**: publish the exact prompts + model to make measurement explicit
+- Open models + promptbooks → **replicable** qualitative pipelines
+- Warning: **non-random errors** (e.g., identity inferences) can bias downstream analyses
+
+---
+
+## 
+
+![](images/stuhler.png){fig-align="center"}
+
+
+---
+
+## What Works (and What Doesn’t) in IE
+
+- Highest accuracy on **explicit** facts (age, cause of death; occupation summaries)
+- Lower on **interpretive/sparse** info (origin, religion; education level)
+- **Prompting approach** differences are modest; more isn’t always better
+
+---
+
+## Big Picture: What Agentic AI Would Need for Qual Coding
+
+1. **Memory**: long context + external memory to carry decisions across documents
+2. **Interpretative mode**: reason with criteria, *abstain* when uncertain, justify with quotes
+3. **Traceability & control**: promptbooks, thresholds/abstention, agreement checks, human-in-loop
+
+---
+
+## How *Qualitative* Is This, After All?
+
+- Where is **interpretation** located — model tokens or researcher prompts?
+- What counts as **ground truth** for themes vs. categories?
+- Are **errors random** or patterned in ways that affect theory?
+
+---
+
+## What **Enhancements** can we think of?
+
+- AI as iterative challenger?
+- Enforced "reflexivity" via prompts?
+- Others?
+
+---
+
+## Current Approaches: Sober Assessment
+
+- **Open-source first** for transparency; APIs can change under you
+- **Agreement ≠ correctness**; always **audit samples** (especially edge cases)
+- Align method to task: **TA** for meaning; **IE** for facts; combine when possible
+
+---
+
+## Data Stewardship & IRB
+
+- Consent for 3rd-party processing (API vs on-prem)
+- Sensitive text: minimization, redaction, retention
+- Document risks (identity inference; re-identification)
+
+---
+
+## How replicable is all of this?
+
+- Iterative testing and selection
+- UI use and prompt variants
+- Documentation needed: promptbooks, codebooks, model versions...
+- But is this enough?
+
+---
