@@ -1,0 +1,1604 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Qualitative Coding with LLMs &#8212; GenAI for Sociology</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'week05_qualitative';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Structured Text Annotation with LLMs" href="week06_annotation.html" />
+    <link rel="prev" title="LLMs for Annotation I" href="week04_llms.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">GenAI for Sociology</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    GenAI for Sociology
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="week04_llms.html">LLMs for Annotation I</a></li>
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">LLMs for Annotation II</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week06_annotation.html">LLMs for Annotation III</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week07_silicon_sampling.html">LLMs for Synthetic Data I: Simulating Survey Respondents</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/cjbarrie/GenAI_Soc/blob/main/genai_book/week05_qualitative.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cjbarrie/GenAI_Soc" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cjbarrie/GenAI_Soc/issues/new?title=Issue%20on%20page%20%2Fweek05_qualitative.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/week05_qualitative.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Qualitative Coding with LLMs</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-in-google-colab">Running in Google Colab</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-locally">Running Locally</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-inductive-thematic-analysis">Part 1: Inductive Thematic Analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-code-condensation">Part 2: Code Condensation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-reflexive-coding-self-challenge">Part 3: Reflexive Coding (Self-Challenge)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-handling-long-documents-chunking">Part 4: Handling Long Documents (Chunking)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-theme-aggregation-and-deduplication">Part 5: Theme Aggregation and Deduplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-6-interactive-reflexive-dialogue">Part 6: Interactive Reflexive Dialogue</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductive-thematic-analysis">1. Inductive Thematic Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-condensation">2. Code Condensation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reflexive-coding">3. Reflexive Coding</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#long-document-handling">4. Long Document Handling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-dialogue">5. Interactive Dialogue</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="qualitative-coding-with-llms">
+<h1>Qualitative Coding with LLMs<a class="headerlink" href="#qualitative-coding-with-llms" title="Link to this heading">#</a></h1>
+<p>This notebook demonstrates how to use Large Language Models for qualitative data analysis tasks like thematic coding, code condensation, and reflexive analysis.</p>
+<section id="learning-objectives">
+<h2>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Perform <strong>inductive thematic analysis</strong> with LLMs on open-ended text</p></li>
+<li><p>Use <strong>structured outputs</strong> (JSON mode) for consistent coding results</p></li>
+<li><p>Apply <strong>code condensation</strong> strategies to reduce redundant themes</p></li>
+<li><p>Implement <strong>reflexive coding</strong> by having the LLM challenge its own interpretations</p></li>
+<li><p>Handle <strong>long documents</strong> (interview transcripts) through text chunking</p></li>
+<li><p>Compare thematic coding results from different LLM approaches</p></li>
+</ul>
+</section>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
+<section id="running-in-google-colab">
+<h3>Running in Google Colab<a class="headerlink" href="#running-in-google-colab" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Upload this notebook to Google Colab</p></li>
+<li><p>Run the installation cell below</p></li>
+<li><p>You’ll be prompted to enter your OpenAI API key</p></li>
+</ol>
+</section>
+<section id="running-locally">
+<h3>Running Locally<a class="headerlink" href="#running-locally" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Install requirements: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">openai</span> <span class="pre">scikit-learn</span> <span class="pre">pandas</span> <span class="pre">numpy</span></code></p></li>
+<li><p>Set environment variable: <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">OPENAI_API_KEY=&quot;your-key-here&quot;</span></code></p></li>
+<li><p>Run notebook with Jupyter: <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span> <span class="pre">week5_qualitative_coding_colab.ipynb</span></code></p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install required packages (uncomment if needed)</span>
+<span class="c1"># !pip install -q &quot;openai&gt;=1.40.0&quot; scikit-learn pandas numpy</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">KMeans</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">getpass</span>
+
+<span class="c1"># Set your OpenAI API key</span>
+<span class="c1"># For Colab: you&#39;ll be prompted to enter it</span>
+<span class="c1"># For local: set OPENAI_API_KEY environment variable</span>
+<span class="k">if</span> <span class="s2">&quot;OPENAI_API_KEY&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getpass</span><span class="p">(</span><span class="s2">&quot;OpenAI API key: &quot;</span><span class="p">)</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">()</span>  <span class="c1"># reads OPENAI_API_KEY from environment</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Setup complete!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>Sets up the environment for qualitative coding with LLMs:</p>
+<p><strong>Key libraries:</strong></p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">openai</span></code></strong>: Official client for OpenAI API (GPT-4, GPT-3.5)</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">sklearn</span></code></strong>: Machine learning library (we’ll use clustering for theme aggregation)</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">pandas</span></code></strong>: Data manipulation for tabular results</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">getpass</span></code></strong>: Secure API key input (won’t display in output)</p></li>
+</ul>
+<p><strong>API Key setup:</strong></p>
+<ul class="simple">
+<li><p>In Colab: You’ll be prompted to paste your key</p></li>
+<li><p>Locally: Set <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">OPENAI_API_KEY=&quot;sk-...&quot;</span></code> before running</p></li>
+<li><p>Security: Never hardcode keys or commit them to git</p></li>
+</ul>
+<p><strong>Why OpenAI vs other models:</strong></p>
+<ul class="simple">
+<li><p>GPT-4o-mini: Best balance of cost and quality for coding (~$0.15 per 1M tokens)</p></li>
+<li><p>Can switch to Anthropic Claude or open-source models with minor code changes</p></li>
+</ul>
+<p><strong>Expected output:</strong> “✓ Setup complete!” means you’re ready to make API calls.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="part-1-inductive-thematic-analysis">
+<h2>Part 1: Inductive Thematic Analysis<a class="headerlink" href="#part-1-inductive-thematic-analysis" title="Link to this heading">#</a></h2>
+<p>In qualitative research, <strong>inductive thematic analysis</strong> means deriving themes directly from the data rather than applying pre-defined categories. We’ll ask an LLM to:</p>
+<ol class="arabic simple">
+<li><p>Read a collection of open-ended responses</p></li>
+<li><p>Identify 3-6 recurring themes</p></li>
+<li><p>Assign each text to one or more themes</p></li>
+<li><p>Provide justifications using quotes from the data</p></li>
+</ol>
+<p>We’ll use <strong>JSON mode</strong> to get structured, parseable output.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample dataset: short survey responses about community concerns</span>
+<span class="n">texts</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;I worry about rising rent and housing costs in my city.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Public transit has improved, but buses are still unreliable.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;I love my neighborhood&#39;s community garden and local markets.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Healthcare appointments take months to schedule.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Street lighting got better and I feel safer walking at night.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Childcare is unaffordable; I had to reduce my hours at work.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;The new bike lanes are great, but drivers don&#39;t respect them.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Utility bills have gone up a lot this year.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Local library events helped me meet new neighbors.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;The wait times at the public clinic are frustrating.&quot;</span>
+<span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dataset: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span><span class="si">}</span><span class="s2"> responses about community life</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">texts</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>This is the core of LLM-assisted inductive thematic analysis:</p>
+<p><strong>Prompt structure:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>System message:</strong> Defines the LLM’s role and output format</p>
+<ul class="simple">
+<li><p>“Return valid JSON only” ensures parseable output</p></li>
+<li><p>Specifies what keys to include (themes, assignments)</p></li>
+</ul>
+</li>
+<li><p><strong>User message:</strong> Contains the actual task and data</p>
+<ul class="simple">
+<li><p>Wrapped in JSON for clarity</p></li>
+<li><p>Specifies desired number of themes (3-6)</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Key parameter: <code class="docutils literal notranslate"><span class="pre">response_format={&quot;type&quot;:</span> <span class="pre">&quot;json_object&quot;}</span></code></strong></p>
+<ul class="simple">
+<li><p>Forces valid JSON output (won’t return prose)</p></li>
+<li><p>Still need to request JSON in the prompt</p></li>
+<li><p>Available in GPT-4 and GPT-3.5-turbo models</p></li>
+</ul>
+<p><strong>Temperature choice: 0.3</strong></p>
+<ul class="simple">
+<li><p>Lower than creative tasks (0.7-1.0)</p></li>
+<li><p>Ensures more consistent theme identification</p></li>
+<li><p>For maximum reproducibility, use 0.0 (but may be too rigid)</p></li>
+</ul>
+<p><strong>How to adapt this:</strong></p>
+<ul class="simple">
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">n_themes_range</span></code> to guide theme granularity</p></li>
+<li><p>Add domain-specific instructions (e.g., “focus on economic themes”)</p></li>
+<li><p>Include codebook examples for few-shot learning</p></li>
+</ul>
+<p><strong>Expected output:</strong> A JSON object with structured themes and text-to-theme assignments.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># System instructions for the LLM</span>
+<span class="n">system_instructions</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;You are a careful qualitative analyst.</span>
+<span class="s2">Return valid JSON only. Create 3–6 concise themes with clear names and</span>
+<span class="s2">1–2 sentence definitions. Then assign each input text an array of theme names</span>
+<span class="s2">(best matches), and include a short justification using quotes when possible.</span>
+<span class="s2">If uncertain, allow an empty array. Keys: themes, assignments.&quot;&quot;&quot;</span>
+
+<span class="c1"># User prompt with the task and data</span>
+<span class="n">user_prompt</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;task&quot;</span><span class="p">:</span> <span class="s2">&quot;Inductive theming of short survey responses&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;n_themes_range&quot;</span><span class="p">:</span> <span class="s2">&quot;3-6&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;texts&quot;</span><span class="p">:</span> <span class="n">texts</span>
+<span class="p">}</span>
+
+<span class="c1"># Make API call with JSON mode</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">system_instructions</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">user_prompt</span><span class="p">)}</span>
+    <span class="p">],</span>
+    <span class="n">response_format</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_object&quot;</span><span class="p">},</span>  <span class="c1"># Force JSON output</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.3</span>  <span class="c1"># Low temperature for more consistent coding</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Thematic analysis complete&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Keys in response: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>Parses and displays the LLM’s theme assignments - with robust error handling:</p>
+<p><strong>Why we need <code class="docutils literal notranslate"><span class="pre">get_text_index</span></code> function:</strong></p>
+<ul class="simple">
+<li><p>LLMs may return results in different formats</p></li>
+<li><p>Sometimes returns <code class="docutils literal notranslate"><span class="pre">&quot;idx&quot;:</span> <span class="pre">0</span></code>, sometimes <code class="docutils literal notranslate"><span class="pre">&quot;text&quot;:</span> <span class="pre">&quot;full</span> <span class="pre">text</span> <span class="pre">here&quot;</span></code></p></li>
+<li><p>This function handles multiple possible response structures</p></li>
+</ul>
+<p><strong>Parsing strategies:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Check for explicit index keys:</strong> <code class="docutils literal notranslate"><span class="pre">idx</span></code>, <code class="docutils literal notranslate"><span class="pre">index</span></code>, <code class="docutils literal notranslate"><span class="pre">i</span></code>, <code class="docutils literal notranslate"><span class="pre">text_id</span></code></p></li>
+<li><p><strong>Match by text content:</strong> If no index, try to find the text in original list</p></li>
+<li><p><strong>Substring matching:</strong> Handle partial quotes or truncated text</p></li>
+</ol>
+<p><strong>Why this matters:</strong></p>
+<ul class="simple">
+<li><p>Makes code robust to LLM output variations</p></li>
+<li><p>Different models or temperature settings may format differently</p></li>
+<li><p>Always validate LLM outputs before trusting them</p></li>
+</ul>
+<p><strong>How to use:</strong></p>
+<ul class="simple">
+<li><p>Run as-is for most cases</p></li>
+<li><p>If your LLM uses different keys, add them to the function</p></li>
+<li><p>For production, add logging to track which matching strategy succeeded</p></li>
+</ul>
+<p><strong>Expected output:</strong> Human-readable list showing which texts got which theme labels, with justifications.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Display the themes identified by the LLM</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== IDENTIFIED THEMES ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">themes</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;themes&quot;</span><span class="p">,</span> <span class="p">[])</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">theme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">themes</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">theme</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;Unnamed theme&quot;</span><span class="p">)</span>
+    <span class="n">definition</span> <span class="o">=</span> <span class="n">theme</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;definition&quot;</span><span class="p">,</span> <span class="s2">&quot;No definition provided&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">definition</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Display assignments of texts to themes</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_text_index</span><span class="p">(</span><span class="n">assignment</span><span class="p">,</span> <span class="n">texts</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract text index from assignment, handling various response formats&quot;&quot;&quot;</span>
+    <span class="c1"># Try explicit index keys</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;idx&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="s2">&quot;text_id&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">assignment</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">assignment</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+    
+    <span class="c1"># Try to match by text content</span>
+    <span class="k">if</span> <span class="s2">&quot;text&quot;</span> <span class="ow">in</span> <span class="n">assignment</span><span class="p">:</span>
+        <span class="n">text_snippet</span> <span class="o">=</span> <span class="n">assignment</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
+        <span class="c1"># Exact match</span>
+        <span class="k">if</span> <span class="n">text_snippet</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">texts</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">text_snippet</span><span class="p">)</span>
+        <span class="c1"># Substring match</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">texts</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">text_snippet</span><span class="p">[:</span><span class="mi">30</span><span class="p">]</span> <span class="ow">in</span> <span class="n">t</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">j</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== THEME ASSIGNMENTS ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">assignments</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;assignments&quot;</span><span class="p">,</span> <span class="p">[])</span>
+<span class="k">for</span> <span class="n">assignment</span> <span class="ow">in</span> <span class="n">assignments</span><span class="p">:</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">get_text_index</span><span class="p">(</span><span class="n">assignment</span><span class="p">,</span> <span class="n">texts</span><span class="p">)</span>
+    
+    <span class="c1"># Get theme names (handle different possible keys)</span>
+    <span class="n">theme_names</span> <span class="o">=</span> <span class="n">assignment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;themes&quot;</span><span class="p">,</span> 
+                   <span class="n">assignment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;labels&quot;</span><span class="p">,</span> 
+                   <span class="n">assignment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;categories&quot;</span><span class="p">,</span> <span class="p">[])))</span>
+    
+    <span class="n">justification</span> <span class="o">=</span> <span class="n">assignment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;justification&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Text </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">texts</span><span class="p">[</span><span class="n">idx</span><span class="p">][:</span><span class="mi">60</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  → Themes: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">theme_names</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">justification</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  → Why: </span><span class="si">{</span><span class="n">justification</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>Demonstrates <strong>code condensation</strong> - a key qualitative analysis technique:</p>
+<p><strong>What is code condensation:</strong></p>
+<ul class="simple">
+<li><p>Start with many detailed codes (13 in this example)</p></li>
+<li><p>Group them into fewer, broader themes (3-5)</p></li>
+<li><p>Creates a hierarchical codebook structure</p></li>
+</ul>
+<p><strong>Why this matters:</strong></p>
+<ul class="simple">
+<li><p>Mirrors iterative qualitative analysis workflow</p></li>
+<li><p>Helps manage complexity in large datasets</p></li>
+<li><p>Makes patterns more visible</p></li>
+</ul>
+<p><strong>How the prompt works:</strong></p>
+<ol class="arabic simple">
+<li><p>Provides all initial codes as context</p></li>
+<li><p>Asks for 3-5 broader categories</p></li>
+<li><p>Requests mapping of initial → condensed codes</p></li>
+<li><p>Wants definitions for each condensed theme</p></li>
+</ol>
+<p><strong>Temperature: 0.2 (very low)</strong></p>
+<ul class="simple">
+<li><p>Code condensation should be consistent</p></li>
+<li><p>We want logical groupings, not creative ones</p></li>
+<li><p>Higher temperature might produce inconsistent hierarchies</p></li>
+</ul>
+<p><strong>How to use this:</strong></p>
+<ul class="simple">
+<li><p>Start by coding 20-50 texts with detailed codes</p></li>
+<li><p>Feed those codes to this condensation step</p></li>
+<li><p>Iterate if the condensed themes don’t feel right</p></li>
+<li><p>Use human judgment to validate the groupings</p></li>
+</ul>
+<p><strong>Expected output:</strong> 3-5 broader themes, each encompassing multiple initial codes, with clear definitions.</p>
+</section>
+<hr class="docutils" />
+<section id="part-2-code-condensation">
+<h2>Part 2: Code Condensation<a class="headerlink" href="#part-2-code-condensation" title="Link to this heading">#</a></h2>
+<p>In iterative qualitative coding, you often start with many codes and then <strong>condense</strong> them into higher-level themes. Let’s simulate this by:</p>
+<ol class="arabic simple">
+<li><p>Creating an initial set of detailed codes</p></li>
+<li><p>Asking the LLM to group them into broader categories</p></li>
+<li><p>Producing a condensed codebook</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simulate initial detailed codes from a first-pass analysis</span>
+<span class="n">initial_codes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Rising rent concerns&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Housing affordability crisis&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Childcare costs&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Utility bill increases&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Bus unreliability&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Bike lane infrastructure&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Healthcare access delays&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Public clinic wait times&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Street lighting improvements&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Neighborhood safety&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Community garden engagement&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Library social events&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Local market connections&quot;</span>
+<span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initial codes: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">initial_codes</span><span class="p">)</span><span class="si">}</span><span class="s2"> detailed codes</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">initial_codes</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  • </span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ask LLM to condense codes into higher-level themes</span>
+<span class="n">condensation_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are a qualitative researcher performing code condensation.</span>
+
+<span class="s2">Given these </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">initial_codes</span><span class="p">)</span><span class="si">}</span><span class="s2"> initial codes from interview analysis:</span>
+<span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">initial_codes</span><span class="p">,</span><span class="w"> </span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span>
+
+<span class="s2">Group them into 3-5 broader themes. For each theme:</span>
+<span class="s2">- Provide a clear theme name</span>
+<span class="s2">- List which initial codes it encompasses</span>
+<span class="s2">- Write a brief definition</span>
+
+<span class="s2">Return JSON with key &#39;condensed_themes&#39; containing an array of theme objects.&quot;&quot;&quot;</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a qualitative researcher. Return valid JSON only.&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">condensation_prompt</span><span class="p">}</span>
+    <span class="p">],</span>
+    <span class="n">response_format</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_object&quot;</span><span class="p">},</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span>
+<span class="p">)</span>
+
+<span class="n">condensed</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Code condensation complete</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Display condensed themes</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== CONDENSED THEMES ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">condensed_themes</span> <span class="o">=</span> <span class="n">condensed</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;condensed_themes&quot;</span><span class="p">,</span> <span class="p">[])</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">theme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">condensed_themes</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">theme</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;Unnamed&quot;</span><span class="p">)</span>
+    <span class="n">definition</span> <span class="o">=</span> <span class="n">theme</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;definition&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">included_codes</span> <span class="o">=</span> <span class="n">theme</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;codes&quot;</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;initial_codes&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Definition: </span><span class="si">{</span><span class="n">definition</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Encompasses: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">included_codes</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>Implements <strong>reflexive coding</strong> - having the LLM critique its own analysis:</p>
+<p><strong>What is reflexivity in qualitative research:</strong></p>
+<ul class="simple">
+<li><p>Questioning your own interpretations</p></li>
+<li><p>Acknowledging researcher positionality and bias</p></li>
+<li><p>Considering alternative readings of data</p></li>
+<li><p>Strengthening validity through self-critique</p></li>
+</ul>
+<p><strong>The two-step process:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Initial coding:</strong> LLM identifies themes (temperature 0.4)</p></li>
+<li><p><strong>Self-challenge:</strong> LLM questions its own themes (temperature 0.5)</p></li>
+</ol>
+<p><strong>Why slightly higher temperature in step 2:</strong></p>
+<ul class="simple">
+<li><p>Need creativity to generate alternative interpretations</p></li>
+<li><p>Want to escape from initial framing</p></li>
+<li><p>Still structured enough for analysis</p></li>
+</ul>
+<p><strong>What the challenge prompt asks:</strong></p>
+<ul class="simple">
+<li><p>What biases might the LLM have made?</p></li>
+<li><p>What alternative interpretations exist?</p></li>
+<li><p>What evidence contradicts the themes?</p></li>
+<li><p>What was overlooked?</p></li>
+</ul>
+<p><strong>Sociological value:</strong></p>
+<ul class="simple">
+<li><p>Surfaces ambiguities in the data</p></li>
+<li><p>Reveals multiple possible readings</p></li>
+<li><p>Makes analysis more transparent and rigorous</p></li>
+</ul>
+<p><strong>How to use:</strong></p>
+<ul class="simple">
+<li><p>Run on texts where interpretation is ambiguous</p></li>
+<li><p>Use the challenges to refine your own thinking</p></li>
+<li><p>Don’t treat LLM challenges as “truth” - they’re provocations</p></li>
+<li><p>Combine with human reflexive memos</p></li>
+</ul>
+<p><strong>Expected output:</strong> Critical reflections on initial coding, alternative themes, and a revised interpretation.</p>
+</section>
+<hr class="docutils" />
+<section id="part-3-reflexive-coding-self-challenge">
+<h2>Part 3: Reflexive Coding (Self-Challenge)<a class="headerlink" href="#part-3-reflexive-coding-self-challenge" title="Link to this heading">#</a></h2>
+<p>Good qualitative research involves <strong>reflexivity</strong>: questioning your own interpretations and biases. We can prompt the LLM to:</p>
+<ol class="arabic simple">
+<li><p>Analyze text and produce initial codes</p></li>
+<li><p>Challenge its own coding decisions</p></li>
+<li><p>Consider alternative interpretations</p></li>
+</ol>
+<p>This helps surface ambiguities and encourages deeper analysis.</p>
+<p><strong>What this code does:</strong></p>
+<p>Implements <strong>text chunking</strong> for handling long documents (like interview transcripts):</p>
+<p><strong>Why chunking is necessary:</strong></p>
+<ul class="simple">
+<li><p>LLMs have context windows (e.g., 128k tokens for GPT-4)</p></li>
+<li><p>Long interviews may exceed this limit</p></li>
+<li><p>Smaller chunks = more focused coding</p></li>
+<li><p>Easier to manage API costs</p></li>
+</ul>
+<p><strong>The <code class="docutils literal notranslate"><span class="pre">chunk_text</span></code> function:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Normalize input:</strong> Handles both strings and lists</p></li>
+<li><p><strong>Clean whitespace:</strong> Collapses multiple spaces to one</p></li>
+<li><p><strong>Split by words:</strong> Chunks of ~200 words (adjustable)</p></li>
+<li><p><strong>Filter short chunks:</strong> Minimum 40 characters to avoid tiny fragments</p></li>
+</ol>
+<p><strong>Parameters to adjust:</strong></p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">max_words=200</span></code>:</strong> Smaller = more granular coding, but more API calls</p>
+<ul>
+<li><p>Use 200-300 for detailed coding</p></li>
+<li><p>Use 500-1000 for broader themes</p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">min_chars=40</span></code>:</strong> Prevents tiny trailing chunks</p></li>
+</ul>
+<p><strong>Alternative chunking strategies:</strong></p>
+<ul class="simple">
+<li><p><strong>Paragraph-based:</strong> Split on <code class="docutils literal notranslate"><span class="pre">\n\n</span></code> (respects document structure)</p></li>
+<li><p><strong>Sentence-based:</strong> Use spaCy or NLTK sentence tokenizer</p></li>
+<li><p><strong>Semantic:</strong> Use embeddings to find natural break points</p></li>
+<li><p><strong>Speaker turns:</strong> For multi-party interviews</p></li>
+</ul>
+<p><strong>How to use:</strong></p>
+<ul class="simple">
+<li><p>For 5,000-word interview: ~25 chunks at 200 words each</p></li>
+<li><p>Each chunk gets coded separately (next cell)</p></li>
+<li><p>Then aggregate themes across chunks (Part 5)</p></li>
+</ul>
+<p><strong>Expected output:</strong> List of text segments, each small enough for focused LLM coding.</p>
+<p><strong>What this code does:</strong></p>
+<p>Applies thematic coding to each chunk separately, then aggregates results:</p>
+<p><strong>The <code class="docutils literal notranslate"><span class="pre">code_chunks</span></code> function workflow:</strong></p>
+<ol class="arabic simple">
+<li><p>Loop through each text chunk</p></li>
+<li><p>Send to LLM for theme identification (max 3 themes per chunk)</p></li>
+<li><p>Collect all themes in a flat list</p></li>
+<li><p>Print themes found in each chunk</p></li>
+</ol>
+<p><strong>Key parameter: <code class="docutils literal notranslate"><span class="pre">max_themes_per_chunk=3</span></code></strong></p>
+<ul class="simple">
+<li><p>Prevents theme explosion (too many themes)</p></li>
+<li><p>Forces LLM to prioritize most salient themes</p></li>
+<li><p>Adjust based on chunk size and content density</p></li>
+</ul>
+<p><strong>Why this approach:</strong></p>
+<ul class="simple">
+<li><p>Each chunk gets focused attention</p></li>
+<li><p>Avoids overwhelming the LLM with too much text</p></li>
+<li><p>Natural for long interviews with multiple topics</p></li>
+</ul>
+<p><strong>Potential issues:</strong></p>
+<ul class="simple">
+<li><p><strong>Duplicate themes across chunks:</strong> “affordability” appears in chunks 1, 3, 5</p></li>
+<li><p><strong>Inconsistent naming:</strong> Chunk 1 says “cost concerns”, chunk 3 says “financial burden”</p></li>
+<li><p>Solution: Deduplication step (next cells)</p></li>
+</ul>
+<p><strong>Cost considerations:</strong></p>
+<ul class="simple">
+<li><p>25 chunks × <span class="math notranslate nohighlight">\(0.0002 per call = ~\)</span>0.005 (very cheap)</p></li>
+<li><p>Most cost is in prompt tokens (the chunk text)</p></li>
+<li><p>For 100 interviews: budget ~$5-10</p></li>
+</ul>
+<p><strong>How to improve:</strong></p>
+<ul class="simple">
+<li><p>Add few-shot examples in the prompt for consistency</p></li>
+<li><p>Use lower temperature (0.1) for more uniform theme names</p></li>
+<li><p>Include a preliminary codebook to guide naming</p></li>
+</ul>
+<p><strong>Expected output:</strong> List of all themes across all chunks, with some duplication that needs resolution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample interview excerpt for reflexive analysis</span>
+<span class="n">interview_excerpt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;I&#39;ve lived in this neighborhood for fifteen years. </span>
+<span class="s2">When I first moved here, everyone knew each other. We&#39;d have block parties, </span>
+<span class="s2">kids played outside together. Now? People keep to themselves. Everyone&#39;s </span>
+<span class="s2">always rushing somewhere. The new apartment buildings brought in a lot of </span>
+<span class="s2">young professionals who don&#39;t seem interested in community. But maybe that&#39;s </span>
+<span class="s2">just my generation talking. I don&#39;t know. Things change.&quot;&quot;&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Interview excerpt:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">interview_excerpt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Step 1: Initial coding</span>
+<span class="n">initial_analysis_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Analyze this interview excerpt and identify 2-3 themes.</span>
+
+<span class="s2">Excerpt:</span>
+<span class="si">{</span><span class="n">interview_excerpt</span><span class="si">}</span>
+
+<span class="s2">Return JSON with:</span>
+<span class="s2">- themes: array of theme names</span>
+<span class="s2">- interpretations: brief explanation of each theme</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a qualitative researcher. Return valid JSON only.&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">initial_analysis_prompt</span><span class="p">}</span>
+    <span class="p">],</span>
+    <span class="n">response_format</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_object&quot;</span><span class="p">},</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.4</span>
+<span class="p">)</span>
+
+<span class="n">initial_analysis</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== INITIAL ANALYSIS ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">theme</span> <span class="ow">in</span> <span class="n">initial_analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;themes&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  • </span><span class="si">{</span><span class="n">theme</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">interpretation</span> <span class="ow">in</span> <span class="n">initial_analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;interpretations&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - </span><span class="si">{</span><span class="n">interpretation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>Uses the LLM to <strong>deduplicate and consolidate</strong> similar themes:</p>
+<p><strong>Why LLMs are good at this:</strong></p>
+<ul class="simple">
+<li><p>Can recognize semantic similarity (“cost concerns” ≈ “financial burden”)</p></li>
+<li><p>Understand broader categories that encompass multiple themes</p></li>
+<li><p>Generate clear definitions for consolidated themes</p></li>
+</ul>
+<p><strong>The deduplication prompt:</strong></p>
+<ol class="arabic simple">
+<li><p>Shows all unique themes from chunk coding</p></li>
+<li><p>Asks LLM to merge similar/overlapping ones</p></li>
+<li><p>Requests 3-5 final distinct themes</p></li>
+<li><p>Wants mapping: which original themes → which final theme</p></li>
+</ol>
+<p><strong>Temperature: 0.2 (low)</strong></p>
+<ul class="simple">
+<li><p>Consolidation should be logical and consistent</p></li>
+<li><p>Too high = creative but inconsistent groupings</p></li>
+</ul>
+<p><strong>How this differs from code condensation:</strong></p>
+<ul class="simple">
+<li><p><strong>Code condensation:</strong> Hierarchical grouping (initial → broader)</p></li>
+<li><p><strong>Deduplication:</strong> Horizontal merging (similar themes → single theme)</p></li>
+</ul>
+<p><strong>Alternative approaches:</strong></p>
+<ul class="simple">
+<li><p><strong>Embedding similarity:</strong> Use cosine similarity on theme embeddings to auto-cluster</p></li>
+<li><p><strong>Manual review:</strong> Export theme list and manually mark duplicates</p></li>
+<li><p><strong>Hybrid:</strong> LLM suggests merges, human approves</p></li>
+</ul>
+<p><strong>When to use:</strong></p>
+<ul class="simple">
+<li><p>After coding 20+ chunks (enough variation to cause duplicates)</p></li>
+<li><p>When you see obvious semantic overlap in theme names</p></li>
+<li><p>Before final codebook creation</p></li>
+</ul>
+<p><strong>Expected output:</strong> Clean, non-redundant final codebook with 3-5 themes, each with clear definition and list of merged original themes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Step 2: Challenge the initial coding</span>
+<span class="n">challenge_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You previously identified these themes in an interview excerpt:</span>
+<span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">initial_analysis</span><span class="p">,</span><span class="w"> </span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span>
+
+<span class="s2">Original excerpt:</span>
+<span class="si">{</span><span class="n">interview_excerpt</span><span class="si">}</span>
+
+<span class="s2">Now, critically examine your own interpretation:</span>
+<span class="s2">1. What biases or assumptions might you have made?</span>
+<span class="s2">2. What alternative interpretations are possible?</span>
+<span class="s2">3. What evidence contradicts your themes?</span>
+<span class="s2">4. What did you overlook?</span>
+
+<span class="s2">Return JSON with:</span>
+<span class="s2">- challenges: array of critical reflections</span>
+<span class="s2">- alternative_themes: array of alternative theme names</span>
+<span class="s2">- revised_interpretation: your reconsidered analysis</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a reflexive qualitative researcher. Return valid JSON only.&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">challenge_prompt</span><span class="p">}</span>
+    <span class="p">],</span>
+    <span class="n">response_format</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_object&quot;</span><span class="p">},</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.5</span>  <span class="c1"># Slightly higher for creative challenges</span>
+<span class="p">)</span>
+
+<span class="n">reflexive_analysis</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== REFLEXIVE ANALYSIS ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Critical reflections:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">challenge</span> <span class="ow">in</span> <span class="n">reflexive_analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;challenges&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  • </span><span class="si">{</span><span class="n">challenge</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Alternative themes:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">alt_theme</span> <span class="ow">in</span> <span class="n">reflexive_analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alternative_themes&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  • </span><span class="si">{</span><span class="n">alt_theme</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Revised interpretation:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">reflexive_analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;revised_interpretation&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>Creates an <strong>interactive dialogue</strong> where the LLM asks YOU questions about the analysis:</p>
+<p><strong>What is member checking/collaborative coding:</strong></p>
+<ul class="simple">
+<li><p>Researcher presents analysis to participants</p></li>
+<li><p>Participants validate or challenge interpretations</p></li>
+<li><p>Iterative dialogue refines understanding</p></li>
+</ul>
+<p><strong>How this simulates that:</strong></p>
+<ul class="simple">
+<li><p>LLM presents its themes</p></li>
+<li><p>LLM asks open-ended questions about:</p>
+<ul>
+<li><p>Ambiguities in the text</p></li>
+<li><p>Missing context</p></li>
+<li><p>Alternative interpretations</p></li>
+</ul>
+</li>
+<li><p>Researcher answers (in practice, you’d feed answers back to LLM)</p></li>
+</ul>
+<p><strong>Temperature: 0.6 (moderate-high)</strong></p>
+<ul class="simple">
+<li><p>Need creativity to formulate good questions</p></li>
+<li><p>Want genuine probing, not just confirmation</p></li>
+<li><p>Not coding task, so higher temp is fine</p></li>
+</ul>
+<p><strong>Practical workflow:</strong></p>
+<ol class="arabic simple">
+<li><p>Run this cell to get LLM’s questions</p></li>
+<li><p>Answer them based on your domain knowledge</p></li>
+<li><p>Feed answers back in a new prompt: “Given these clarifications: [answers], revise your coding”</p></li>
+<li><p>LLM produces refined themes</p></li>
+</ol>
+<p><strong>Why this matters:</strong></p>
+<ul class="simple">
+<li><p>Makes LLM analysis more interactive</p></li>
+<li><p>Surfaces what the LLM is uncertain about</p></li>
+<li><p>Encourages researcher reflexivity</p></li>
+<li><p>Combines LLM capabilities with human expertise</p></li>
+</ul>
+<p><strong>How to extend:</strong></p>
+<ul class="simple">
+<li><p>Create a loop: Ask questions → Get answers → Revise → Ask follow-ups</p></li>
+<li><p>Log the dialogue for transparency in publications</p></li>
+<li><p>Use for training human coders (shows what questions to ask)</p></li>
+</ul>
+<p><strong>Expected output:</strong> 2-3 thoughtful questions that probe interpretation, not just factual gaps.</p>
+</section>
+<hr class="docutils" />
+<section id="part-4-handling-long-documents-chunking">
+<h2>Part 4: Handling Long Documents (Chunking)<a class="headerlink" href="#part-4-handling-long-documents-chunking" title="Link to this heading">#</a></h2>
+<p>Interview transcripts can be very long. To handle them effectively:</p>
+<ol class="arabic simple">
+<li><p><strong>Chunk</strong> the text into manageable segments</p></li>
+<li><p>Code each segment separately</p></li>
+<li><p>Aggregate themes across all segments</p></li>
+</ol>
+<p>Here’s a simple chunking strategy based on word count.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">chunk_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">max_words</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">min_chars</span><span class="o">=</span><span class="mi">40</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Split text into chunks of roughly max_words each.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        text: Input text (string or list of strings)</span>
+<span class="sd">        max_words: Maximum words per chunk</span>
+<span class="sd">        min_chars: Minimum characters to keep a chunk</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        List of text chunks</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Normalize to string</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    
+    <span class="c1"># Collapse whitespace</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    
+    <span class="c1"># Split into words and chunk</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">),</span> <span class="n">max_words</span><span class="p">):</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">max_words</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">min_chars</span><span class="p">:</span>
+            <span class="n">chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">chunks</span>
+
+<span class="c1"># Test with a sample long text</span>
+<span class="n">sample_long_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Video games are a diverse medium. The audience who plays </span>
+<span class="s2">video games is similarly diverse. If you&#39;re trying to break into a specialist </span>
+<span class="s2">space, such as interactive fiction, there are very set definitions of what </span>
+<span class="s2">interactive fiction can be or can&#39;t be. Some people in the community believe </span>
+<span class="s2">interactive fiction is typing into a parser and nothing else. But there are </span>
+<span class="s2">people working to change that perception. Similar movements happen in other </span>
+<span class="s2">genres like roguelikes. Gaming is a big tent and we&#39;re seeing those voices </span>
+<span class="s2">being given more press as a testament to the maturity of our medium.&quot;&quot;&quot;</span>
+
+<span class="n">chunks</span> <span class="o">=</span> <span class="n">chunk_text</span><span class="p">(</span><span class="n">sample_long_text</span><span class="p">,</span> <span class="n">max_words</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Split text into </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span><span class="si">}</span><span class="s2"> chunks</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chunks</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Chunk </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">split</span><span class="p">())</span><span class="si">}</span><span class="s2"> words):&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">chunk</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span><span class="si">}</span><span class="s2">...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now let&#39;s code each chunk separately</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">code_chunks</span><span class="p">(</span><span class="n">chunks</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span> <span class="n">max_themes_per_chunk</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply thematic coding to each chunk and aggregate results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_themes</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chunks</span><span class="p">):</span>
+        <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Identify up to </span><span class="si">{</span><span class="n">max_themes_per_chunk</span><span class="si">}</span><span class="s2"> themes in this text segment.</span>
+<span class="s2">        </span>
+<span class="s2">Segment:</span>
+<span class="si">{</span><span class="n">chunk</span><span class="si">}</span>
+
+<span class="s2">Return JSON with:</span>
+<span class="s2">- themes: array of theme names</span>
+<span class="s2">- supporting_quotes: array of relevant quotes</span>
+<span class="s2">&quot;&quot;&quot;</span>
+        
+        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a qualitative researcher. Return valid JSON only.&quot;</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}</span>
+            <span class="p">],</span>
+            <span class="n">response_format</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_object&quot;</span><span class="p">},</span>
+            <span class="n">temperature</span><span class="o">=</span><span class="mf">0.3</span>
+        <span class="p">)</span>
+        
+        <span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+        <span class="n">chunk_themes</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;themes&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">all_themes</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">chunk_themes</span><span class="p">)</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Chunk </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">chunk_themes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">all_themes</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== CODING CHUNKS ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">all_themes</span> <span class="o">=</span> <span class="n">code_chunks</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ Total themes identified across chunks: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_themes</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unique themes: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">all_themes</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="part-5-theme-aggregation-and-deduplication">
+<h2>Part 5: Theme Aggregation and Deduplication<a class="headerlink" href="#part-5-theme-aggregation-and-deduplication" title="Link to this heading">#</a></h2>
+<p>When coding in chunks, you often get <strong>duplicate or overlapping themes</strong>. Let’s aggregate and deduplicate them.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Count theme frequency</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+
+<span class="n">theme_counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">all_themes</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== THEME FREQUENCY ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">theme</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">theme_counts</span><span class="o">.</span><span class="n">most_common</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">theme</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">x&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use LLM to deduplicate and merge similar themes</span>
+<span class="n">dedup_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You identified these themes across multiple text segments:</span>
+<span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">theme_counts</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span><span class="w"> </span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span>
+
+<span class="s2">Some themes may be duplicates or highly similar. Consolidate them into a </span>
+<span class="s2">final list of 3-5 distinct themes. For each:</span>
+<span class="s2">- Provide a clear theme name</span>
+<span class="s2">- List which original themes it merges</span>
+<span class="s2">- Give a 1-2 sentence definition</span>
+
+<span class="s2">Return JSON with key &#39;final_themes&#39;.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a qualitative researcher. Return valid JSON only.&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">dedup_prompt</span><span class="p">}</span>
+    <span class="p">],</span>
+    <span class="n">response_format</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_object&quot;</span><span class="p">},</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span>
+<span class="p">)</span>
+
+<span class="n">final_codebook</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== FINAL CODEBOOK ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">theme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">final_codebook</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;final_themes&quot;</span><span class="p">,</span> <span class="p">[]),</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">theme</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;Unnamed&quot;</span><span class="p">)</span>
+    <span class="n">definition</span> <span class="o">=</span> <span class="n">theme</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;definition&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">merged</span> <span class="o">=</span> <span class="n">theme</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;merged_themes&quot;</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;merges&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">definition</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">merged</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Merged from: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">merged</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="part-6-interactive-reflexive-dialogue">
+<h2>Part 6: Interactive Reflexive Dialogue<a class="headerlink" href="#part-6-interactive-reflexive-dialogue" title="Link to this heading">#</a></h2>
+<p>One powerful feature of LLM-assisted coding is the ability to have a <strong>dialogue</strong> about the analysis. Let’s create a function that allows the LLM to:</p>
+<ol class="arabic simple">
+<li><p>Present its coding</p></li>
+<li><p>Ask for your opinion</p></li>
+<li><p>Incorporate your feedback</p></li>
+</ol>
+<p>This simulates collaborative coding or member checking.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a dialogue where LLM asks for researcher input</span>
+<span class="n">dialogue_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You&#39;ve coded this interview excerpt:</span>
+
+<span class="si">{</span><span class="n">interview_excerpt</span><span class="si">}</span>
+
+<span class="s2">Your themes: </span><span class="si">{</span><span class="n">initial_analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;themes&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">[])</span><span class="si">}</span>
+
+<span class="s2">Now, formulate 2-3 questions to ask the researcher to validate or challenge </span>
+<span class="s2">your interpretation. These should be open-ended questions that:</span>
+<span class="s2">- Probe ambiguities in the text</span>
+<span class="s2">- Ask about context you might be missing</span>
+<span class="s2">- Invite alternative interpretations</span>
+
+<span class="s2">Return JSON with key &#39;questions&#39;.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a reflexive qualitative researcher. Return valid JSON only.&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">dialogue_prompt</span><span class="p">}</span>
+    <span class="p">],</span>
+    <span class="n">response_format</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_object&quot;</span><span class="p">},</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.6</span>
+<span class="p">)</span>
+
+<span class="n">dialogue</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== LLM QUESTIONS FOR RESEARCHER ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">question</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dialogue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;questions&quot;</span><span class="p">,</span> <span class="p">[]),</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">question</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">💡 In practice, you would answer these questions and feed the responses&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   back to the LLM to refine the coding iteratively.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>This notebook demonstrated key techniques for LLM-assisted qualitative coding:</p>
+<section id="inductive-thematic-analysis">
+<h3>1. Inductive Thematic Analysis<a class="headerlink" href="#inductive-thematic-analysis" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Let the LLM derive themes from data</p></li>
+<li><p>Use JSON mode for structured output</p></li>
+<li><p>Get justifications with supporting quotes</p></li>
+</ul>
+</section>
+<section id="code-condensation">
+<h3>2. Code Condensation<a class="headerlink" href="#code-condensation" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Start with detailed codes</p></li>
+<li><p>Group into higher-level themes</p></li>
+<li><p>Create hierarchical codebooks</p></li>
+</ul>
+</section>
+<section id="reflexive-coding">
+<h3>3. Reflexive Coding<a class="headerlink" href="#reflexive-coding" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Challenge initial interpretations</p></li>
+<li><p>Consider alternative themes</p></li>
+<li><p>Surface researcher biases</p></li>
+</ul>
+</section>
+<section id="long-document-handling">
+<h3>4. Long Document Handling<a class="headerlink" href="#long-document-handling" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Chunk text into manageable segments</p></li>
+<li><p>Code each chunk separately</p></li>
+<li><p>Aggregate and deduplicate themes</p></li>
+</ul>
+</section>
+<section id="interactive-dialogue">
+<h3>5. Interactive Dialogue<a class="headerlink" href="#interactive-dialogue" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Have LLM ask clarifying questions</p></li>
+<li><p>Incorporate researcher feedback</p></li>
+<li><p>Iterate toward refined coding</p></li>
+</ul>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Use low temperature</strong> (0.2-0.4) for consistent coding</p></li>
+<li><p><strong>Always validate</strong> LLM themes against your domain knowledge</p></li>
+<li><p><strong>Use JSON mode</strong> for structured, parseable outputs</p></li>
+<li><p><strong>Document your process</strong> (prompts, model versions, settings)</p></li>
+<li><p><strong>Combine LLM + human judgment</strong> - never fully automate interpretation</p></li>
+<li><p><strong>Check for bias</strong> - LLMs can reproduce stereotypes in coding</p></li>
+<li><p><strong>Iterate</strong> - qualitative analysis is rarely one-shot</p></li>
+</ol>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Find real interview data</strong> (e.g., from <a class="reference external" href="https://zenodo.org/records/1163698">Zenodo</a>) and apply the techniques above</p></li>
+<li><p><strong>Compare different models</strong> (GPT-4 vs GPT-4o-mini) on the same coding task</p></li>
+<li><p><strong>Implement intercoder reliability</strong> by running the same prompt multiple times and calculating Cohen’s κ</p></li>
+<li><p><strong>Try few-shot coding</strong> by providing example coded segments in your prompt</p></li>
+<li><p><strong>Experiment with temperature</strong> - how does it affect theme consistency?</p></li>
+</ol>
+</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Ziems et al. (2024). “Can Large Language Models Transform Computational Social Science?” <em>Computational Linguistics</em></p></li>
+<li><p>Argyle et al. (2023). “Out of One, Many: Using Language Models to Simulate Human Samples.” <em>Political Analysis</em></p></li>
+<li><p>Braun &amp; Clarke (2006). “Using thematic analysis in psychology.” <em>Qualitative Research in Psychology</em></p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="week04_llms.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">LLMs for Annotation I</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="week06_annotation.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Structured Text Annotation with LLMs</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-in-google-colab">Running in Google Colab</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-locally">Running Locally</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-inductive-thematic-analysis">Part 1: Inductive Thematic Analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-code-condensation">Part 2: Code Condensation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-reflexive-coding-self-challenge">Part 3: Reflexive Coding (Self-Challenge)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-handling-long-documents-chunking">Part 4: Handling Long Documents (Chunking)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-theme-aggregation-and-deduplication">Part 5: Theme Aggregation and Deduplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-6-interactive-reflexive-dialogue">Part 6: Interactive Reflexive Dialogue</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductive-thematic-analysis">1. Inductive Thematic Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-condensation">2. Code Condensation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reflexive-coding">3. Reflexive Coding</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#long-document-handling">4. Long Document Handling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-dialogue">5. Interactive Dialogue</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Christopher Barrie
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
