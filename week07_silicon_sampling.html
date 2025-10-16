@@ -179,6 +179,10 @@
 <li class="toctree-l1"><a class="reference internal" href="week05_qualitative.html">LLMs for Annotation II</a></li>
 <li class="toctree-l1"><a class="reference internal" href="week06_annotation.html">LLMs for Annotation III</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">LLMs for Synthetic Data I: Simulating Survey Respondents</a></li>
+
+
+
+
 </ul>
 
     </div>
@@ -405,6 +409,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">LLMs for Synthetic Data I: Simulating Survey Respondents</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-silicon-sampling">What is Silicon Sampling?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-creating-demographic-personas-argyle-et-al-2023">Part 1: Creating Demographic Personas (Argyle et al. 2023)</a></li>
@@ -416,7 +421,12 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-larger-synthetic-sample-for-proper-validation">Generating larger synthetic sample for proper validation</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-diagnosing-invariance">Part 4: Diagnosing Invariance</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#test-invariance-multiple-responses-from-same-persona">Test invariance: multiple responses from same persona</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#collect-10-responses-from-same-persona">Collect 10 responses from same persona</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-variance">Calculate variance</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-to-expected-human-variance">Compare to expected human variance</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-diagnosing-stereotyping">Part 5: Diagnosing Stereotyping</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-6-when-does-silicon-sampling-work-bisbee-et-al-2024">Part 6: When Does Silicon Sampling Work? (Bisbee et al. 2024)</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-it-works">When it works:</a></li>
@@ -426,8 +436,10 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 </ul>
+</li>
+</ul>
+
             </nav>
         </div>
     </div>
@@ -445,7 +457,7 @@ document.write(`
 <li><p>Understand silicon sampling and its application to survey research</p></li>
 <li><p>Implement demographic persona construction following Argyle et al. (2023)</p></li>
 <li><p>Generate synthetic survey responses and compare to real data</p></li>
-<li><p>Measure algorithmic fidelity, invariance, and stereotyping</p></li>
+<li><p>Measure accuracy, invariance, and stereotyping</p></li>
 <li><p>Validate synthetic data against ground truth surveys</p></li>
 <li><p>Understand boundary conditions for when silicon sampling works (Bisbee et al. 2024)</p></li>
 </ul>
@@ -453,7 +465,6 @@ document.write(`
 <ul class="simple">
 <li><p><strong>Google Colab</strong> (recommended): Works for all parts</p></li>
 <li><p><strong>OpenAI API key needed</strong>: For generating synthetic responses</p></li>
-<li><p><strong>SubPOP dataset</strong>: Available at <a class="reference external" href="http://github.com/JosephJeesungSuh/subpop">github.com/JosephJeesungSuh/subpop</a></p></li>
 </ul>
 <hr class="docutils" />
 <section id="what-is-silicon-sampling">
@@ -907,8 +918,7 @@ document.write(`
 <li><p>Find the most common (modal) response in real data</p></li>
 <li><p>Calculate what % of synthetic responses match that mode</p></li>
 <li><p><strong>Example</strong>: If real Democrats most commonly say “5” (strongly agree) to healthcare, what % of synthetic Democrats also say “5”?</p></li>
-<li><p><strong>Good target</strong>: &gt; 50% matching</p></li>
-<li><p><strong>Poor</strong>: &lt; 30% matching</p></li>
+<li><p>Higher matching indicates better alignment with real data</p></li>
 </ul>
 <p><strong>Variance comparison:</strong></p>
 <ul class="simple">
@@ -921,8 +931,9 @@ document.write(`
 <li><p><strong>Problem</strong>: Synthetic std too low → invariance issue</p></li>
 </ul>
 </li>
+<li><p>Ideally, synthetic variance should be similar to real variance</p></li>
 </ul>
-<p><strong>Why these metrics instead of cosine/KL divergence:</strong></p>
+<p><strong>Why these metrics:</strong></p>
 <ul class="simple">
 <li><p><strong>More intuitive</strong>: Easier to explain to non-technical audiences</p></li>
 <li><p><strong>Direct</strong>: Measures actual agreement, not abstract distance</p></li>
@@ -1094,22 +1105,41 @@ document.write(`
 </ul>
 </section>
 </section>
-<hr class="docutils" />
-<section id="part-4-diagnosing-invariance">
-<h2>Part 4: Diagnosing Invariance<a class="headerlink" href="#part-4-diagnosing-invariance" title="Link to this heading">#</a></h2>
-<p><strong>Invariance</strong> refers to the lack of within-group diversity - do all personas with the same demographics give identical answers?</p>
-<p><strong>The problem:</strong></p>
-<ul class="simple">
-<li><p>Real humans with same demographics have diverse opinions</p></li>
-<li><p>LLMs may give identical answers for identical demographics</p></li>
-<li><p>This underestimates real heterogeneity</p></li>
-</ul>
-<p><strong>How to test:</strong></p>
-<ul class="simple">
-<li><p>Generate multiple responses for same persona</p></li>
-<li><p>Measure within-persona variance</p></li>
-<li><p>Compare to human within-group variance</p></li>
-</ul>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="test-invariance-multiple-responses-from-same-persona">
+<h1>Test invariance: multiple responses from same persona<a class="headerlink" href="#test-invariance-multiple-responses-from-same-persona" title="Link to this heading">#</a></h1>
+<p>test_persona = example_personas[0]  # Democrat, 45, white male
+test_question = questions[0]  # Healthcare</p>
+<p>print(f”Testing invariance for persona: {test_persona[‘party’]}, {test_persona[‘age’]}, {test_persona[‘race’]}”)
+print(f”Question: {test_question}\n”)
+print(“=” * 70)</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="collect-10-responses-from-same-persona">
+<h1>Collect 10 responses from same persona<a class="headerlink" href="#collect-10-responses-from-same-persona" title="Link to this heading">#</a></h1>
+<p>responses = []
+for i in range(10):
+response = silicon_sample_likert(test_persona, test_question)
+responses.append(response)
+print(f”Response {i+1}: {response}”)
+time.sleep(0.3)</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="calculate-variance">
+<h1>Calculate variance<a class="headerlink" href="#calculate-variance" title="Link to this heading">#</a></h1>
+<p>responses = [r for r in responses if r is not None]
+mean_response = np.mean(responses)
+variance = np.var(responses)
+std = np.std(responses)</p>
+<p>print(f”\nWithin-persona statistics:”)
+print(f”  Mean: {mean_response:.2f}”)
+print(f”  Std: {std:.2f}”)
+print(f”  Variance: {variance:.2f}”)</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="compare-to-expected-human-variance">
+<h1>Compare to expected human variance<a class="headerlink" href="#compare-to-expected-human-variance" title="Link to this heading">#</a></h1>
+<p>print(f”\nComparison:”)
+print(f”  LLM within-persona std: {std:.2f}”)
+print(f”  Typical human within-group std: ~1.0-1.5”)
+print(f”\nInterpretation: Lower std indicates less diversity than humans”)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">**</span><span class="n">What</span> <span class="n">this</span> <span class="n">code</span> <span class="n">does</span><span class="p">:</span><span class="o">**</span>
@@ -1133,14 +1163,14 @@ document.write(`
 <span class="o">-</span> <span class="o">**</span><span class="n">Variance</span><span class="o">**</span><span class="p">:</span> <span class="n">Squared</span> <span class="n">std</span>
 
 <span class="o">**</span><span class="n">Interpretation</span><span class="p">:</span><span class="o">**</span>
-<span class="o">-</span> <span class="o">**</span><span class="n">Std</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="o">**</span><span class="p">:</span> <span class="n">High</span> <span class="n">invariance</span> <span class="p">(</span><span class="n">responses</span> <span class="n">very</span> <span class="n">similar</span><span class="p">)</span>
-<span class="o">-</span> <span class="o">**</span><span class="n">Std</span> <span class="mf">0.5</span><span class="o">-</span><span class="mf">1.0</span><span class="o">**</span><span class="p">:</span> <span class="n">Moderate</span> <span class="n">diversity</span> <span class="p">(</span><span class="n">less</span> <span class="n">than</span> <span class="n">humans</span><span class="p">)</span>
-<span class="o">-</span> <span class="o">**</span><span class="n">Std</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="o">**</span><span class="p">:</span> <span class="n">Good</span> <span class="n">diversity</span> <span class="p">(</span><span class="n">approaching</span> <span class="n">human</span> <span class="n">levels</span><span class="p">)</span>
+<span class="o">-</span> <span class="n">Compare</span> <span class="n">LLM</span> <span class="n">std</span> <span class="n">to</span> <span class="n">typical</span> <span class="n">human</span> <span class="n">std</span> <span class="p">(</span><span class="o">~</span><span class="mf">1.0</span><span class="o">-</span><span class="mf">1.5</span> <span class="n">on</span> <span class="mi">5</span><span class="o">-</span><span class="n">point</span> <span class="n">scales</span><span class="p">)</span>
+<span class="o">-</span> <span class="n">Lower</span> <span class="n">LLM</span> <span class="n">std</span> <span class="n">indicates</span> <span class="n">less</span> <span class="n">diversity</span> <span class="p">(</span><span class="n">invariance</span> <span class="n">problem</span><span class="p">)</span>
+<span class="o">-</span> <span class="n">Higher</span> <span class="n">LLM</span> <span class="n">std</span> <span class="n">approaching</span> <span class="n">human</span> <span class="n">levels</span> <span class="n">suggests</span> <span class="n">better</span> <span class="n">diversity</span>
 
 <span class="o">**</span><span class="n">Typical</span> <span class="n">observations</span><span class="p">:</span><span class="o">**</span>
-<span class="o">-</span> <span class="n">LLMs</span><span class="p">:</span> <span class="n">Std</span> <span class="o">~</span> <span class="mf">0.3</span><span class="o">-</span><span class="mf">0.8</span> <span class="p">(</span><span class="n">varies</span> <span class="n">by</span> <span class="n">question</span> <span class="ow">and</span> <span class="n">model</span><span class="p">)</span>
-<span class="o">-</span> <span class="n">Humans</span><span class="p">:</span> <span class="n">Std</span> <span class="o">~</span> <span class="mf">1.0</span><span class="o">-</span><span class="mf">1.5</span> <span class="n">on</span> <span class="n">same</span> <span class="n">demographic</span>
-<span class="o">-</span> <span class="o">**</span><span class="n">Implication</span><span class="o">**</span><span class="p">:</span> <span class="n">LLMs</span> <span class="n">underestimate</span> <span class="n">within</span><span class="o">-</span><span class="n">group</span> <span class="n">diversity</span>
+<span class="o">-</span> <span class="n">LLMs</span><span class="p">:</span> <span class="n">Std</span> <span class="n">varies</span> <span class="n">by</span> <span class="n">question</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="ow">and</span> <span class="n">temperature</span>
+<span class="o">-</span> <span class="n">Humans</span><span class="p">:</span> <span class="n">Generally</span> <span class="n">show</span> <span class="n">more</span> <span class="n">within</span><span class="o">-</span><span class="n">group</span> <span class="n">diversity</span>
+<span class="o">-</span> <span class="o">**</span><span class="n">Implication</span><span class="o">**</span><span class="p">:</span> <span class="n">LLMs</span> <span class="n">often</span> <span class="n">underestimate</span> <span class="n">within</span><span class="o">-</span><span class="n">group</span> <span class="n">diversity</span>
 
 <span class="o">**</span><span class="n">Bisbee</span> <span class="n">et</span> <span class="n">al</span><span class="o">.</span> <span class="p">(</span><span class="mi">2024</span><span class="p">)</span> <span class="n">finding</span><span class="p">:</span><span class="o">**</span>
 <span class="o">-</span> <span class="n">Invariance</span> <span class="n">worse</span> <span class="k">for</span> <span class="n">identity</span><span class="o">-</span><span class="n">salient</span> <span class="n">questions</span>
@@ -1209,7 +1239,6 @@ document.write(`
 <li><p>Fine-tune on diverse real responses</p></li>
 <li><p>Acknowledge limitation in reporting</p></li>
 </ul>
-</section>
 <hr class="docutils" />
 <section id="part-5-diagnosing-stereotyping">
 <h2>Part 5: Diagnosing Stereotyping<a class="headerlink" href="#part-5-diagnosing-stereotyping" title="Link to this heading">#</a></h2>
@@ -1227,60 +1256,18 @@ document.write(`
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Analyze stereotyping: between-group differences</span>
-
-<span class="c1"># For demonstration, generate synthetic data for Democrats vs Republicans</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating responses from 5 Democrats and 5 Republicans...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="n">stereotyping_data</span> <span class="o">=</span> <span class="p">[]</span>
-
-<span class="k">for</span> <span class="n">party</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Democrat&#39;</span><span class="p">,</span> <span class="s1">&#39;Republican&#39;</span><span class="p">]:</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
-        <span class="n">persona</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">45</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">5</span><span class="p">,</span>
-            <span class="s1">&#39;race&#39;</span><span class="p">:</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="s1">&#39;male&#39;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;female&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;education&#39;</span><span class="p">:</span> <span class="s1">&#39;college degree&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;income&#39;</span><span class="p">:</span> <span class="s1">&#39;75,000&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="s1">&#39;Midwest&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;party&#39;</span><span class="p">:</span> <span class="n">party</span>
-        <span class="p">}</span>
-        
-        <span class="n">response</span> <span class="o">=</span> <span class="n">silicon_sample_likert</span><span class="p">(</span><span class="n">persona</span><span class="p">,</span> <span class="n">questions</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># Healthcare question</span>
-        <span class="n">stereotyping_data</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-            <span class="s1">&#39;party&#39;</span><span class="p">:</span> <span class="n">party</span><span class="p">,</span>
-            <span class="s1">&#39;response&#39;</span><span class="p">:</span> <span class="n">response</span>
-        <span class="p">})</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>
-
-<span class="n">df_stereotyping</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">stereotyping_data</span><span class="p">)</span>
-
-<span class="c1"># Calculate means and effect size</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate means and differences</span>
 <span class="n">dem_mean</span> <span class="o">=</span> <span class="n">df_stereotyping</span><span class="p">[</span><span class="n">df_stereotyping</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Democrat&#39;</span><span class="p">][</span><span class="s1">&#39;response&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 <span class="n">rep_mean</span> <span class="o">=</span> <span class="n">df_stereotyping</span><span class="p">[</span><span class="n">df_stereotyping</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Republican&#39;</span><span class="p">][</span><span class="s1">&#39;response&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-
-<span class="c1"># Cohen&#39;s d (effect size)</span>
-<span class="n">pooled_std</span> <span class="o">=</span> <span class="n">df_stereotyping</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;party&#39;</span><span class="p">)[</span><span class="s1">&#39;response&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="n">cohens_d</span> <span class="o">=</span> <span class="p">(</span><span class="n">dem_mean</span> <span class="o">-</span> <span class="n">rep_mean</span><span class="p">)</span> <span class="o">/</span> <span class="n">pooled_std</span> <span class="k">if</span> <span class="n">pooled_std</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Between-group analysis (Healthcare question):&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Democrat mean: </span><span class="si">{</span><span class="n">dem_mean</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Republican mean: </span><span class="si">{</span><span class="n">rep_mean</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Difference: </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">dem_mean</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">rep_mean</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cohen&#39;s d: </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">cohens_d</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Effect size interpretation:&quot;</span><span class="p">)</span>
-<span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cohens_d</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Small effect (&lt; 0.5)&quot;</span><span class="p">)</span>
-<span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cohens_d</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.8</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Medium effect (0.5-0.8)&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Large effect (&gt; 0.8)&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  ⚠ May indicate stereotyping if larger than real data&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Note: Compare this to real survey data Cohen&#39;s d&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;If synthetic d &gt;&gt; real d, this suggests stereotyping&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Note: Compare this difference to real survey data&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;If synthetic difference &gt;&gt; real difference, this suggests stereotyping&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1294,28 +1281,22 @@ document.write(`
 <li><p>Or Republicans MORE anti-healthcare than real Republicans</p></li>
 <li><p>Creates artificial polarization</p></li>
 </ul>
-<p><strong>Cohen’s d (effect size):</strong></p>
+<p><strong>Measuring group differences:</strong></p>
 <ul class="simple">
-<li><p>Standardized measure of group difference</p></li>
-<li><p><strong>Formula</strong>: (Mean1 - Mean2) / Pooled SD</p></li>
-<li><p><strong>Interpretation</strong>:</p>
-<ul>
-<li><p>d &lt; 0.5: Small effect</p></li>
-<li><p>d = 0.5-0.8: Medium effect</p></li>
-<li><p>d &gt; 0.8: Large effect</p></li>
-</ul>
-</li>
+<li><p>Calculate mean response for each group</p></li>
+<li><p>Calculate absolute difference</p></li>
+<li><p>Compare to real data differences</p></li>
 </ul>
 <p><strong>How to detect stereotyping:</strong></p>
 <ol class="arabic simple">
-<li><p>Calculate Cohen’s d for synthetic data</p></li>
-<li><p>Calculate Cohen’s d for real data</p></li>
-<li><p>Compare: If synthetic d &gt;&gt; real d, stereotyping present</p></li>
+<li><p>Calculate group difference for synthetic data</p></li>
+<li><p>Calculate group difference for real data</p></li>
+<li><p>Compare: If synthetic difference &gt;&gt; real difference, stereotyping present</p></li>
 </ol>
 <p><strong>Example:</strong></p>
 <ul class="simple">
-<li><p>Real data: Democrat vs Republican on healthcare, d = 1.2</p></li>
-<li><p>Synthetic: d = 2.4</p></li>
+<li><p>Real data: Democrat vs Republican on healthcare, difference = 1.2</p></li>
+<li><p>Synthetic: difference = 2.4</p></li>
 <li><p><strong>Interpretation</strong>: LLM is doubling the partisan divide</p></li>
 </ul>
 <p><strong>Why stereotyping happens:</strong></p>
@@ -1343,7 +1324,7 @@ document.write(`
 </ul>
 <p><strong>Solutions:</strong></p>
 <ul class="simple">
-<li><p>Compare effect sizes to real data (essential validation step)</p></li>
+<li><p>Compare differences to real data (essential validation step)</p></li>
 <li><p>Avoid using for identity-salient questions</p></li>
 <li><p>Consider weighting/calibrating to match real distributions</p></li>
 </ul>
@@ -1436,7 +1417,7 @@ document.write(`
 <td><p>Invariance</p></td>
 <td><p>&gt; 1.0</p></td>
 </tr>
-<tr class="row-odd"><td><p>Cohen’s d ratio</p></td>
+<tr class="row-odd"><td><p>Mean difference ratio</p></td>
 <td><p>Stereotyping</p></td>
 <td><p>≈ 1.0</p></td>
 </tr>
@@ -1464,26 +1445,7 @@ document.write(`
 <li><p><strong>Week 9</strong>: Generative agents and multi-agent systems</p></li>
 <li><p><strong>Week 10</strong>: Using LLMs to predict experimental outcomes</p></li>
 </ul>
-<p><strong>Further reading:</strong></p>
-<ul class="simple">
-<li><p>Argyle et al. (2023): “Out of One, Many: Using Language Models to Simulate Human Samples”</p></li>
-<li><p>Bisbee et al. (2024): “Synthetic Replacements for Human Survey Data? The Perils of Large Language Models”</p></li>
-<li><p>Boelaert &amp; Ollion (2025): “AI-Augmented Surveys: Assessing the Scope and Validity of Silicon Sampling”</p></li>
-<li><p>Kozlowski &amp; Evans (2025): “Machine learning as a model for cultural learning”</p></li>
-</ul>
-</section>
 <hr class="docutils" />
-<section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p><strong>Generate your own synthetic sample</strong>: Create 50 personas (uncomment the large-scale generation code) and compare to real ANES/GSS data. Calculate cosine similarity and KL divergence.</p></li>
-<li><p><strong>Test boundary conditions</strong>: Choose a controversial topic (e.g., abortion, immigration) and a non-controversial one (e.g., liking pizza). Compare fidelity, invariance, and stereotyping across both.</p></li>
-<li><p><strong>Model comparison</strong>: Generate responses using both GPT-3.5-turbo and GPT-4. Do larger models show better fidelity and less stereotyping?</p></li>
-<li><p><strong>Temperature experiment</strong>: For the same persona and question, vary temperature from 0.1 to 2.0. How does this affect within-persona variance?</p></li>
-<li><p><strong>Intersectionality</strong>: Test if LLMs capture intersectional effects (e.g., Black women vs white women vs Black men) or just additive demographic effects.</p></li>
-<li><p><strong>Real data validation</strong>: Download SubPOP data (<a class="reference external" href="http://github.com/JosephJeesungSuh/subpop">github.com/JosephJeesungSuh/subpop</a>), generate synthetic responses for the same questions, and calculate validation metrics.</p></li>
-<li><p><strong>Ethical analysis</strong>: Write a 1-page reflection on the ethical implications of using silicon sampling to study marginalized groups without their consent.</p></li>
-</ol>
 </section>
 </section>
 
@@ -1542,6 +1504,7 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">LLMs for Synthetic Data I: Simulating Survey Respondents</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-silicon-sampling">What is Silicon Sampling?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-creating-demographic-personas-argyle-et-al-2023">Part 1: Creating Demographic Personas (Argyle et al. 2023)</a></li>
@@ -1553,7 +1516,12 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-larger-synthetic-sample-for-proper-validation">Generating larger synthetic sample for proper validation</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-diagnosing-invariance">Part 4: Diagnosing Invariance</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#test-invariance-multiple-responses-from-same-persona">Test invariance: multiple responses from same persona</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#collect-10-responses-from-same-persona">Collect 10 responses from same persona</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-variance">Calculate variance</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-to-expected-human-variance">Compare to expected human variance</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-diagnosing-stereotyping">Part 5: Diagnosing Stereotyping</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-6-when-does-silicon-sampling-work-bisbee-et-al-2024">Part 6: When Does Silicon Sampling Work? (Bisbee et al. 2024)</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-it-works">When it works:</a></li>
@@ -1563,8 +1531,10 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 </ul>
+</li>
+</ul>
+
   </nav></div>
 
 </div></div>
