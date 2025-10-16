@@ -756,42 +756,6 @@ document.write(`
 </div>
 </div>
 </div>
-<p><strong>What this code does:</strong></p>
-<p>Implements <strong>chain-of-thought (CoT) prompting</strong> - asking the model to reason step-by-step:</p>
-<p><strong>What is chain-of-thought:</strong></p>
-<ul class="simple">
-<li><p>Ask model to show its reasoning before giving final answer</p></li>
-<li><p>Originated in Wei et al. (2022) “Chain-of-Thought Prompting Elicits Reasoning”</p></li>
-<li><p>Dramatically improves performance on reasoning tasks</p></li>
-</ul>
-<p><strong>Why CoT helps:</strong></p>
-<ul class="simple">
-<li><p><strong>Better accuracy:</strong> Especially on multi-step problems</p></li>
-<li><p><strong>Transparency:</strong> Can see model’s logic</p></li>
-<li><p><strong>Debugging:</strong> Identify where reasoning goes wrong</p></li>
-<li><p><strong>Trust:</strong> Justifications build confidence in annotations</p></li>
-</ul>
-<p><strong>Temperature: 0.3 (slightly higher)</strong></p>
-<ul class="simple">
-<li><p>CoT needs some creativity for explanations</p></li>
-<li><p>But still low enough for consistency</p></li>
-<li><p>Trade-off between rigid and random</p></li>
-</ul>
-<p><strong>When to use CoT:</strong></p>
-<ul class="simple">
-<li><p>Complex classification (multiple factors to consider)</p></li>
-<li><p>Need justifications for auditing</p></li>
-<li><p>Debugging misclassifications</p></li>
-<li><p>Training human annotators (shows reasoning process)</p></li>
-</ul>
-<p><strong>When NOT to use CoT:</strong></p>
-<ul class="simple">
-<li><p>Simple tasks (adds unnecessary tokens/cost)</p></li>
-<li><p>Speed critical (CoT is slower)</p></li>
-<li><p>Don’t need explanations</p></li>
-</ul>
-<p><strong>Cost consideration:</strong> CoT generates more tokens (reasoning + answer), so ~2-3x more expensive than direct classification.</p>
-<p><strong>Alternative:</strong> Use JSON mode (Approach 3) to get structured reasoning + classification</p>
 </section>
 <section id="c-few-shot-prompting">
 <h3>1C. Few-Shot Prompting<a class="headerlink" href="#c-few-shot-prompting" title="Link to this heading">#</a></h3>
@@ -898,6 +862,42 @@ document.write(`
 <li><p>Want IDE autocomplete on schema</p></li>
 </ul>
 <p><strong>Cost:</strong> Same as normal API calls - no extra charge for JSON mode.</p>
+<p><strong>What this code does:</strong></p>
+<p>Implements <strong>chain-of-thought (CoT) prompting</strong> - asking the model to reason step-by-step:</p>
+<p><strong>What is chain-of-thought:</strong></p>
+<ul class="simple">
+<li><p>Ask model to show its reasoning before giving final answer</p></li>
+<li><p>Originated in Wei et al. (2022) “Chain-of-Thought Prompting Elicits Reasoning”</p></li>
+<li><p>Dramatically improves performance on reasoning tasks</p></li>
+</ul>
+<p><strong>Why CoT helps:</strong></p>
+<ul class="simple">
+<li><p><strong>Better accuracy:</strong> Especially on multi-step problems</p></li>
+<li><p><strong>Transparency:</strong> Can see model’s logic</p></li>
+<li><p><strong>Debugging:</strong> Identify where reasoning goes wrong</p></li>
+<li><p><strong>Trust:</strong> Justifications build confidence in annotations</p></li>
+</ul>
+<p><strong>Temperature: 0.3 (slightly higher)</strong></p>
+<ul class="simple">
+<li><p>CoT needs some creativity for explanations</p></li>
+<li><p>But still low enough for consistency</p></li>
+<li><p>Trade-off between rigid and random</p></li>
+</ul>
+<p><strong>When to use CoT:</strong></p>
+<ul class="simple">
+<li><p>Complex classification (multiple factors to consider)</p></li>
+<li><p>Need justifications for auditing</p></li>
+<li><p>Debugging misclassifications</p></li>
+<li><p>Training human annotators (shows reasoning process)</p></li>
+</ul>
+<p><strong>When NOT to use CoT:</strong></p>
+<ul class="simple">
+<li><p>Simple tasks (adds unnecessary tokens/cost)</p></li>
+<li><p>Speed critical (CoT is slower)</p></li>
+<li><p>Don’t need explanations</p></li>
+</ul>
+<p><strong>Cost consideration:</strong> CoT generates more tokens (reasoning + answer), so ~2-3x more expensive than direct classification.</p>
+<p><strong>Alternative:</strong> Use JSON mode (Part 2) to get structured reasoning + classification</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">COT_TEMPLATE</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Classify the stance and explain your reasoning.</span>
