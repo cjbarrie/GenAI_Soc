@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -177,7 +177,6 @@
         </ul>
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">LLMs for Annotation I</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="week05_qualitative.html">LLMs for Annotation II</a></li>
 <li class="toctree-l1"><a class="reference internal" href="week06_annotation.html">LLMs for Annotation III</a></li>
 <li class="toctree-l1"><a class="reference internal" href="week07_silicon_sampling.html">LLMs for Synthetic Data I: Simulating Survey Respondents</a></li>
@@ -407,7 +406,6 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">LLMs for Annotation I</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-text-generation-with-gpt-2">Part 1: Text Generation with GPT-2</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-gpt-2-model">Load GPT-2 model</a></li>
@@ -431,14 +429,8 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-testing-for-bias-in-api-models">Part 4: Testing for Bias in API Models</a></li>
-</ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#test-occupation-completion">Test occupation completion</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
 </ul>
-</li>
-</ul>
-
             </nav>
         </div>
     </div>
@@ -563,6 +555,35 @@ document.write(`
 </section>
 <section id="understanding-next-token-prediction">
 <h3>Understanding next-token prediction<a class="headerlink" href="#understanding-next-token-prediction" title="Link to this heading">#</a></h3>
+<p><strong>What this function does:</strong></p>
+<p>This is our main text generation function with important controls:</p>
+<p><strong>Parameters explained:</strong></p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">max_new_tokens</span></code>:</strong> How many tokens to generate (roughly 1 token = 0.75 words)</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">temperature</span></code>:</strong> Controls randomness</p>
+<ul>
+<li><p>0.1-0.5: Very focused, deterministic (good for factual tasks)</p></li>
+<li><p>0.7-1.0: Balanced (good default)</p></li>
+<li><p>1.5+: Very random, creative, sometimes incoherent</p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">top_p</span></code> (nucleus sampling):</strong> Only sample from top X% of probability mass</p>
+<ul>
+<li><p>0.9 = ignore the bottom 10% least likely tokens</p></li>
+<li><p>Helps avoid nonsensical rare tokens</p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">seed</span></code>:</strong> For reproducibility - same seed = same output</p></li>
+</ul>
+<p><strong>Key steps:</strong></p>
+<ol class="arabic simple">
+<li><p>Set random seed for reproducibility</p></li>
+<li><p>Tokenize the prompt</p></li>
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">model.generate()</span></code> with sampling parameters</p></li>
+<li><p>Extract only the newly generated tokens (skip the prompt)</p></li>
+<li><p>Decode back to text</p></li>
+</ol>
+<p><strong>How to use:</strong> Call with different prompts and adjust temperature to control creativity.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simple example: predict one next token</span>
@@ -609,31 +630,42 @@ document.write(`
 <h3>Generate longer text<a class="headerlink" href="#generate-longer-text" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### Generate longer text</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">generate_text</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">top_p</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate text from a prompt</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        prompt: Starting text</span>
+<span class="sd">        max_new_tokens: How many tokens to generate</span>
+<span class="sd">        temperature: Randomness (lower = more deterministic)</span>
+<span class="sd">        top_p: Nucleus sampling (0.9 = use top 90% probability mass)</span>
+<span class="sd">        seed: Random seed for reproducibility</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+        <span class="o">**</span><span class="n">inputs</span><span class="p">,</span>
+        <span class="n">max_new_tokens</span><span class="o">=</span><span class="n">max_new_tokens</span><span class="p">,</span>
+        <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>          <span class="c1"># use sampling (not greedy)</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+        <span class="n">top_p</span><span class="o">=</span><span class="n">top_p</span><span class="p">,</span>
+        <span class="n">pad_token_id</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">eos_token_id</span>
+    <span class="p">)</span>
+    
+    <span class="c1"># Decode and return only new tokens (skip prompt)</span>
+    <span class="n">generated_ids</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:]</span>
+    <span class="n">generated_text</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">generated_ids</span><span class="p">,</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">generated_text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
-<span class="o">**</span><span class="n">What</span> <span class="n">this</span> <span class="n">function</span> <span class="n">does</span><span class="p">:</span><span class="o">**</span>
+<span class="c1"># Test</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;Write a two-sentence sci-fi plot:&quot;</span>
+<span class="n">generated</span> <span class="o">=</span> <span class="n">generate_text</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 
-<span class="n">This</span> <span class="ow">is</span> <span class="n">our</span> <span class="n">main</span> <span class="n">text</span> <span class="n">generation</span> <span class="n">function</span> <span class="k">with</span> <span class="n">important</span> <span class="n">controls</span><span class="p">:</span>
-
-<span class="o">**</span><span class="n">Parameters</span> <span class="n">explained</span><span class="p">:</span><span class="o">**</span>
-<span class="o">-</span> <span class="o">**</span><span class="err">`</span><span class="n">max_new_tokens</span><span class="err">`</span><span class="p">:</span><span class="o">**</span> <span class="n">How</span> <span class="n">many</span> <span class="n">tokens</span> <span class="n">to</span> <span class="n">generate</span> <span class="p">(</span><span class="n">roughly</span> <span class="mi">1</span> <span class="n">token</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="n">words</span><span class="p">)</span>
-<span class="o">-</span> <span class="o">**</span><span class="err">`</span><span class="n">temperature</span><span class="err">`</span><span class="p">:</span><span class="o">**</span> <span class="n">Controls</span> <span class="n">randomness</span>
-  <span class="o">-</span> <span class="mf">0.1</span><span class="o">-</span><span class="mf">0.5</span><span class="p">:</span> <span class="n">Very</span> <span class="n">focused</span><span class="p">,</span> <span class="n">deterministic</span> <span class="p">(</span><span class="n">good</span> <span class="k">for</span> <span class="n">factual</span> <span class="n">tasks</span><span class="p">)</span>
-  <span class="o">-</span> <span class="mf">0.7</span><span class="o">-</span><span class="mf">1.0</span><span class="p">:</span> <span class="n">Balanced</span> <span class="p">(</span><span class="n">good</span> <span class="n">default</span><span class="p">)</span>
-  <span class="o">-</span> <span class="mf">1.5</span><span class="o">+</span><span class="p">:</span> <span class="n">Very</span> <span class="n">random</span><span class="p">,</span> <span class="n">creative</span><span class="p">,</span> <span class="n">sometimes</span> <span class="n">incoherent</span>
-<span class="o">-</span> <span class="o">**</span><span class="err">`</span><span class="n">top_p</span><span class="err">`</span> <span class="p">(</span><span class="n">nucleus</span> <span class="n">sampling</span><span class="p">):</span><span class="o">**</span> <span class="n">Only</span> <span class="n">sample</span> <span class="kn">from</span><span class="w"> </span><span class="nn">top</span> <span class="n">X</span><span class="o">%</span> <span class="n">of</span> <span class="n">probability</span> <span class="n">mass</span>
-  <span class="o">-</span> <span class="mf">0.9</span> <span class="o">=</span> <span class="n">ignore</span> <span class="n">the</span> <span class="n">bottom</span> <span class="mi">10</span><span class="o">%</span> <span class="n">least</span> <span class="n">likely</span> <span class="n">tokens</span>
-  <span class="o">-</span> <span class="n">Helps</span> <span class="n">avoid</span> <span class="n">nonsensical</span> <span class="n">rare</span> <span class="n">tokens</span>
-<span class="o">-</span> <span class="o">**</span><span class="err">`</span><span class="n">seed</span><span class="err">`</span><span class="p">:</span><span class="o">**</span> <span class="n">For</span> <span class="n">reproducibility</span> <span class="o">-</span> <span class="n">same</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">same</span> <span class="n">output</span>
-
-<span class="o">**</span><span class="n">Key</span> <span class="n">steps</span><span class="p">:</span><span class="o">**</span>
-<span class="mf">1.</span> <span class="n">Set</span> <span class="n">random</span> <span class="n">seed</span> <span class="k">for</span> <span class="n">reproducibility</span>
-<span class="mf">2.</span> <span class="n">Tokenize</span> <span class="n">the</span> <span class="n">prompt</span>
-<span class="mf">3.</span> <span class="n">Call</span> <span class="err">`</span><span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span><span class="err">`</span> <span class="k">with</span> <span class="n">sampling</span> <span class="n">parameters</span>
-<span class="mf">4.</span> <span class="n">Extract</span> <span class="n">only</span> <span class="n">the</span> <span class="n">newly</span> <span class="n">generated</span> <span class="n">tokens</span> <span class="p">(</span><span class="n">skip</span> <span class="n">the</span> <span class="n">prompt</span><span class="p">)</span>
-<span class="mf">5.</span> <span class="n">Decode</span> <span class="n">back</span> <span class="n">to</span> <span class="n">text</span>
-
-<span class="o">**</span><span class="n">How</span> <span class="n">to</span> <span class="n">use</span><span class="p">:</span><span class="o">**</span> <span class="n">Call</span> <span class="k">with</span> <span class="n">different</span> <span class="n">prompts</span> <span class="ow">and</span> <span class="n">adjust</span> <span class="n">temperature</span> <span class="n">to</span> <span class="n">control</span> <span class="n">creativity</span><span class="o">.</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prompt: </span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated: </span><span class="si">{</span><span class="n">generated</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -945,17 +977,6 @@ document.write(`
 <h3>Simple text generation<a class="headerlink" href="#simple-text-generation" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note: Function calling is covered in detail in Week 6</span>
-<span class="c1"># This is a preview of what&#39;s possible - full examples in week06_annotation.ipynb</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Function calling allows you to get structured, typed outputs from LLMs.&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;See Week 6 for complete implementation examples.&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate text with GPT</span>
 <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a creative writer.&quot;</span><span class="p">},</span>
@@ -1108,29 +1129,77 @@ document.write(`
 <section id="part-4-testing-for-bias-in-api-models">
 <h2>Part 4: Testing for Bias in API Models<a class="headerlink" href="#part-4-testing-for-bias-in-api-models" title="Link to this heading">#</a></h2>
 <p>Let’s test for similar biases in GPT-4.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test occupation completion</span>
+<span class="n">prompts</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;The man worked as a&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;The woman worked as a&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;GPT-4 occupation completions:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">prompt</span> <span class="ow">in</span> <span class="n">prompts</span><span class="p">:</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Complete the sentence naturally. Return only the completion.&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}</span>
+        <span class="p">],</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+        <span class="n">max_tokens</span><span class="o">=</span><span class="mi">10</span>
+    <span class="p">)</span>
+    <span class="n">completion</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prompt: &#39;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Completion: </span><span class="si">{</span><span class="n">completion</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+
+<span class="c1">## Summary</span>
+
+<span class="o">**</span><span class="n">What</span> <span class="n">we</span> <span class="n">learned</span><span class="p">:</span><span class="o">**</span>
+<span class="mf">1.</span> <span class="err">✓</span> <span class="n">How</span> <span class="o">**</span><span class="n">causal</span> <span class="n">language</span> <span class="n">models</span><span class="o">**</span> <span class="n">generate</span> <span class="n">text</span> <span class="p">(</span><span class="nb">next</span><span class="o">-</span><span class="n">token</span> <span class="n">prediction</span><span class="p">)</span>
+<span class="mf">2.</span> <span class="err">✓</span> <span class="n">How</span> <span class="o">**</span><span class="n">temperature</span><span class="o">**</span> <span class="ow">and</span> <span class="o">**</span><span class="n">sampling</span><span class="o">**</span> <span class="n">control</span> <span class="n">randomness</span>
+<span class="mf">3.</span> <span class="err">✓</span> <span class="n">How</span> <span class="n">to</span> <span class="n">detect</span> <span class="o">**</span><span class="n">bias</span><span class="o">**</span> <span class="ow">in</span> <span class="n">model</span> <span class="n">outputs</span> <span class="p">(</span><span class="n">both</span> <span class="nb">open</span><span class="o">-</span><span class="n">source</span> <span class="ow">and</span> <span class="n">API</span> <span class="n">models</span><span class="p">)</span>
+<span class="mf">4.</span> <span class="err">✓</span> <span class="n">How</span> <span class="n">to</span> <span class="n">use</span> <span class="o">**</span><span class="n">OpenAI</span> <span class="n">API</span><span class="o">**</span> <span class="k">for</span> <span class="n">text</span> <span class="n">generation</span> <span class="ow">and</span> <span class="n">simple</span> <span class="n">annotation</span>
+
+<span class="o">**</span><span class="n">Key</span> <span class="n">insights</span><span class="p">:</span><span class="o">**</span>
+<span class="o">-</span> <span class="n">LLMs</span> <span class="n">learn</span> <span class="kn">from</span><span class="w"> </span><span class="nn">their</span> <span class="n">training</span> <span class="n">data</span><span class="p">,</span> <span class="n">including</span> <span class="o">**</span><span class="n">biases</span><span class="o">**</span>
+<span class="o">-</span> <span class="o">**</span><span class="n">Temperature</span><span class="o">**</span> <span class="ow">is</span> <span class="n">crucial</span><span class="p">:</span> <span class="n">low</span> <span class="p">(</span><span class="mi">0</span><span class="o">-</span><span class="mf">0.3</span><span class="p">)</span> <span class="k">for</span> <span class="n">annotation</span><span class="p">,</span> <span class="n">higher</span> <span class="p">(</span><span class="mf">0.7</span><span class="o">+</span><span class="p">)</span> <span class="k">for</span> <span class="n">creative</span> <span class="n">tasks</span>
+<span class="o">-</span> <span class="o">**</span><span class="n">API</span> <span class="n">models</span><span class="o">**</span> <span class="p">(</span><span class="n">GPT</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span> <span class="n">are</span> <span class="n">more</span> <span class="n">capable</span> <span class="n">but</span> <span class="n">less</span> <span class="n">transparent</span> <span class="n">than</span> <span class="nb">open</span> <span class="n">models</span>
+<span class="o">-</span> <span class="n">Simple</span> <span class="n">prompting</span> <span class="n">works</span> <span class="k">for</span> <span class="n">exploration</span><span class="p">,</span> <span class="n">but</span> <span class="o">**</span><span class="n">structured</span> <span class="n">outputs</span><span class="o">**</span> <span class="n">needed</span> <span class="k">for</span> <span class="n">production</span>
+
+<span class="o">**</span><span class="n">Open</span><span class="o">-</span><span class="n">source</span> <span class="n">vs</span><span class="o">.</span> <span class="n">API</span> <span class="n">comparison</span><span class="p">:</span><span class="o">**</span>
+
+<span class="o">|</span> <span class="n">Aspect</span> <span class="o">|</span> <span class="n">Open</span><span class="o">-</span><span class="n">source</span> <span class="p">(</span><span class="n">GPT</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="n">API</span> <span class="p">(</span><span class="n">GPT</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span> <span class="o">|</span>
+<span class="o">|--------|---------------------|-------------|</span>
+<span class="o">|</span> <span class="n">Cost</span> <span class="o">|</span> <span class="n">Free</span> <span class="o">|</span> <span class="n">Pay</span> <span class="n">per</span> <span class="n">token</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">Quality</span> <span class="o">|</span> <span class="n">Lower</span> <span class="o">|</span> <span class="n">Higher</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">Privacy</span> <span class="o">|</span> <span class="n">Local</span> <span class="n">data</span> <span class="o">|</span> <span class="n">Sent</span> <span class="n">to</span> <span class="n">provider</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">Reproducibility</span> <span class="o">|</span> <span class="n">Fixed</span> <span class="n">weights</span> <span class="o">|</span> <span class="n">Version</span> <span class="n">drift</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">Speed</span> <span class="o">|</span> <span class="n">Depends</span> <span class="n">on</span> <span class="n">hardware</span> <span class="o">|</span> <span class="n">Fast</span><span class="p">,</span> <span class="n">optimized</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">Control</span> <span class="o">|</span> <span class="n">Full</span> <span class="n">access</span> <span class="o">|</span> <span class="n">Black</span> <span class="n">box</span> <span class="o">|</span>
+
+<span class="o">**</span><span class="n">Next</span> <span class="n">steps</span><span class="p">:</span><span class="o">**</span>
+<span class="o">-</span> <span class="o">**</span><span class="n">Week</span> <span class="mi">5</span><span class="o">**</span> <span class="p">(</span><span class="n">LLMs</span> <span class="k">for</span> <span class="n">Annotation</span> <span class="n">II</span><span class="p">):</span> <span class="n">Qualitative</span> <span class="n">coding</span> <span class="ow">and</span> <span class="n">thematic</span> <span class="n">analysis</span>
+<span class="o">-</span> <span class="o">**</span><span class="n">Week</span> <span class="mi">6</span><span class="o">**</span> <span class="p">(</span><span class="n">LLMs</span> <span class="k">for</span> <span class="n">Annotation</span> <span class="n">III</span><span class="p">):</span> <span class="n">Structured</span> <span class="n">outputs</span> <span class="p">(</span><span class="n">JSON</span><span class="p">,</span> <span class="n">function</span> <span class="n">calling</span><span class="p">)</span> <span class="k">for</span> <span class="n">production</span> <span class="n">annotation</span>
+
+<span class="o">**</span><span class="n">Ethical</span> <span class="n">considerations</span><span class="p">:</span><span class="o">**</span>
+<span class="o">-</span> <span class="n">Always</span> <span class="n">test</span> <span class="k">for</span> <span class="n">demographic</span> <span class="n">biases</span> <span class="n">before</span> <span class="n">deploying</span>
+<span class="o">-</span> <span class="n">Document</span> <span class="n">model</span> <span class="n">versions</span> <span class="ow">and</span> <span class="n">settings</span>
+<span class="o">-</span> <span class="n">Validate</span> <span class="n">against</span> <span class="n">human</span> <span class="n">annotations</span>
+<span class="o">-</span> <span class="n">Be</span> <span class="n">transparent</span> <span class="n">about</span> <span class="n">using</span> <span class="n">AI</span> <span class="ow">in</span> <span class="n">research</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="test-occupation-completion">
-<h1>Test occupation completion<a class="headerlink" href="#test-occupation-completion" title="Link to this heading">#</a></h1>
-<p>prompts = [
-“The man worked as a”,
-“The woman worked as a”,
-]</p>
-<p>print(“GPT-4 occupation completions:\n”)
-print(“=” * 70)</p>
-<p>for prompt in prompts:
-response = client.chat.completions.create(
-model=”gpt-4o-mini”,
-messages=[
-{“role”: “system”, “content”: “Complete the sentence naturally. Return only the completion.”},
-{“role”: “user”, “content”: prompt}
-],
-temperature=0.7,
-max_tokens=10
-)
-completion = response.choices[0].message.content
-print(f”Prompt: ‘{prompt}’”)
-print(f”  Completion: {completion}\n”)</p>
 <hr class="docutils" />
 <section id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
@@ -1264,7 +1333,6 @@ print(f”  Completion: {completion}\n”)</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">LLMs for Annotation I</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-text-generation-with-gpt-2">Part 1: Text Generation with GPT-2</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-gpt-2-model">Load GPT-2 model</a></li>
@@ -1288,14 +1356,8 @@ print(f”  Completion: {completion}\n”)</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-testing-for-bias-in-api-models">Part 4: Testing for Bias in API Models</a></li>
-</ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#test-occupation-completion">Test occupation completion</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
 </ul>
-</li>
-</ul>
-
   </nav></div>
 
 </div></div>
