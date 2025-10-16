@@ -407,7 +407,7 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-silicon-sampling">What is Silicon Sampling?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-creating-demographic-personas-argyle-et-al-2023">Part 1: Creating Demographic Personas (Argyle et al. 2023)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-creating-demographic-personas">Part 1: Creating Demographic Personas</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-generating-synthetic-survey-responses">Part 2: Generating Synthetic Survey Responses</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-responses-for-multiple-questions">Generating responses for multiple questions</a></li>
 </ul>
@@ -435,11 +435,10 @@ document.write(`
 <p><strong>Learning objectives:</strong></p>
 <ul class="simple">
 <li><p>Understand silicon sampling and its application to survey research</p></li>
-<li><p>Implement demographic persona construction following Argyle et al. (2023)</p></li>
+<li><p>Implement demographic persona construction</p></li>
 <li><p>Generate synthetic survey responses and compare to real data</p></li>
 <li><p>Measure algorithmic fidelity, invariance, and stereotyping</p></li>
 <li><p>Validate synthetic data against ground truth surveys</p></li>
-<li><p>Understand boundary conditions for when silicon sampling works (Bisbee et al. 2024)</p></li>
 </ul>
 <p><strong>How to run this notebook:</strong></p>
 <ul class="simple">
@@ -542,9 +541,9 @@ document.write(`
 <p><strong>Security reminder:</strong> Uses <code class="docutils literal notranslate"><span class="pre">getpass</span></code> for API keys - never hardcode them.</p>
 </section>
 <hr class="docutils" />
-<section id="part-1-creating-demographic-personas-argyle-et-al-2023">
-<h2>Part 1: Creating Demographic Personas (Argyle et al. 2023)<a class="headerlink" href="#part-1-creating-demographic-personas-argyle-et-al-2023" title="Link to this heading">#</a></h2>
-<p>The foundation of silicon sampling is constructing realistic demographic personas. Based on Argyle et al. (2023), personas should include:</p>
+<section id="part-1-creating-demographic-personas">
+<h2>Part 1: Creating Demographic Personas<a class="headerlink" href="#part-1-creating-demographic-personas" title="Link to this heading">#</a></h2>
+<p>The foundation of silicon sampling is constructing realistic demographic personas. personas should include:</p>
 <ul class="simple">
 <li><p>Age</p></li>
 <li><p>Gender</p></li>
@@ -558,7 +557,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_persona</span><span class="p">(</span><span class="n">demographics</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create persona string following Argyle et al. (2023)</span>
+<span class="sd">    Create persona string for silicon sampling</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        demographics: dict with keys: age, race, gender, education, income, region</span>
@@ -652,7 +651,7 @@ You are a 67-year-old Hispanic male from West with some college education and an
 <ul class="simple">
 <li><p>Clear, unambiguous demographic information</p></li>
 <li><p>Mimics how humans think about identity</p></li>
-<li><p>Tested extensively in Argyle et al. (2023)</p></li>
+<li><p>Tested in silicon sampling research</p></li>
 </ul>
 <p><strong>Limitations:</strong></p>
 <ul class="simple">
@@ -676,7 +675,7 @@ You are a 67-year-old Hispanic male from West with some college education and an
 <span class="sd">        question: survey question text</span>
 <span class="sd">        scale: tuple of (min, max) for Likert scale</span>
 <span class="sd">        model: which OpenAI model to use</span>
-<span class="sd">        temperature: sampling temperature (1.0 matches Argyle et al.)</span>
+<span class="sd">        temperature: sampling temperature (1.0 is default)</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        int or None: numeric response on scale, or None if parsing fails</span>
@@ -758,7 +757,7 @@ Persona 3 (Republican): 2
 </ol>
 <p><strong>Key parameters:</strong></p>
 <ul class="simple">
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">temperature=1.0</span></code></strong>: Matches Argyle et al. (2023) default</p>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">temperature=1.0</span></code></strong>: Default setting (1.0)</p>
 <ul>
 <li><p>Higher than annotation tasks (0.1-0.3)</p></li>
 <li><p>Allows for within-group diversity</p></li>
@@ -1010,7 +1009,7 @@ Republican:
 <div><p>0.9: Excellent match</p>
 </div></blockquote>
 </li>
-<li><p>0.7-0.9: Good match (typical in Argyle et al.)</p></li>
+<li><p>0.7-0.9: Good match (typical for good fidelity)</p></li>
 <li><p>&lt; 0.7: Poor match</p></li>
 </ul>
 </li>
@@ -1157,7 +1156,7 @@ Republican:
 <ul class="simple">
 <li><p>Small differences in counts but same overall pattern</p></li>
 <li><p>This level of agreement suggests synthetic data captures real patterns well</p></li>
-<li><p>Typical of successful silicon sampling in Argyle et al. (2023)</p></li>
+<li><p>Typical of successful silicon sampling</p></li>
 </ul>
 </li>
 <li><p><strong>Moderate Mismatch</strong> (Cosine 0.85-0.95, KL 0.05-0.20):</p>
@@ -1275,7 +1274,7 @@ This would generate 90 synthetic respondents (~$0.50-1.00)
 <ul class="simple">
 <li><p><strong>Minimum</strong>: 30-50 per group for distribution comparison</p></li>
 <li><p><strong>Good</strong>: 100+ per group</p></li>
-<li><p><strong>Excellent</strong>: 200+ per group (like Argyle et al.)</p></li>
+<li><p><strong>Excellent</strong>: 200+ per group (for robust comparison)</p></li>
 </ul>
 <p><strong>Cost calculation:</strong></p>
 <ul class="simple">
@@ -1419,11 +1418,6 @@ Comparison:
 <li><p>LLMs: Std ~ 0.3-0.8 (varies by question and model)</p></li>
 <li><p>Humans: Std ~ 1.0-1.5 on same demographic</p></li>
 <li><p><strong>Implication</strong>: LLMs underestimate within-group diversity</p></li>
-</ul>
-<p><strong>Bisbee et al. (2024) finding:</strong></p>
-<ul class="simple">
-<li><p>Invariance varies by question type and model</p></li>
-<li><p>Larger models (GPT-4) show slightly better diversity than GPT-3.5</p></li>
 </ul>
 <p><strong>Solutions:</strong></p>
 <ul class="simple">
@@ -1641,7 +1635,7 @@ If synthetic d &gt;&gt; real d, this suggests stereotyping
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-silicon-sampling">What is Silicon Sampling?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-creating-demographic-personas-argyle-et-al-2023">Part 1: Creating Demographic Personas (Argyle et al. 2023)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-creating-demographic-personas">Part 1: Creating Demographic Personas</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-generating-synthetic-survey-responses">Part 2: Generating Synthetic Survey Responses</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-responses-for-multiple-questions">Generating responses for multiple questions</a></li>
 </ul>
