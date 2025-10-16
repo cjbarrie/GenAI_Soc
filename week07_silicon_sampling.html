@@ -1422,8 +1422,7 @@ Comparison:
 </ul>
 <p><strong>Bisbee et al. (2024) finding:</strong></p>
 <ul class="simple">
-<li><p>Invariance worse for identity-salient questions</p></li>
-<li><p>Better for non-political factual questions</p></li>
+<li><p>Invariance varies by question type and model</p></li>
 <li><p>Larger models (GPT-4) show slightly better diversity than GPT-3.5</p></li>
 </ul>
 <p><strong>Solutions:</strong></p>
@@ -1571,24 +1570,15 @@ If synthetic d &gt;&gt; real d, this suggests stereotyping
 </ul>
 <p><strong>Bisbee et al. (2024) findings:</strong></p>
 <ul class="simple">
-<li><p>Stereotyping worse for:</p>
-<ul>
-<li><p>Morally charged issues (abortion, guns)</p></li>
-<li><p>Identity-salient topics (race, gender)</p></li>
-<li><p>Minority subgroups (underrepresented in training)</p></li>
-</ul>
-</li>
-<li><p>Better for:</p>
-<ul>
-<li><p>Non-political topics</p></li>
-<li><p>Aggregate estimates (averaging reduces bias)</p></li>
-</ul>
-</li>
+<li><p>Stereotyping varies by question type</p></li>
+<li><p>More polarized responses for morally charged issues (abortion, guns)</p></li>
+<li><p>Better performance for less controversial topics</p></li>
+<li><p>Aggregate estimates can help reduce bias</p></li>
 </ul>
 <p><strong>Solutions:</strong></p>
 <ul class="simple">
 <li><p>Compare effect sizes to real data (essential validation step)</p></li>
-<li><p>Avoid using for identity-salient questions</p></li>
+<li><p>Use caution with controversial or morally charged questions</p></li>
 <li><p>Consider weighting/calibrating to match real distributions</p></li>
 </ul>
 </section>
