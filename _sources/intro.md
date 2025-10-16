@@ -76,7 +76,7 @@ Each computational notebook in this book includes:
 - **Basic Python programming**: variables, functions, loops, conditionals
 - **Familiarity with NumPy and pandas** for data manipulation
 - **Basic ML concepts**: training/testing, classification, evaluation
-- **(Optional) OpenAI API key** for Weeks 4-6 (required for some exercises). I will also share temporary API keys in class so don't worry about this. 
+- **(Optional) OpenAI API key** for Weeks 4-6 (required for some exercises)
 
 ## Required Textbook
 
@@ -90,9 +90,27 @@ Language models are powerful technologies that can enhance research at unprecede
 
 **The question is**: Are you building the intellectual muscles needed to operate in this world, or are you outsourcing the hard work?
 
-Assignments in this course are primarily lab-based and collaborative. You'll work through notebooks together, check each other's code, and explain your implementations. Don't outsource your learning––you'll only shortchange yourself.
+Assignments in this course are primarily lab-based and collaborative. You'll work through notebooks together, check each other's code, and explain your implementations. Don't outsource your learning—you'll only shortchange yourself.
+
+## Acknowledgments
+
+This book builds on open-source tools and cutting-edge research:
+- **Hugging Face Transformers** for pretrained models
+- **OpenAI API** for large language model access
+- **scikit-learn** for ML utilities
+- **Jupyter Book** for publishing
+
+Special thanks to the researchers whose work informs this curriculum (full citations in each chapter).
 
 ## License
 
 - **Code**: MIT License
 - **Content**: CC BY 4.0
+
+## Getting Started
+
+Ready to begin? Start with the first computational notebook:
+
+→ [Week 4: LLMs for Annotation I - Automated Content Analysis](week04_llms.ipynb)
+
+(Weeks 1-3 provide theoretical foundations covered in lecture; computational labs begin in Week 4.)

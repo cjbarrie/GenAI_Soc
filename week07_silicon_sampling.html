@@ -496,6 +496,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">getpass</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
@@ -557,66 +558,36 @@ document.write(`
 <li><p>Geographic region</p></li>
 <li><p>Political party (for political questions)</p></li>
 </ul>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_persona</span><span class="p">(</span><span class="n">demographics</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create persona string following Argyle et al. (2023)</span>
-<span class="sd">    </span>
-<span class="sd">    Args:</span>
-<span class="sd">        demographics: dict with keys: age, race, gender, education, income, region</span>
-<span class="sd">    </span>
-<span class="sd">    Returns:</span>
-<span class="sd">        str: Formatted persona prompt</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">persona</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are a </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">-year-old </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;gender&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> education and an income of $</span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;income&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;&quot;&quot;</span>
-    
-    <span class="c1"># Add political affiliation if present</span>
-    <span class="k">if</span> <span class="s1">&#39;party&#39;</span> <span class="ow">in</span> <span class="n">demographics</span><span class="p">:</span>
-        <span class="n">persona</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; You identify as a </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
-    
-    <span class="k">return</span> <span class="n">persona</span>
-
-<span class="c1"># Example personas</span>
-<span class="n">example_personas</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span>
-        <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">45</span><span class="p">,</span>
-        <span class="s1">&#39;race&#39;</span><span class="p">:</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="s1">&#39;male&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;education&#39;</span><span class="p">:</span> <span class="s1">&#39;college degree&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;income&#39;</span><span class="p">:</span> <span class="s1">&#39;75,000&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="s1">&#39;Midwest&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;party&#39;</span><span class="p">:</span> <span class="s1">&#39;Democrat&#39;</span>
-    <span class="p">},</span>
-    <span class="p">{</span>
-        <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">29</span><span class="p">,</span>
-        <span class="s1">&#39;race&#39;</span><span class="p">:</span> <span class="s1">&#39;Black&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="s1">&#39;female&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;education&#39;</span><span class="p">:</span> <span class="s1">&#39;high school&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;income&#39;</span><span class="p">:</span> <span class="s1">&#39;35,000&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="s1">&#39;South&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;party&#39;</span><span class="p">:</span> <span class="s1">&#39;Independent&#39;</span>
-    <span class="p">},</span>
-    <span class="p">{</span>
-        <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">67</span><span class="p">,</span>
-        <span class="s1">&#39;race&#39;</span><span class="p">:</span> <span class="s1">&#39;Hispanic&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="s1">&#39;male&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;education&#39;</span><span class="p">:</span> <span class="s1">&#39;some college&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;income&#39;</span><span class="p">:</span> <span class="s1">&#39;55,000&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="s1">&#39;West&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;party&#39;</span><span class="p">:</span> <span class="s1">&#39;Republican&#39;</span>
-    <span class="p">}</span>
-<span class="p">]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Example personas:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">demo</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">example_personas</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Persona </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">create_persona</span><span class="p">(</span><span class="n">demo</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
+<p><strong>What this code does:</strong></p>
+<p>Implements the <strong>persona construction</strong> approach from Argyle et al. (2023):</p>
+<p><strong>The <code class="docutils literal notranslate"><span class="pre">create_persona</span></code> function:</strong></p>
+<ul class="simple">
+<li><p>Takes a dictionary of demographic attributes</p></li>
+<li><p>Formats them into a natural language persona description</p></li>
+<li><p>Uses second person (“You are…”) to prime the model</p></li>
+</ul>
+<p><strong>Key demographic variables:</strong></p>
+<ul class="simple">
+<li><p><strong>Age</strong>: Specific number (not range) for precision</p></li>
+<li><p><strong>Race/ethnicity</strong>: Following U.S. Census categories</p></li>
+<li><p><strong>Gender</strong>: Binary in original study (limitations noted)</p></li>
+<li><p><strong>Education</strong>: Categorical levels (high school, some college, college degree, graduate)</p></li>
+<li><p><strong>Income</strong>: Specific dollar amount or range</p></li>
+<li><p><strong>Region</strong>: Geographic area (affects policy preferences)</p></li>
+<li><p><strong>Party</strong>: Political affiliation (optional, task-dependent)</p></li>
+</ul>
+<p><strong>Why this format:</strong></p>
+<ul class="simple">
+<li><p>Clear, unambiguous demographic information</p></li>
+<li><p>Mimics how humans think about identity</p></li>
+<li><p>Tested extensively in Argyle et al. (2023)</p></li>
+</ul>
+<p><strong>Limitations:</strong></p>
+<ul class="simple">
+<li><p>Simplified categories (e.g., binary gender)</p></li>
+<li><p>May activate stereotypes in the model</p></li>
+<li><p>Assumes demographics determine opinions (not always true)</p></li>
+</ul>
 <p><strong>What this code does:</strong></p>
 <p>Implements the <strong>persona construction</strong> approach from Argyle et al. (2023):</p>
 <p><strong>The <code class="docutils literal notranslate"><span class="pre">create_persona</span></code> function:</strong></p>
@@ -737,6 +708,7 @@ document.write(`
 <li><p>Higher than annotation tasks (0.1-0.3)</p></li>
 <li><p>Allows for within-group diversity</p></li>
 <li><p>Still not as diverse as real humans</p></li>
+<li><p><strong>Why 1.0 instead of 0</strong>: We want to simulate human variability, not find a single “correct” answer. Temperature=0 would make all personas with identical demographics give identical responses, which is unrealistic. Temperature=1.0 introduces sampling stochasticity to approximate real human diversity.</p></li>
 </ul>
 </li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">model=&quot;gpt-3.5-turbo&quot;</span></code></strong>: Original study used GPT-3 (similar)</p></li>
@@ -828,6 +800,13 @@ document.write(`
 <li><p>Easy to analyze, visualize, export</p></li>
 <li><p>Can merge with real survey data for comparison</p></li>
 </ul>
+<p><strong>Note on None values:</strong></p>
+<ul class="simple">
+<li><p>If the LLM fails to return a valid numeric response, <code class="docutils literal notranslate"><span class="pre">silicon_sample_likert</span></code> returns <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p>This can happen if the model provides explanation instead of just a number, or if parsing fails</p></li>
+<li><p>These None values will appear in the DataFrame and should be handled in analysis (e.g., filtered out or imputed)</p></li>
+<li><p>Always check for and report the rate of failed parses in your validation</p></li>
+</ul>
 <p><strong>Next steps:</strong> Scale up to many personas and compare to real distributions</p>
 </section>
 </section>
@@ -841,6 +820,7 @@ document.write(`
 <li><p><strong>KL divergence</strong>: 0 = identical, higher = more different</p></li>
 <li><p><strong>Spearman correlation</strong>: Ordinal association (-1 to +1)</p></li>
 </ul>
+<p><strong>⚠️ IMPORTANT: The “real” survey data used in this section is simulated for demonstration purposes only. In actual research, you MUST use authentic survey data from sources like ANES, GSS, Pew, or your own validated surveys.</strong></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simulate real survey data for comparison</span>
@@ -923,6 +903,30 @@ document.write(`
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">party</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Real distribution: </span><span class="si">{</span><span class="n">real_dist</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  (Note: Need larger synthetic sample for proper comparison)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Example computation with dummy synthetic data for demonstration</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Example fidelity calculations (with hypothetical synthetic data):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+
+<span class="c1"># Create example synthetic distribution for Democrats (hypothetical)</span>
+<span class="n">real_dem_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># From real_data above</span>
+<span class="n">synthetic_dem_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">35</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># Hypothetical synthetic</span>
+
+<span class="n">cosine_sim</span> <span class="o">=</span> <span class="n">calculate_cosine_similarity</span><span class="p">(</span><span class="n">real_dem_dist</span><span class="p">,</span> <span class="n">synthetic_dem_dist</span><span class="p">)</span>
+<span class="n">kl_div</span> <span class="o">=</span> <span class="n">calculate_kl_divergence</span><span class="p">(</span><span class="n">real_dem_dist</span><span class="p">,</span> <span class="n">synthetic_dem_dist</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Democrat Q1 (Healthcare) - Hypothetical comparison:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Real distribution:      </span><span class="si">{</span><span class="n">real_dem_dist</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Synthetic distribution: </span><span class="si">{</span><span class="n">synthetic_dem_dist</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Cosine similarity: </span><span class="si">{</span><span class="n">cosine_sim</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  KL divergence:     </span><span class="si">{</span><span class="n">kl_div</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Interpretation:&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">cosine_sim</span> <span class="o">&gt;</span> <span class="mf">0.9</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Excellent match (cosine &gt; 0.9)&quot;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">cosine_sim</span> <span class="o">&gt;</span> <span class="mf">0.7</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Good match (cosine 0.7-0.9)&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Poor match (cosine &lt; 0.7)&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -979,7 +983,7 @@ document.write(`
 <h3>Generating larger synthetic sample for proper validation<a class="headerlink" href="#generating-larger-synthetic-sample-for-proper-validation" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate larger synthetic sample (this will take a few minutes and cost ~$0.50)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate larger synthetic sample (this will take a few minutes and cost ~$0.09-$0.50)</span>
 <span class="c1"># Uncomment to run - skipping by default to save API costs</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
@@ -1031,7 +1035,8 @@ document.write(`
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Skipped to save API costs - uncomment to run]&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This would generate 90 synthetic respondents (~$0.50-1.00)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This would generate 90 synthetic respondents&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cost estimate: ~$0.09 for completions, up to $0.50 with prompt tokens depending on length&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1158,6 +1163,13 @@ document.write(`
 <li><p><strong>Std &lt; 0.5</strong>: High invariance (responses very similar)</p></li>
 <li><p><strong>Std 0.5-1.0</strong>: Moderate diversity (less than humans)</p></li>
 <li><p><strong>Std &gt; 1.0</strong>: Good diversity (approaching human levels)</p></li>
+</ul>
+<p><strong>Note on thresholds with temperature=1.0:</strong></p>
+<ul class="simple">
+<li><p>With temperature=1.0, LLM variance is typically higher than with temperature=0</p></li>
+<li><p>However, the thresholds above (&lt; 0.5, 0.5-1.0, &gt; 1.0) still apply because they’re calibrated against human within-group variance</p></li>
+<li><p>Even with temperature=1.0, LLMs often show variance around 0.3-0.8, which is still less than typical human variance of 1.0-1.5</p></li>
+<li><p>The higher temperature helps but doesn’t fully solve the invariance problem</p></li>
 </ul>
 <p><strong>Typical observations:</strong></p>
 <ul class="simple">

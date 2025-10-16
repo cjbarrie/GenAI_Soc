@@ -421,7 +421,6 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-three-approaches-to-getting-structured-outputs-json">Part 2: Three Approaches to Getting Structured Outputs (JSON)</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-2-json-mode-api-parameter-recommended-for-most-tasks">Approach 2: JSON Mode API Parameter (Recommended for Most Tasks)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-3-provider-json-mode-more-reliable">Approach 3: Provider JSON Mode (More Reliable)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-3-function-calling-most-structured-type-safe">Approach 3: Function Calling (Most Structured, Type-Safe)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-summary">Comparison Summary</a></li>
 </ul>
 </li>
@@ -591,7 +590,7 @@ document.write(`
 <li><p>Interactive exploration</p></li>
 <li><p>Single-shot annotations where you’ll read the output</p></li>
 </ul>
-<p><strong>For production:</strong> Use structured outputs (Approach 3 or 4 later in this notebook)</p>
+<p><strong>For production:</strong> Use structured outputs (Approach 2 or 3 later in this notebook)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample political texts for annotation</span>
@@ -967,7 +966,9 @@ document.write(`
 <p>Let’s compare the three approaches from simplest to most reliable.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### Approach 1: Prompt for JSON (Simplest, Least Reliable)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">**</span><span class="n">Example</span><span class="p">:</span><span class="o">**</span>
+
+<span class="c1">### Approach 1: Prompt for JSON (Simplest, Least Reliable)</span>
 
 <span class="o">**</span><span class="n">How</span> <span class="n">it</span> <span class="n">works</span><span class="p">:</span><span class="o">**</span> <span class="n">Just</span> <span class="n">ask</span> <span class="n">the</span> <span class="n">LLM</span> <span class="n">to</span> <span class="k">return</span> <span class="n">JSON</span> <span class="ow">in</span> <span class="n">your</span> <span class="n">prompt</span><span class="o">.</span> <span class="n">No</span> <span class="n">special</span> <span class="n">API</span> <span class="n">parameters</span><span class="o">.</span>
 
@@ -1145,17 +1146,6 @@ document.write(`
 </div>
 </div>
 </div>
-</section>
-<section id="approach-3-function-calling-most-structured-type-safe">
-<h3>Approach 3: Function Calling (Most Structured, Type-Safe)<a class="headerlink" href="#approach-3-function-calling-most-structured-type-safe" title="Link to this heading">#</a></h3>
-<p><strong>How it works:</strong> Define a function schema with types and constraints. The API forces the model to match your schema exactly.</p>
-<p><strong>What you do:</strong></p>
-<ol class="arabic simple">
-<li><p>Define a JSON Schema with types (<code class="docutils literal notranslate"><span class="pre">string</span></code>, <code class="docutils literal notranslate"><span class="pre">number</span></code>, <code class="docutils literal notranslate"><span class="pre">enum</span></code>)</p></li>
-<li><p>Send as <code class="docutils literal notranslate"><span class="pre">tools</span></code> parameter</p></li>
-<li><p>Extract typed arguments from response</p></li>
-</ol>
-<p><strong>Success rate:</strong> ~99.9% (guaranteed valid + type-checked)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define function schema with typed arguments</span>
@@ -1782,6 +1772,21 @@ document.write(`
 </div>
 </div>
 </div>
+<p><strong>Using a continuous scale instead of categorical labels:</strong></p>
+<p>For more nuanced analysis, we can ask models to rate ideology on a <strong>continuous scale</strong> rather than discrete categories. This approach:</p>
+<ul class="simple">
+<li><p>Captures gradations between positions (e.g., -0.45 vs -0.90 both progressive, but different intensities)</p></li>
+<li><p>Enables more sophisticated aggregation (mean, median, standard deviation)</p></li>
+<li><p>Allows measurement of <strong>uncertainty</strong> via ensemble variance</p></li>
+<li><p>Follows Kraft et al. (2024) methodology for ideological scaling</p></li>
+</ul>
+<p><strong>The scale:</strong></p>
+<ul class="simple">
+<li><p><strong>-1</strong>: Most progressive position</p></li>
+<li><p><strong>0</strong>: Centrist/neutral</p></li>
+<li><p><strong>+1</strong>: Most conservative position</p></li>
+</ul>
+<p>This continuous representation is particularly useful for mixture-of-experts approaches where we aggregate scores across multiple models.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Single text with multiple models</span>
@@ -2211,7 +2216,6 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-three-approaches-to-getting-structured-outputs-json">Part 2: Three Approaches to Getting Structured Outputs (JSON)</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-2-json-mode-api-parameter-recommended-for-most-tasks">Approach 2: JSON Mode API Parameter (Recommended for Most Tasks)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-3-provider-json-mode-more-reliable">Approach 3: Provider JSON Mode (More Reliable)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-3-function-calling-most-structured-type-safe">Approach 3: Function Calling (Most Structured, Type-Safe)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-summary">Comparison Summary</a></li>
 </ul>
 </li>
