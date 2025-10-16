@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -713,41 +713,6 @@ document.write(`
 </div>
 </div>
 </div>
-<p><strong>What this code does:</strong></p>
-<p>Demonstrates <strong>code condensation</strong> - a key qualitative analysis technique:</p>
-<p><strong>What is code condensation:</strong></p>
-<ul class="simple">
-<li><p>Start with many detailed codes (13 in this example)</p></li>
-<li><p>Group them into fewer, broader themes (3-5)</p></li>
-<li><p>Creates a hierarchical codebook structure</p></li>
-</ul>
-<p><strong>Why this matters:</strong></p>
-<ul class="simple">
-<li><p>Mirrors iterative qualitative analysis workflow</p></li>
-<li><p>Helps manage complexity in large datasets</p></li>
-<li><p>Makes patterns more visible</p></li>
-</ul>
-<p><strong>How the prompt works:</strong></p>
-<ol class="arabic simple">
-<li><p>Provides all initial codes as context</p></li>
-<li><p>Asks for 3-5 broader categories</p></li>
-<li><p>Requests mapping of initial → condensed codes</p></li>
-<li><p>Wants definitions for each condensed theme</p></li>
-</ol>
-<p><strong>Temperature: 0.2 (very low)</strong></p>
-<ul class="simple">
-<li><p>Code condensation should be consistent</p></li>
-<li><p>We want logical groupings, not creative ones</p></li>
-<li><p>Higher temperature might produce inconsistent hierarchies</p></li>
-</ul>
-<p><strong>How to use this:</strong></p>
-<ul class="simple">
-<li><p>Start by coding 20-50 texts with detailed codes</p></li>
-<li><p>Feed those codes to this condensation step</p></li>
-<li><p>Iterate if the condensed themes don’t feel right</p></li>
-<li><p>Use human judgment to validate the groupings</p></li>
-</ul>
-<p><strong>Expected output:</strong> 3-5 broader themes, each encompassing multiple initial codes, with clear definitions.</p>
 </section>
 <hr class="docutils" />
 <section id="part-2-code-condensation">
@@ -784,6 +749,41 @@ document.write(`
 </div>
 </div>
 </div>
+<p><strong>What this code does:</strong></p>
+<p>Demonstrates <strong>code condensation</strong> - a key qualitative analysis technique:</p>
+<p><strong>What is code condensation:</strong></p>
+<ul class="simple">
+<li><p>Start with many detailed codes (13 in this example)</p></li>
+<li><p>Group them into fewer, broader themes (3-5)</p></li>
+<li><p>Creates a hierarchical codebook structure</p></li>
+</ul>
+<p><strong>Why this matters:</strong></p>
+<ul class="simple">
+<li><p>Mirrors iterative qualitative analysis workflow</p></li>
+<li><p>Helps manage complexity in large datasets</p></li>
+<li><p>Makes patterns more visible</p></li>
+</ul>
+<p><strong>How the prompt works:</strong></p>
+<ol class="arabic simple">
+<li><p>Provides all initial codes as context</p></li>
+<li><p>Asks for 3-5 broader categories</p></li>
+<li><p>Requests mapping of initial → condensed codes</p></li>
+<li><p>Wants definitions for each condensed theme</p></li>
+</ol>
+<p><strong>Temperature: 0.2 (very low)</strong></p>
+<ul class="simple">
+<li><p>Code condensation should be consistent</p></li>
+<li><p>We want logical groupings, not creative ones</p></li>
+<li><p>Higher temperature might produce inconsistent hierarchies</p></li>
+</ul>
+<p><strong>How to use this:</strong></p>
+<ul class="simple">
+<li><p>Start by coding 20-50 texts with detailed codes</p></li>
+<li><p>Feed those codes to this condensation step</p></li>
+<li><p>Iterate if the condensed themes don’t feel right</p></li>
+<li><p>Use human judgment to validate the groupings</p></li>
+</ul>
+<p><strong>Expected output:</strong> 3-5 broader themes, each encompassing multiple initial codes, with clear definitions.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ask LLM to condense codes into higher-level themes</span>
