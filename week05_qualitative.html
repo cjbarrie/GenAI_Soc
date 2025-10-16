@@ -1017,44 +1017,6 @@ document.write(`
 </div>
 </div>
 </div>
-<p><strong>What this code does:</strong></p>
-<p>Uses the LLM to <strong>deduplicate and consolidate</strong> similar themes:</p>
-<p><strong>Why LLMs are good at this:</strong></p>
-<ul class="simple">
-<li><p>Can recognize semantic similarity (“cost concerns” ≈ “financial burden”)</p></li>
-<li><p>Understand broader categories that encompass multiple themes</p></li>
-<li><p>Generate clear definitions for consolidated themes</p></li>
-</ul>
-<p><strong>The deduplication prompt:</strong></p>
-<ol class="arabic simple">
-<li><p>Shows all unique themes from chunk coding</p></li>
-<li><p>Asks LLM to merge similar/overlapping ones</p></li>
-<li><p>Requests 3-5 final distinct themes</p></li>
-<li><p>Wants mapping: which original themes → which final theme</p></li>
-</ol>
-<p><strong>Temperature: 0.2 (low)</strong></p>
-<ul class="simple">
-<li><p>Consolidation should be logical and consistent</p></li>
-<li><p>Too high = creative but inconsistent groupings</p></li>
-</ul>
-<p><strong>How this differs from code condensation:</strong></p>
-<ul class="simple">
-<li><p><strong>Code condensation:</strong> Hierarchical grouping (initial → broader)</p></li>
-<li><p><strong>Deduplication:</strong> Horizontal merging (similar themes → single theme)</p></li>
-</ul>
-<p><strong>Alternative approaches:</strong></p>
-<ul class="simple">
-<li><p><strong>Embedding similarity:</strong> Use cosine similarity on theme embeddings to auto-cluster</p></li>
-<li><p><strong>Manual review:</strong> Export theme list and manually mark duplicates</p></li>
-<li><p><strong>Hybrid:</strong> LLM suggests merges, human approves</p></li>
-</ul>
-<p><strong>When to use:</strong></p>
-<ul class="simple">
-<li><p>After coding 20+ chunks (enough variation to cause duplicates)</p></li>
-<li><p>When you see obvious semantic overlap in theme names</p></li>
-<li><p>Before final codebook creation</p></li>
-</ul>
-<p><strong>Expected output:</strong> Clean, non-redundant final codebook with 3-5 themes, each with clear definition and list of merged original themes.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Step 2: Challenge the initial coding</span>
@@ -1283,6 +1245,44 @@ document.write(`
 </div>
 </div>
 </div>
+<p><strong>What this code does:</strong></p>
+<p>Uses the LLM to <strong>deduplicate and consolidate</strong> similar themes:</p>
+<p><strong>Why LLMs are good at this:</strong></p>
+<ul class="simple">
+<li><p>Can recognize semantic similarity (“cost concerns” ≈ “financial burden”)</p></li>
+<li><p>Understand broader categories that encompass multiple themes</p></li>
+<li><p>Generate clear definitions for consolidated themes</p></li>
+</ul>
+<p><strong>The deduplication prompt:</strong></p>
+<ol class="arabic simple">
+<li><p>Shows all unique themes from chunk coding</p></li>
+<li><p>Asks LLM to merge similar/overlapping ones</p></li>
+<li><p>Requests 3-5 final distinct themes</p></li>
+<li><p>Wants mapping: which original themes → which final theme</p></li>
+</ol>
+<p><strong>Temperature: 0.2 (low)</strong></p>
+<ul class="simple">
+<li><p>Consolidation should be logical and consistent</p></li>
+<li><p>Too high = creative but inconsistent groupings</p></li>
+</ul>
+<p><strong>How this differs from code condensation:</strong></p>
+<ul class="simple">
+<li><p><strong>Code condensation:</strong> Hierarchical grouping (initial → broader)</p></li>
+<li><p><strong>Deduplication:</strong> Horizontal merging (similar themes → single theme)</p></li>
+</ul>
+<p><strong>Alternative approaches:</strong></p>
+<ul class="simple">
+<li><p><strong>Embedding similarity:</strong> Use cosine similarity on theme embeddings to auto-cluster</p></li>
+<li><p><strong>Manual review:</strong> Export theme list and manually mark duplicates</p></li>
+<li><p><strong>Hybrid:</strong> LLM suggests merges, human approves</p></li>
+</ul>
+<p><strong>When to use:</strong></p>
+<ul class="simple">
+<li><p>After coding 20+ chunks (enough variation to cause duplicates)</p></li>
+<li><p>When you see obvious semantic overlap in theme names</p></li>
+<li><p>Before final codebook creation</p></li>
+</ul>
+<p><strong>Expected output:</strong> Clean, non-redundant final codebook with 3-5 themes, each with clear definition and list of merged original themes.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use LLM to deduplicate and merge similar themes</span>
