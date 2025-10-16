@@ -1,0 +1,12 @@
+# Table of Contents
+format: jb-book
+root: intro
+chapters:
+  - file: week04_llms
+    title: "LLMs for Annotation I"
+  - file: week05_qualitative
+    title: "LLMs for Annotation II"
+  - file: week06_annotation
+    title: "LLMs for Annotation III"
+  - file: week07_silicon_sampling
+    title: "LLMs for Synthetic Data I: Simulating Survey Respondents"

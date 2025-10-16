@@ -1,0 +1,397 @@
+
+---
+title: "Week 6: Gen AI for Sociology"
+format:
+  revealjs:
+    toc: false
+    slide-number: true
+    incremental: true
+    transition: fade
+    code-line-numbers: true
+---
+
+## Course feedback (thank you!)
+
+- Want **more in-depth reading** ✅  
+- Want **more structured coding exercises** ✅  
+- Want **more examples of how the code actually works** ✅  
+- Want **more structured, guided lectures with clear roadmaps** ✅
+
+---
+
+## Course feedback (thank you!)
+
+::: callout-note
+**Plan:** I’ll anchor each week with: 
+
+1. 10-min roadmap;
+2. describe concrete outputs
+3. unpack readings and tie to code; 
+4. make code exercises more structured + accessible.
+:::
+
+---
+
+
+## This week
+
+No code exercise: I'm compiling everything into a book for you... 
+
+We will also be finishing early.
+
+---
+
+## 
+
+![](images/book.png){fig-align="center"}
+
+---
+
+## What we'll cover & why it matters
+
+- Getting **structured outputs** you can analyze (JSON mode & tool/function calling)  
+- **Reliability & replication**: pin versions, logging, validation  
+- **When to fine-tune** open models vs use APIs; quick **batch** patterns  
+- **How the readings** do it: key lessons & exact methods (you’ll reuse these patterns)
+
+---
+
+## Why it matters
+
+The zero-shot revolution was amazing but...
+
+---
+
+## Why it matters
+
+The zero-shot revolution was amazing but... also kind of dumb
+
+- Annotation pipelines live/die on **structure + reproducibility**  
+- Open models can be **cheap, private, and replicable**  
+- Your research needs **validation & documentation** to be credible
+
+---
+
+## Strategies for controlling outputs
+
+This is a big thing... weirdly enough.
+
+---
+
+## Strategies for controlling outputs
+
+![](images/yt.png){fig-align="center"}
+
+---
+
+## Strategies for controlling outputs
+
+![](images/yt1.png){fig-align="center"}
+
+---
+
+## Strategies for controlling outputs
+
+![](images/yt3.png){fig-align="center"}
+
+---
+
+## Why do we need these strategies?
+
+- Models are stochastic
+- They are text generators at the end of the day...
+- And so they are not optimized for e.g., annotation
+
+---
+
+## Three Approaches to Structured Outputs
+
+::: {.incremental}
+1. **Prompt for JSON** - Just ask nicely
+2. **JSON Mode API** - API guarantees valid JSON ← **Start here**
+3. **Function Calling** - Full type safety & validation
+:::
+
+---
+
+## Three Approaches to Structured Outputs
+
+:::callout-note
+Each approach trades off simplicity vs. guarantees.
+:::
+---
+
+## Minimal prompting patterns (for annotation)
+
+```python
+# f-string prompt (simple, stable)
+text = "We must invest in renewable energy now!"
+prompt = f'''Classify stance: Progressive | Conservative | Centrist
+Text: {text}
+Answer with one label only:'''
+```
+
+---
+
+## Minimal prompting patterns (for annotation)
+
+```python
+# Few-shot
+TEMPLATE = '''Classify stance as Progressive, Conservative, or Centrist.
+Text: "Cut taxes and reduce regulations" -> Conservative
+Text: "Expand healthcare access for all" -> Progressive
+Text: "Maintain current spending levels" -> Centrist
+Text: {text} ->'''
+```
+
+---
+
+## Structured outputs (do this)
+
+**Best default:** provider **JSON mode** (or strict schema/tool calling).
+
+```python
+response = client.chat.completions.create(
+  model="gpt-4o",
+  messages=[{"role": "user",
+             "content": f"Analyze stance of: {text}"}],
+  response_format={"type": "json_object"}  # forces JSON
+)
+data = json.loads(response.choices[0].message.content)
+```
+
+---
+
+## Function/Tool Calling: Strongest Guarantees
+
+**What is it?** Define a typed schema with strict validation (types, enums, ranges).
+
+---
+
+## Function/Tool Calling: Strongest Guarantees
+
+**What is it?** 
+
+- Define a typed schema with strict validation (types, enums, ranges).
+
+---
+
+## Function/Tool Calling: Strongest Guarantees
+
+**Why use it?**
+
+- Enforce `confidence` is a **number** 0-1, not a string
+- Guarantee `stance` is one of 3 exact values (e.g., "Progressive" not "progressive")
+- Catch errors early with required fields and type checking
+
+---
+
+## Function Calling Example
+
+```python
+tools = [{
+  "type": "function",
+  "function": {
+    "name": "analyze_stance",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "stance": {"type": "string",
+                   "enum": ["Progressive", "Conservative", "Centrist"]},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "reasoning": {"type": "string"}
+      },
+      "required": ["stance", "confidence", "reasoning"]
+    }
+  }
+}]
+
+response = client.chat.completions.create(
+  model="gpt-4o",
+  messages=[{"role": "user", "content": f"Analyze: {text}"}],
+  tools=tools,
+  tool_choice="auto"
+)
+args = json.loads(response.choices[0].message.tool_calls[0].function.arguments)
+```
+
+---
+
+## When to use Function Calling vs JSON Mode
+
+**JSON Mode** (easier, flexible):
+
+- Good default for most annotation tasks
+- Simpler setup, less code
+- No type validation
+
+---
+
+## When to use Function Calling vs JSON Mode
+
+**Function Calling** (stricter, production):
+
+- Production systems needing data quality guarantees
+- When downstream code expects specific types
+- Complex nested schemas with validation
+
+---
+
+## Structured outputs **without** JSON mode
+
+- Ask for **ONLY a ```json fenced block** with a tiny schema.
+- Use **sentinels** (BEGIN/END or code fence) for easy parsing.
+- Keep temp low (≤0.2). No pre/post text, no emojis.
+- On parse fail, **echo the error** and ask for a **corrected JSON**.
+- Allow **nulls** instead of guesses.
+
+---
+
+```python
+import re, json
+
+import json
+
+INSTR = (
+  'Return only a JSON object like this:\n'
+  '{"stance":"Progressive|Conservative|Centrist|null",'
+  '"confidence":0-1,"reasoning":"brief"}\n'
+  'Do not add any extra text.'
+)
+
+def get_labels(client, text):
+    # 1) Ask for JSON only
+    prompt = f'{INSTR}\n\nText: "{text}"'
+    r = client.chat.completions.create(
+        model="gpt-4o", messages=[{"role":"user","content":prompt}], temperature=0.1
+    )
+    out = r.choices[0].message.content.strip()
+    try:
+        return json.loads(out)              # 2) Try to parse as JSON
+    except json.JSONDecodeError:
+        # 3) One simple retry asking for just JSON again
+        fix = "That was not valid JSON. Please send ONLY the JSON object, nothing else."
+        r2 = client.chat.completions.create(
+            model="gpt-4o", messages=[{"role":"user","content":fix}], temperature=0.0
+        )
+        return json.loads(r2.choices[0].message.content.strip())
+```
+
+---
+
+## Reading 1 — Heseltine & Clemm von Hohenberg (2024): 3 lessons
+
+- GPT‑4 is **highly accurate on tweets** for political/negativity/ideology; drops on **longer texts** and **multi-class sentiment**; **hybrid adjudication** boosts accuracy near human agreement.  
+- Performance is **similar across languages** with slight drops; still viable.  
+- **Downstream** models trained on GPT‑4-coded vs hand-coded **yield similar outcomes**.
+
+---
+
+## Reading 1 — Method in brief
+
+- Data: **US tweets (n≈635)** + **news articles (n≈200)**; plus **non‑US tweets** (Chile, Germany, Italy).  
+- Procedure: **Two GPT‑4 runs** with expert-aligned instructions; **human adjudicates disagreements** → **hybrid** labels.  
+- Evaluation: Accuracy vs experts; **cross‑language** and **text‑length** tests; **downstream**: train BERTweet on ~3k tweets coded by (human | GPT‑4 | hybrid) and compare outcomes.
+
+---
+
+##  Heseltine & Clemm von Hohenberg (2024): Results
+
+![](images/heseltine.jpg){fig-align="center"}
+---
+
+##  Heseltine & Clemm von Hohenberg (2024): Results
+
+![](images/heseltine2.jpg){fig-align="center"}
+
+---
+
+##  Heseltine & Clemm von Hohenberg (2024): Questions
+
+- Is this hybrid approach valid?
+- Is it scalable?
+- Is it "gold standard"?
+- Do we agree with conclusions re downstream models?
+
+---
+
+## Reading 2 — Le Mens & Gallego (2025): 3 lessons
+
+- **Ask‑and‑average** works: ask LLM for a **position score** on a dimension and **average across sentences/tweets** → **correlations > .90** with benchmarks.  
+- **Cheaper & fast** vs human coding; if accuracy is similar, **prefer open LLMs** for reproducibility.  
+- For long docs, **sentence‑level + average** often beats single long‑prompt; **multilingual** works, but validate.
+
+---
+
+## Reading 2 — Method in brief
+
+- Datasets: US Congress tweets (post‑training), **US Senators**, **UK manifestos**, **EU speeches in 10 languages**.  
+- LLMs: GPT‑4o, GPT‑4 Turbo, **MiXtral 8×22B**, **Llama 3 70B**, **Aya 35B**.  
+- Procedure: For each text/sentence → **ask for ideological/policy position**; **average** to get actor/document scores; compare to **crowd/expert/roll‑call** benchmarks; analyze **cost**.
+
+---
+
+## Reading 2 — Method in brief
+
+![](images/moe.png){fig-align="center"}
+
+---
+
+## Reading 2 — Le Mens & Gallego (2025): Results
+
+![](images/lemens.png){fig-align="center"}
+
+---
+
+##  Le Mens & Gallego (2025): Questions
+
+- Are these models like experts?
+- What might be different (variance)
+- What happened to theory...?
+
+---
+
+## Reading 3 — Barrie, Spirling, and Palmer (2025): 3 lessons
+
+- LMs can be accurate, but **between‑run & over‑time variance** is often high; **temperature control ≠ determinism** for APIs.  
+- **Proprietary models are fragile** for replication (versions change/retire).  
+- This all has consequences for **downstream findings**
+
+---
+
+## Reading 3 — Method in brief
+
+- **Rolling iterated replication** over months; compare **crowd vs LMs** across tasks.  
+- Systematically vary **temperature/top‑p** (incl. 0), and **repeat labeling 20×**; compute **between‑run correlations**; test **open models locally** (Ollama).  
+- Assess downstream consequences for LLM-annotated data in place of original humans.
+
+---
+
+## Reading 3 — Barrie, Spirling, and Palmer (2025): Results
+
+![](images/barrie.png){fig-align="center"}
+
+---
+
+## Reading 3 — Barrie, Spirling, and Palmer (2025): Results
+
+![](images/barrie2.png){fig-align="center"}
+
+---
+
+## Conclusions
+
+- LLMS are powerful but need **structure + validation** for annotation.
+- LLMs are not optimized for reproducibility... 
+- Open models are **cheap, private, and replicable**.
+- Always **log versions + parameters**; validate outputs.
+
+---
+
+## Conclusions
+
+- Consider fragility estimates e.g....
+  - Repeat annotations multiple times
+  - Measure between-run variance
+  - Report confidence intervals on downstream results
+  - We're going to cover more of this in coming weeks (yes, that is a threat)

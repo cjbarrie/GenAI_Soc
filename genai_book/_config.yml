@@ -1,0 +1,52 @@
+# Book settings
+title: GenAI for Sociology
+author: Christopher Barrie
+copyright: "2025"
+
+# Don't execute notebooks during build (run them manually or in Colab)
+execute:
+  execute_notebooks: off
+  timeout: 300
+  allow_errors: false
+
+# Define the left-hand table of contents
+format:
+  html:
+    theme: cosmo
+
+# Add GitHub buttons to your book
+repository:
+  url: https://github.com/cjbarrie/GenAI_Soc
+  path_to_book: genai_book
+  branch: main
+
+# Launch buttons
+launch_buttons:
+  colab_url: "https://colab.research.google.com"
+  notebook_interface: "jupyterlab"
+  binderhub_url: ""
+
+# HTML-specific settings
+html:
+  favicon: ""
+  use_edit_page_button: false
+  use_repository_button: true
+  use_issues_button: true
+  use_multitoc_numbering: true
+  extra_navbar: ""
+  extra_footer: ""
+  google_analytics_id: ""
+  home_page_in_navbar: true
+  baseurl: ""
+  comments:
+    hypothesis: false
+    utterances: false
+
+# Bibliography settings
+bibtex_bibfiles:
+  - references.bib
+
+# Sphinx settings
+sphinx:
+  config:
+    html_show_copyright: true

@@ -13,3 +13,4 @@ Course repo. for Gen AI class
 - Week 4 exercises: [https://colab.research.google.com/drive/1aLG4pu6jhEBXLt7bxIBYrAFNf1Xj3ouF?usp=sharing](https://colab.research.google.com/drive/1aLG4pu6jhEBXLt7bxIBYrAFNf1Xj3ouF?usp=sharing)
 - Week 5 slides: [https://cjbarrie.quarto.pub/week5genai](https://cjbarrie.quarto.pub/week5genai)
 - Week 5 examples and exercises: [https://colab.research.google.com/drive/1aQGLfZhFX656PmsRnIwa-ULp3CFshkjn?usp=sharing](https://colab.research.google.com/drive/1aQGLfZhFX656PmsRnIwa-ULp3CFshkjn?usp=sharing)
+- Week 6 slides: [https://cjbarrie.quarto.pub/week6genai](https://cjbarrie.quarto.pub/week6genai)
