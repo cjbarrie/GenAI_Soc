@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -412,7 +412,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-responses-for-multiple-questions">Generating responses for multiple questions</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-measuring-algorithmic-fidelity">Part 3: Measuring Algorithmic Fidelity</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-validating-synthetic-data-against-real-surveys">Part 3: Validating Synthetic Data Against Real Surveys</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-larger-synthetic-sample-for-proper-validation">Generating larger synthetic sample for proper validation</a></li>
 </ul>
 </li>
@@ -707,7 +707,7 @@ document.write(`
 <li><p>Higher than annotation tasks (0.1-0.3)</p></li>
 <li><p>Allows for within-group diversity</p></li>
 <li><p>Still not as diverse as real humans</p></li>
-<li><p><strong>Why 1.0 instead of 0</strong>: We want to simulate human variability, not find a single “correct” answer. Temperature=0 would make all personas with identical demographics give identical responses, which is unrealistic. Temperature=1.0 introduces sampling stochasticity to approximate real human diversity.</p></li>
+<li><p><strong>Why 1.0 instead of lower values</strong>: We want to simulate human variability, not find a single “correct” answer. Lower temperatures would reduce response diversity, making personas with similar demographics give more similar responses. Temperature=1.0 introduces sampling variability to better approximate real human diversity.</p></li>
 </ul>
 </li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">model=&quot;gpt-3.5-turbo&quot;</span></code></strong>: Original study used GPT-3 (similar)</p></li>
@@ -810,14 +810,14 @@ document.write(`
 </section>
 </section>
 <hr class="docutils" />
-<section id="part-3-measuring-algorithmic-fidelity">
-<h2>Part 3: Measuring Algorithmic Fidelity<a class="headerlink" href="#part-3-measuring-algorithmic-fidelity" title="Link to this heading">#</a></h2>
-<p><strong>Algorithmic fidelity</strong> measures how well synthetic distributions match real survey distributions.</p>
-<p>Common metrics:</p>
+<section id="part-3-validating-synthetic-data-against-real-surveys">
+<h2>Part 3: Validating Synthetic Data Against Real Surveys<a class="headerlink" href="#part-3-validating-synthetic-data-against-real-surveys" title="Link to this heading">#</a></h2>
+<p><strong>Validation</strong> measures how well synthetic responses match real survey data.</p>
+<p>Key metrics:</p>
 <ul class="simple">
-<li><p><strong>Cosine similarity</strong>: 1 = identical, 0 = orthogonal, -1 = opposite</p></li>
-<li><p><strong>KL divergence</strong>: 0 = identical, higher = more different</p></li>
-<li><p><strong>Spearman correlation</strong>: Ordinal association (-1 to +1)</p></li>
+<li><p><strong>Proportion matching</strong>: What percentage of synthetic responses match the modal real response?</p></li>
+<li><p><strong>Response variance</strong>: Do synthetic responses show similar spread to real responses?</p></li>
+<li><p><strong>Distribution plots</strong>: Visual comparison of response distributions</p></li>
 </ul>
 <p><strong>⚠️ IMPORTANT: The “real” survey data used in this section is simulated for demonstration purposes only. In actual research, you MUST use authentic survey data from sources like ANES, GSS, Pew, or your own validated surveys.</strong></p>
 <div class="cell docutils container">
@@ -860,124 +860,143 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">calculate_cosine_similarity</span><span class="p">(</span><span class="n">dist1</span><span class="p">,</span> <span class="n">dist2</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculate cosine similarity between two distributions</span>
-<span class="sd">    </span>
-<span class="sd">    Returns:</span>
-<span class="sd">        float: 1 = identical, 0 = orthogonal, -1 = opposite</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Ensure same length and normalize</span>
-    <span class="n">dist1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dist1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dist1</span><span class="p">)</span>
-    <span class="n">dist2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dist2</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dist2</span><span class="p">)</span>
-    
-    <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">cosine</span><span class="p">(</span><span class="n">dist1</span><span class="p">,</span> <span class="n">dist2</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate proportion matching and variance comparison</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">calculate_kl_divergence</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculate KL divergence from distribution q to p</span>
-<span class="sd">    Lower is better (0 = identical)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-    <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
-    
-    <span class="c1"># Add small epsilon to avoid division by zero</span>
-    <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-10</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="n">epsilon</span>
-    <span class="n">q</span> <span class="o">=</span> <span class="n">q</span> <span class="o">+</span> <span class="n">epsilon</span>
-    
-    <span class="k">return</span> <span class="n">entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
-
-<span class="c1"># Compare distributions for Q1 by party</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Algorithmic Fidelity Analysis (Q1: Healthcare)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Validation Metrics</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
 
+<span class="c1"># For each party and question, compare synthetic to real</span>
 <span class="k">for</span> <span class="n">party</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Democrat&#39;</span><span class="p">,</span> <span class="s1">&#39;Republican&#39;</span><span class="p">]:</span>
-    <span class="c1"># Get real distribution</span>
-    <span class="n">real_dist</span> <span class="o">=</span> <span class="n">df_real</span><span class="p">[</span><span class="n">df_real</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">party</span><span class="p">][</span><span class="s1">&#39;Q1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
-    <span class="n">real_dist</span> <span class="o">=</span> <span class="n">real_dist</span><span class="o">.</span><span class="n">reindex</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">party</span><span class="si">}</span><span class="s2"> - Q1 (Healthcare):&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
     
-    <span class="c1"># For synthetic, we only have 1 sample per party in example</span>
-    <span class="c1"># In practice, you&#39;d generate many samples</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">party</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Real distribution: </span><span class="si">{</span><span class="n">real_dist</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  (Note: Need larger synthetic sample for proper comparison)&quot;</span><span class="p">)</span>
+    <span class="c1"># Get real responses</span>
+    <span class="n">real_responses</span> <span class="o">=</span> <span class="n">df_real</span><span class="p">[</span><span class="n">df_real</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">party</span><span class="p">][</span><span class="s1">&#39;Q1&#39;</span><span class="p">]</span>
+    <span class="n">real_mean</span> <span class="o">=</span> <span class="n">real_responses</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">real_std</span> <span class="o">=</span> <span class="n">real_responses</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+    <span class="n">real_mode</span> <span class="o">=</span> <span class="n">real_responses</span><span class="o">.</span><span class="n">mode</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Real data:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Mean: </span><span class="si">{</span><span class="n">real_mean</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Std:  </span><span class="si">{</span><span class="n">real_std</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Modal response: </span><span class="si">{</span><span class="n">real_mode</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># For synthetic (in practice, you&#39;d have many synthetic responses per party)</span>
+    <span class="c1"># Here we just show the structure</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  Synthetic data (need larger sample for comparison):&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    [Generate 30+ responses per party]&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Then calculate:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      - Proportion matching modal response&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      - Mean and std of synthetic responses&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      - Compare std to real std&quot;</span><span class="p">)</span>
 
-<span class="c1"># Example computation with dummy synthetic data for demonstration</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Example fidelity calculations (with hypothetical synthetic data):&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
-
-<span class="c1"># Create example synthetic distribution for Democrats (hypothetical)</span>
-<span class="n">real_dem_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># From real_data above</span>
-<span class="n">synthetic_dem_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">35</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># Hypothetical synthetic</span>
-
-<span class="n">cosine_sim</span> <span class="o">=</span> <span class="n">calculate_cosine_similarity</span><span class="p">(</span><span class="n">real_dem_dist</span><span class="p">,</span> <span class="n">synthetic_dem_dist</span><span class="p">)</span>
-<span class="n">kl_div</span> <span class="o">=</span> <span class="n">calculate_kl_divergence</span><span class="p">(</span><span class="n">real_dem_dist</span><span class="p">,</span> <span class="n">synthetic_dem_dist</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Democrat Q1 (Healthcare) - Hypothetical comparison:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Real distribution:      </span><span class="si">{</span><span class="n">real_dem_dist</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Synthetic distribution: </span><span class="si">{</span><span class="n">synthetic_dem_dist</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Cosine similarity: </span><span class="si">{</span><span class="n">cosine_sim</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  KL divergence:     </span><span class="si">{</span><span class="n">kl_div</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Interpretation:&quot;</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">cosine_sim</span> <span class="o">&gt;</span> <span class="mf">0.9</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Excellent match (cosine &gt; 0.9)&quot;</span><span class="p">)</span>
-<span class="k">elif</span> <span class="n">cosine_sim</span> <span class="o">&gt;</span> <span class="mf">0.7</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Good match (cosine 0.7-0.9)&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Poor match (cosine &lt; 0.7)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">**Interpretation:**&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- **Proportion matching**: Higher is better (&gt; 50</span><span class="si">% g</span><span class="s2">ood)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- **Variance comparison**: Synthetic std should be close to real std&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - If synthetic std &lt;&lt; real std: Underestimating diversity (invariance)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - If synthetic std &gt;&gt; real std: Overestimating diversity&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- **Visual inspection**: Plot distributions side-by-side&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <p><strong>What this code does:</strong></p>
-<p>Implements <strong>algorithmic fidelity metrics</strong> to compare synthetic and real distributions:</p>
-<p><strong>Why we need simulated data:</strong></p>
+<p><strong>Proportion matching:</strong></p>
 <ul class="simple">
-<li><p>Real survey data (ANES, GSS) requires download/access</p></li>
-<li><p>Simulated data lets us demonstrate the metrics</p></li>
-<li><p>In practice, you’d replace this with actual survey data</p></li>
+<li><p>Find the most common (modal) response in real data</p></li>
+<li><p>Calculate what % of synthetic responses match that mode</p></li>
+<li><p><strong>Example</strong>: If real Democrats most commonly say “5” (strongly agree) to healthcare, what % of synthetic Democrats also say “5”?</p></li>
+<li><p><strong>Good target</strong>: &gt; 50% matching</p></li>
+<li><p><strong>Poor</strong>: &lt; 30% matching</p></li>
 </ul>
-<p><strong>Cosine similarity:</strong></p>
-<ul>
-<li><p>Measures angle between two vectors</p></li>
-<li><p><strong>Range</strong>: -1 (opposite) to +1 (identical)</p></li>
-<li><p><strong>Interpretation</strong>:</p>
-<ul>
-<li><blockquote>
-<div><p>0.9: Excellent match</p>
-</div></blockquote>
-</li>
-<li><p>0.7-0.9: Good match (typical in Argyle et al.)</p></li>
-<li><p>&lt; 0.7: Poor match</p></li>
-</ul>
-</li>
-<li><p><strong>Advantage</strong>: Scale-invariant (doesn’t matter if one dist is larger)</p></li>
-</ul>
-<p><strong>KL divergence (Kullback-Leibler):</strong></p>
-<ul>
-<li><p>Measures how one distribution differs from another</p></li>
-<li><p><strong>Range</strong>: 0 (identical) to ∞ (completely different)</p></li>
-<li><p><strong>Interpretation</strong>:</p>
-<ul>
-<li><p>&lt; 0.1: Excellent match</p></li>
-<li><p>0.1-0.5: Moderate difference</p></li>
-<li><blockquote>
-<div><p>0.5: Large difference</p>
-</div></blockquote>
-</li>
-</ul>
-</li>
-<li><p><strong>Asymmetric</strong>: KL(P||Q) ≠ KL(Q||P)</p></li>
-<li><p><strong>Sensitive to zeros</strong>: Need epsilon for numerical stability</p></li>
-</ul>
-<p><strong>When to use each:</strong></p>
+<p><strong>Variance comparison:</strong></p>
 <ul class="simple">
-<li><p><strong>Cosine</strong>: Easier to interpret, symmetric, good for correlation</p></li>
-<li><p><strong>KL divergence</strong>: More sensitive to differences, standard in ML</p></li>
-<li><p><strong>Report both</strong>: Different perspectives on same comparison</p></li>
+<li><p>Real humans have variance in responses even with same demographics</p></li>
+<li><p>Compare std deviation of synthetic vs real</p></li>
+<li><p><strong>Example</strong>:</p>
+<ul>
+<li><p>Real Democrats on healthcare: mean=4.2, std=1.1</p></li>
+<li><p>Synthetic Democrats: mean=4.3, std=0.4</p></li>
+<li><p><strong>Problem</strong>: Synthetic std too low → invariance issue</p></li>
 </ul>
-<p><strong>Practical note:</strong> Need large samples (100+ per group) for reliable distribution comparison</p>
+</li>
+</ul>
+<p><strong>Why these metrics instead of cosine/KL divergence:</strong></p>
+<ul class="simple">
+<li><p><strong>More intuitive</strong>: Easier to explain to non-technical audiences</p></li>
+<li><p><strong>Direct</strong>: Measures actual agreement, not abstract distance</p></li>
+<li><p><strong>Actionable</strong>: Clear when synthetic data fails validation</p></li>
+</ul>
+<p><strong>Visual comparison (next cell):</strong></p>
+<ul class="simple">
+<li><p>Plot distributions side-by-side</p></li>
+<li><p>See where synthetic over/under-represents responses</p></li>
+<li><p>Identify systematic biases</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize variance comparison</span>
+<span class="c1"># This would use actual synthetic data once generated</span>
+
+<span class="c1"># Example visualization code:</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="c1"># Plot 1: Distribution comparison</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">parties</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Democrat&#39;</span><span class="p">,</span> <span class="s1">&#39;Republican&#39;</span><span class="p">]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parties</span><span class="p">))</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mf">0.35</span>
+
+<span class="c1"># Real data means (from df_real)</span>
+<span class="n">real_means</span> <span class="o">=</span> <span class="p">[</span><span class="n">df_real</span><span class="p">[</span><span class="n">df_real</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">p</span><span class="p">][</span><span class="s1">&#39;Q1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parties</span><span class="p">]</span>
+<span class="n">real_stds</span> <span class="o">=</span> <span class="p">[</span><span class="n">df_real</span><span class="p">[</span><span class="n">df_real</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">p</span><span class="p">][</span><span class="s1">&#39;Q1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parties</span><span class="p">]</span>
+
+<span class="c1"># Synthetic would go here (placeholder)</span>
+<span class="n">synthetic_means</span> <span class="o">=</span> <span class="p">[</span><span class="mf">4.1</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">]</span>  <span class="c1"># Placeholder - replace with actual synthetic data</span>
+<span class="n">synthetic_stds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>   <span class="c1"># Placeholder</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">real_means</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Real&#39;</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="n">real_stds</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">synthetic_means</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Synthetic (placeholder)&#39;</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="n">synthetic_stds</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Mean Response (1-5)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Q1: Healthcare - Mean ± Std&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">parties</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Neutral&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot 2: Variance comparison</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">variance_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Democrat&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Real&#39;</span><span class="p">:</span> <span class="n">real_stds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;Synthetic&#39;</span><span class="p">:</span> <span class="n">synthetic_stds</span><span class="p">[</span><span class="mi">0</span><span class="p">]},</span>
+    <span class="s1">&#39;Republican&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Real&#39;</span><span class="p">:</span> <span class="n">real_stds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;Synthetic&#39;</span><span class="p">:</span> <span class="n">synthetic_stds</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+<span class="p">}</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parties</span><span class="p">))</span>
+<span class="n">real_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">variance_data</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="s1">&#39;Real&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parties</span><span class="p">]</span>
+<span class="n">synth_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">variance_data</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="s1">&#39;Synthetic&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parties</span><span class="p">]</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">real_vars</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Real&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">synth_vars</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Synthetic (placeholder)&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Standard Deviation&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Response Variance Comparison&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">parties</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Target (human-level)&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ Visualization shows:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Left: Mean responses with error bars (std)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Right: Direct variance comparison&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  ⚠ Replace placeholder synthetic data with actual generated responses&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 <section id="generating-larger-synthetic-sample-for-proper-validation">
 <h3>Generating larger synthetic sample for proper validation<a class="headerlink" href="#generating-larger-synthetic-sample-for-proper-validation" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
@@ -1093,45 +1112,46 @@ document.write(`
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test invariance: multiple responses from same persona</span>
-<span class="n">test_persona</span> <span class="o">=</span> <span class="n">example_personas</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Democrat, 45, white male</span>
-<span class="n">test_question</span> <span class="o">=</span> <span class="n">questions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Healthcare</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">**</span><span class="n">What</span> <span class="n">this</span> <span class="n">code</span> <span class="n">does</span><span class="p">:</span><span class="o">**</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Testing invariance for persona: </span><span class="si">{</span><span class="n">test_persona</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">test_persona</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">test_persona</span><span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Question: </span><span class="si">{</span><span class="n">test_question</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="n">Tests</span> <span class="k">for</span> <span class="o">**</span><span class="n">invariance</span><span class="o">**</span> <span class="n">by</span> <span class="n">repeatedly</span> <span class="n">querying</span> <span class="n">the</span> <span class="n">same</span> <span class="n">persona</span><span class="p">:</span>
 
-<span class="c1"># Collect 10 responses from same persona</span>
-<span class="n">responses</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">silicon_sample_likert</span><span class="p">(</span><span class="n">test_persona</span><span class="p">,</span> <span class="n">test_question</span><span class="p">)</span>
-    <span class="n">responses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Response </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">response</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="o">**</span><span class="n">The</span> <span class="n">invariance</span> <span class="n">problem</span><span class="p">:</span><span class="o">**</span>
+<span class="o">-</span> <span class="n">Real</span> <span class="n">humans</span><span class="p">:</span> <span class="n">Same</span> <span class="n">demographics</span> <span class="err">≠</span> <span class="n">identical</span> <span class="n">opinions</span>  
+<span class="o">-</span> <span class="n">LLMs</span><span class="p">:</span> <span class="n">May</span> <span class="n">produce</span> <span class="n">very</span> <span class="n">similar</span> <span class="n">responses</span> <span class="k">for</span> <span class="n">identical</span> <span class="n">personas</span>
+<span class="o">-</span> <span class="n">This</span> <span class="o">**</span><span class="n">underestimates</span> <span class="n">real</span> <span class="n">heterogeneity</span><span class="o">**</span>
 
-<span class="c1"># Calculate variance</span>
-<span class="n">responses</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">responses</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
-<span class="n">mean_response</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>
-<span class="n">variance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>
-<span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>
+<span class="o">**</span><span class="n">Why</span> <span class="n">invariance</span> <span class="n">happens</span><span class="p">:</span><span class="o">**</span>
+<span class="o">-</span> <span class="n">Even</span> <span class="k">with</span> <span class="n">temperature</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">models</span> <span class="n">show</span> <span class="n">less</span> <span class="n">diversity</span> <span class="n">than</span> <span class="n">humans</span>
+<span class="o">-</span> <span class="n">Models</span> <span class="n">average</span> <span class="n">over</span> <span class="n">training</span> <span class="n">data</span>
+<span class="o">-</span> <span class="n">Stereotypical</span> <span class="s2">&quot;typical&quot;</span> <span class="n">response</span> <span class="k">for</span> <span class="n">each</span> <span class="n">demographic</span>
+<span class="o">-</span> <span class="n">Missing</span> <span class="n">individual</span><span class="o">-</span><span class="n">level</span> <span class="n">factors</span> <span class="p">(</span><span class="n">personality</span><span class="p">,</span> <span class="n">experiences</span><span class="p">,</span> <span class="n">etc</span><span class="o">.</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Within-persona statistics:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Mean: </span><span class="si">{</span><span class="n">mean_response</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Std: </span><span class="si">{</span><span class="n">std</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Variance: </span><span class="si">{</span><span class="n">variance</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="o">**</span><span class="n">What</span> <span class="n">we</span> <span class="n">measure</span><span class="p">:</span><span class="o">**</span>
+<span class="o">-</span> <span class="o">**</span><span class="n">Mean</span><span class="o">**</span><span class="p">:</span> <span class="n">Average</span> <span class="n">response</span> <span class="k">for</span> <span class="n">persona</span>
+<span class="o">-</span> <span class="o">**</span><span class="n">Std</span> <span class="p">(</span><span class="n">standard</span> <span class="n">deviation</span><span class="p">)</span><span class="o">**</span><span class="p">:</span> <span class="n">Spread</span> <span class="n">of</span> <span class="n">responses</span>
+<span class="o">-</span> <span class="o">**</span><span class="n">Variance</span><span class="o">**</span><span class="p">:</span> <span class="n">Squared</span> <span class="n">std</span>
 
-<span class="c1"># Compare to expected human variance</span>
-<span class="c1"># For real data, same-demographic humans typically have std ~ 1.0-1.5 on 5-point scale</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Comparison:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  LLM within-persona std: </span><span class="si">{</span><span class="n">std</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Expected human within-group std: ~1.0-1.5&quot;</span><span class="p">)</span>
+<span class="o">**</span><span class="n">Interpretation</span><span class="p">:</span><span class="o">**</span>
+<span class="o">-</span> <span class="o">**</span><span class="n">Std</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="o">**</span><span class="p">:</span> <span class="n">High</span> <span class="n">invariance</span> <span class="p">(</span><span class="n">responses</span> <span class="n">very</span> <span class="n">similar</span><span class="p">)</span>
+<span class="o">-</span> <span class="o">**</span><span class="n">Std</span> <span class="mf">0.5</span><span class="o">-</span><span class="mf">1.0</span><span class="o">**</span><span class="p">:</span> <span class="n">Moderate</span> <span class="n">diversity</span> <span class="p">(</span><span class="n">less</span> <span class="n">than</span> <span class="n">humans</span><span class="p">)</span>
+<span class="o">-</span> <span class="o">**</span><span class="n">Std</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="o">**</span><span class="p">:</span> <span class="n">Good</span> <span class="n">diversity</span> <span class="p">(</span><span class="n">approaching</span> <span class="n">human</span> <span class="n">levels</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="n">std</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ⚠ High invariance detected (low diversity)&quot;</span><span class="p">)</span>
-<span class="k">elif</span> <span class="n">std</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ⚠ Moderate invariance (less diverse than humans)&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ✓ Variance comparable to humans&quot;</span><span class="p">)</span>
+<span class="o">**</span><span class="n">Typical</span> <span class="n">observations</span><span class="p">:</span><span class="o">**</span>
+<span class="o">-</span> <span class="n">LLMs</span><span class="p">:</span> <span class="n">Std</span> <span class="o">~</span> <span class="mf">0.3</span><span class="o">-</span><span class="mf">0.8</span> <span class="p">(</span><span class="n">varies</span> <span class="n">by</span> <span class="n">question</span> <span class="ow">and</span> <span class="n">model</span><span class="p">)</span>
+<span class="o">-</span> <span class="n">Humans</span><span class="p">:</span> <span class="n">Std</span> <span class="o">~</span> <span class="mf">1.0</span><span class="o">-</span><span class="mf">1.5</span> <span class="n">on</span> <span class="n">same</span> <span class="n">demographic</span>
+<span class="o">-</span> <span class="o">**</span><span class="n">Implication</span><span class="o">**</span><span class="p">:</span> <span class="n">LLMs</span> <span class="n">underestimate</span> <span class="n">within</span><span class="o">-</span><span class="n">group</span> <span class="n">diversity</span>
+
+<span class="o">**</span><span class="n">Bisbee</span> <span class="n">et</span> <span class="n">al</span><span class="o">.</span> <span class="p">(</span><span class="mi">2024</span><span class="p">)</span> <span class="n">finding</span><span class="p">:</span><span class="o">**</span>
+<span class="o">-</span> <span class="n">Invariance</span> <span class="n">worse</span> <span class="k">for</span> <span class="n">identity</span><span class="o">-</span><span class="n">salient</span> <span class="n">questions</span>
+<span class="o">-</span> <span class="n">Better</span> <span class="k">for</span> <span class="n">non</span><span class="o">-</span><span class="n">political</span> <span class="n">factual</span> <span class="n">questions</span>
+<span class="o">-</span> <span class="n">Larger</span> <span class="n">models</span> <span class="p">(</span><span class="n">GPT</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span> <span class="n">show</span> <span class="n">slightly</span> <span class="n">better</span> <span class="n">diversity</span> <span class="n">than</span> <span class="n">GPT</span><span class="o">-</span><span class="mf">3.5</span>
+
+<span class="o">**</span><span class="n">Solutions</span><span class="p">:</span><span class="o">**</span>
+<span class="o">-</span> <span class="n">Higher</span> <span class="n">temperature</span> <span class="n">helps</span> <span class="n">but</span> <span class="n">doesn</span><span class="s1">&#39;t fully solve the problem</span>
+<span class="o">-</span> <span class="n">Add</span> <span class="n">personality</span> <span class="n">traits</span> <span class="n">to</span> <span class="n">personas</span>
+<span class="o">-</span> <span class="n">Fine</span><span class="o">-</span><span class="n">tune</span> <span class="n">on</span> <span class="n">diverse</span> <span class="n">real</span> <span class="n">responses</span>
+<span class="o">-</span> <span class="n">Acknowledge</span> <span class="n">limitation</span> <span class="ow">in</span> <span class="n">reporting</span>
 </pre></div>
 </div>
 </div>
@@ -1376,7 +1396,7 @@ document.write(`
 <ol class="arabic simple">
 <li><p>✓ How to construct <strong>demographic personas</strong> following Argyle et al. (2023)</p></li>
 <li><p>✓ How to generate <strong>synthetic survey responses</strong> with LLMs</p></li>
-<li><p>✓ How to measure <strong>algorithmic fidelity</strong> (cosine similarity, KL divergence)</p></li>
+<li><p>✓ How to validate using <strong>proportion matching</strong> and <strong>variance comparison</strong></p></li>
 <li><p>✓ How to diagnose <strong>invariance</strong> (within-group diversity)</p></li>
 <li><p>✓ How to diagnose <strong>stereotyping</strong> (exaggerated between-group differences)</p></li>
 <li><p>✓ <strong>Boundary conditions</strong> for when silicon sampling works (Bisbee et al. 2024)</p></li>
@@ -1404,13 +1424,13 @@ document.write(`
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Cosine similarity</p></td>
-<td><p>Distribution match</p></td>
-<td><p>&gt; 0.7</p></td>
+<tr class="row-even"><td><p>Proportion matching</p></td>
+<td><p>Agreement with modal response</p></td>
+<td><p>&gt; 50%</p></td>
 </tr>
-<tr class="row-odd"><td><p>KL divergence</p></td>
-<td><p>Distribution difference</p></td>
-<td><p>&lt; 0.5</p></td>
+<tr class="row-odd"><td><p>Variance ratio</p></td>
+<td><p>Synthetic std / Real std</p></td>
+<td><p>0.7-1.3</p></td>
 </tr>
 <tr class="row-even"><td><p>Within-group std</p></td>
 <td><p>Invariance</p></td>
@@ -1426,7 +1446,7 @@ document.write(`
 <p><strong>Best practices:</strong></p>
 <ol class="arabic simple">
 <li><p>Always validate against real survey data</p></li>
-<li><p>Report all three challenges (fidelity, invariance, stereotyping)</p></li>
+<li><p>Report all three challenges (accuracy, invariance, stereotyping)</p></li>
 <li><p>Use for exploration, not substitution</p></li>
 <li><p>Be transparent about limitations</p></li>
 <li><p>Consider ethical implications</p></li>
@@ -1529,7 +1549,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-responses-for-multiple-questions">Generating responses for multiple questions</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-measuring-algorithmic-fidelity">Part 3: Measuring Algorithmic Fidelity</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-validating-synthetic-data-against-real-surveys">Part 3: Validating Synthetic Data Against Real Surveys</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-larger-synthetic-sample-for-proper-validation">Generating larger synthetic sample for proper validation</a></li>
 </ul>
 </li>

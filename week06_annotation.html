@@ -426,19 +426,11 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-robust-json-extraction">Part 3: Robust JSON Extraction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-batch-annotation">Part 4: Batch Annotation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-6-validation-and-replication">Part 6: Validation and Replication</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-comprehensive-logging">6A. Comprehensive Logging</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-model-fingerprinting-detect-api-drift">6B. Model Fingerprinting (Detect API Drift)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-validation-with-human-labels">5C. Validation with Human Labels</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#d-promptbook-documentation">5D. Promptbook Documentation</a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt-formatting">1. Prompt Formatting</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#structured-outputs-three-approaches">2. Structured Outputs (Three Approaches)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#robust-extraction">3. Robust Extraction</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-annotation">4. Batch Annotation</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validation-replication">5. Validation &amp; Replication</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices-checklist">Best Practices Checklist</a></li>
@@ -1810,48 +1802,6 @@ document.write(`
 </div>
 </section>
 <hr class="docutils" />
-<section id="part-6-validation-and-replication">
-<h2>Part 6: Validation and Replication<a class="headerlink" href="#part-6-validation-and-replication" title="Link to this heading">#</a></h2>
-<p>Best practices for <strong>reproducible</strong> and <strong>validated</strong> LLM annotation.</p>
-<section id="a-comprehensive-logging">
-<h3>6A. Comprehensive Logging<a class="headerlink" href="#a-comprehensive-logging" title="Link to this heading">#</a></h3>
-</section>
-<section id="b-model-fingerprinting-detect-api-drift">
-<h3>6B. Model Fingerprinting (Detect API Drift)<a class="headerlink" href="#b-model-fingerprinting-detect-api-drift" title="Link to this heading">#</a></h3>
-<p>Create a <strong>fingerprint</strong> of model behavior to detect when the API changes.</p>
-</section>
-<section id="c-validation-with-human-labels">
-<h3>5C. Validation with Human Labels<a class="headerlink" href="#c-validation-with-human-labels" title="Link to this heading">#</a></h3>
-<p>Measure agreement between LLM and human annotations using <strong>Cohen’s kappa</strong>.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
-
-<span class="c1">## Part 5: Validation and Replication</span>
-
-<span class="n">Best</span> <span class="n">practices</span> <span class="k">for</span> <span class="o">**</span><span class="n">reproducible</span><span class="o">**</span> <span class="ow">and</span> <span class="o">**</span><span class="n">validated</span><span class="o">**</span> <span class="n">LLM</span> <span class="n">annotation</span><span class="o">.</span>
-
-<span class="c1">### 5A. Comprehensive Logging</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="d-promptbook-documentation">
-<h3>5D. Promptbook Documentation<a class="headerlink" href="#d-promptbook-documentation" title="Link to this heading">#</a></h3>
-<p>A <strong>promptbook</strong> documents your entire annotation pipeline for replication.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### 5B. Model Fingerprinting (Detect API Drift)</span>
-
-<span class="n">Create</span> <span class="n">a</span> <span class="o">**</span><span class="n">fingerprint</span><span class="o">**</span> <span class="n">of</span> <span class="n">model</span> <span class="n">behavior</span> <span class="n">to</span> <span class="n">detect</span> <span class="n">when</span> <span class="n">the</span> <span class="n">API</span> <span class="n">changes</span><span class="o">.</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-</section>
-<hr class="docutils" />
 <section id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
 <p>This notebook demonstrated key techniques for reliable, reproducible LLM annotation:</p>
@@ -1886,15 +1836,6 @@ document.write(`
 <li><p>Efficient processing of multiple texts</p></li>
 <li><p>Logging timestamps and metadata</p></li>
 <li><p>Quality checks (low confidence, failures)</p></li>
-</ul>
-</section>
-<section id="validation-replication">
-<h3>5. Validation &amp; Replication<a class="headerlink" href="#validation-replication" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p><strong>Comprehensive logging</strong>: All parameters and outputs</p></li>
-<li><p><strong>Model fingerprinting</strong>: Detect API drift</p></li>
-<li><p><strong>Human validation</strong>: Cohen’s κ &gt; 0.80 target</p></li>
-<li><p><strong>Promptbook</strong>: Document entire pipeline</p></li>
 </ul>
 </section>
 </section>
@@ -2001,19 +1942,11 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-robust-json-extraction">Part 3: Robust JSON Extraction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-batch-annotation">Part 4: Batch Annotation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-6-validation-and-replication">Part 6: Validation and Replication</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-comprehensive-logging">6A. Comprehensive Logging</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-model-fingerprinting-detect-api-drift">6B. Model Fingerprinting (Detect API Drift)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-validation-with-human-labels">5C. Validation with Human Labels</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#d-promptbook-documentation">5D. Promptbook Documentation</a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt-formatting">1. Prompt Formatting</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#structured-outputs-three-approaches">2. Structured Outputs (Three Approaches)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#robust-extraction">3. Robust Extraction</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-annotation">4. Batch Annotation</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validation-replication">5. Validation &amp; Replication</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices-checklist">Best Practices Checklist</a></li>
