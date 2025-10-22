@@ -1,0 +1,1952 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>LLMs for Synthetic Data II: Interactive Experiments and Persuasion &#8212; GenAI for Sociology</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'week08_interactive_experiments';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="LLMs for Synthetic Data I: Simulating Survey Respondents" href="week07_silicon_sampling.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">GenAI for Sociology</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    GenAI for Sociology
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="week04_llms.html">LLMs for Annotation I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week05_qualitative.html">LLMs for Annotation II</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week06_annotation.html">LLMs for Annotation III</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week07_silicon_sampling.html">LLMs for Synthetic Data I: Simulating Survey Respondents</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">LLMs for Synthetic Data II: Interactive Experiments and Persuasion</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/cjbarrie/GenAI_Soc/blob/main/genai_book/week08_interactive_experiments.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cjbarrie/GenAI_Soc" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cjbarrie/GenAI_Soc/issues/new?title=Issue%20on%20page%20%2Fweek08_interactive_experiments.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/week08_interactive_experiments.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>LLMs for Synthetic Data II: Interactive Experiments and Persuasion</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-are-interactive-persuasion-experiments">What are Interactive Persuasion Experiments?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-pre-test-post-test-experimental-design">Part 1: Pre-test/Post-test Experimental Design</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-generating-personalized-persuasive-messages">Part 2: Generating Personalized Persuasive Messages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-testing-persuasive-effects">Part 3: Testing Persuasive Effects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-experimental-design-with-multiple-conditions">Part 4: Experimental Design with Multiple Conditions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analyzing-experimental-results">Analyzing experimental results</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-interactive-multi-turn-conversations">Part 5: Interactive Multi-Turn Conversations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-6-personalized-outcomes-velez-liu-approach">Part 6: Personalized Outcomes (Velez &amp; Liu Approach)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-source-alternatives">Open-Source Alternatives</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-ollama">Using Ollama</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-hugging-face">Using Hugging Face</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-and-best-practices">Summary and Best Practices</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="llms-for-synthetic-data-ii-interactive-experiments-and-persuasion">
+<h1>LLMs for Synthetic Data II: Interactive Experiments and Persuasion<a class="headerlink" href="#llms-for-synthetic-data-ii-interactive-experiments-and-persuasion" title="Link to this heading">#</a></h1>
+<p><strong>Learning objectives:</strong></p>
+<ul class="simple">
+<li><p>Design and implement interactive persuasion experiments with LLMs</p></li>
+<li><p>Generate personalized persuasive messages tailored to demographics</p></li>
+<li><p>Implement pre-test/post-test experimental designs</p></li>
+<li><p>Conduct multi-turn conversations with LLM respondents</p></li>
+<li><p>Measure persuasion effects and validate against human data</p></li>
+</ul>
+<p><strong>How to run this notebook:</strong></p>
+<ul class="simple">
+<li><p><strong>Google Colab</strong> (recommended): Works for all parts</p></li>
+<li><p><strong>OpenAI API key needed</strong>: For generating messages and responses</p></li>
+<li><p><strong>Cost</strong>: Approximately  for full notebook</p></li>
+</ul>
+<hr class="docutils" />
+<section id="what-are-interactive-persuasion-experiments">
+<h2>What are Interactive Persuasion Experiments?<a class="headerlink" href="#what-are-interactive-persuasion-experiments" title="Link to this heading">#</a></h2>
+<p>Building on silicon sampling, <strong>interactive persuasion experiments</strong> use LLMs to:</p>
+<ol class="arabic simple">
+<li><p>Generate personalized persuasive messages</p></li>
+<li><p>Test those messages on synthetic respondents</p></li>
+<li><p>Engage in multi-turn conversations to change attitudes</p></li>
+<li><p>Measure attitude change over time</p></li>
+</ol>
+<p><strong>Key innovations from recent research:</strong></p>
+<ul class="simple">
+<li><p><strong>Argyle et al. (2025)</strong>: Testing microtargeting and elaboration theories</p></li>
+<li><p><strong>Velez &amp; Liu (2025)</strong>: Personalizing both treatments and outcomes</p></li>
+</ul>
+<p><strong>Potential applications:</strong></p>
+<ul class="simple">
+<li><p>Rapid testing of persuasive message variants</p></li>
+<li><p>Understanding mechanisms of attitude change</p></li>
+<li><p>Prototyping interventions before expensive field work</p></li>
+<li><p>Exploring counterfactual scenarios</p></li>
+</ul>
+<p><strong>Key challenges:</strong></p>
+<ul class="simple">
+<li><p><strong>External validity</strong>: Do LLM responses predict human behavior?</p></li>
+<li><p><strong>Effect size accuracy</strong>: Are magnitudes realistic?</p></li>
+<li><p><strong>Mechanism validity</strong>: Do LLMs change “beliefs” for the right reasons?</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install packages</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>-q<span class="w"> </span>openai<span class="w"> </span>pandas<span class="w"> </span>numpy<span class="w"> </span>scipy<span class="w"> </span>scikit-learn<span class="w"> </span>matplotlib<span class="w"> </span>seaborn
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">getpass</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="c1"># Set API key</span>
+<span class="k">if</span> <span class="s2">&quot;OPENAI_API_KEY&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getpass</span><span class="p">(</span><span class="s2">&quot;Enter your OpenAI API key: &quot;</span><span class="p">)</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">()</span>
+
+<span class="c1"># Set plotting style</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Setup complete!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="part-1-pre-test-post-test-experimental-design">
+<h2>Part 1: Pre-test/Post-test Experimental Design<a class="headerlink" href="#part-1-pre-test-post-test-experimental-design" title="Link to this heading">#</a></h2>
+<p>The basic experimental setup:</p>
+<ol class="arabic simple">
+<li><p><strong>Pre-test</strong>: Measure initial attitude</p></li>
+<li><p><strong>Treatment</strong>: Expose to persuasive message</p></li>
+<li><p><strong>Post-test</strong>: Measure attitude again</p></li>
+<li><p><strong>Effect</strong>: Post - Pre = attitude change</p></li>
+</ol>
+<p>This is the foundation for testing persuasion effects.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_persona</span><span class="p">(</span><span class="n">demographics</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create persona string for experiment</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        demographics: dict with demographic attributes</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Formatted persona prompt</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">persona</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are a </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">-year-old </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;gender&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span>
+<span class="s2">from </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> education and an income of $</span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;income&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="s1">&#39;party&#39;</span> <span class="ow">in</span> <span class="n">demographics</span><span class="p">:</span>
+        <span class="n">persona</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; You identify as a </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+    
+    <span class="k">return</span> <span class="n">persona</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">measure_attitude</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measure attitude on a topic using 1-7 Likert scale</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        demographics: dict of demographic attributes</span>
+<span class="sd">        topic: string describing the policy/issue</span>
+<span class="sd">        model: which OpenAI model to use</span>
+<span class="sd">        temperature: sampling temperature</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        int or None: attitude score 1-7, or None if parsing fails</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">persona</span> <span class="o">=</span> <span class="n">create_persona</span><span class="p">(</span><span class="n">demographics</span><span class="p">)</span>
+    
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;On a scale of 1 to 7, how much do you support the following:</span>
+
+<span class="si">{</span><span class="n">topic</span><span class="si">}</span>
+
+<span class="s2">Where:</span>
+<span class="s2">1 = Strongly Oppose</span>
+<span class="s2">4 = Neutral</span>
+<span class="s2">7 = Strongly Support</span>
+
+<span class="s2">Please respond with ONLY a number from 1 to 7.&quot;&quot;&quot;</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">persona</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}</span>
+            <span class="p">],</span>
+            <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># Extract number</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">numbers</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">numbers</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">7</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">value</span>
+        
+        <span class="k">return</span> <span class="kc">None</span>
+        
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="c1"># Example: measure attitudes before any treatment</span>
+<span class="n">test_persona</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span>
+    <span class="s1">&#39;race&#39;</span><span class="p">:</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="s1">&#39;female&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;education&#39;</span><span class="p">:</span> <span class="s1">&#39;college degree&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;income&#39;</span><span class="p">:</span> <span class="s1">&#39;65,000&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="s1">&#39;Northeast&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;party&#39;</span><span class="p">:</span> <span class="s1">&#39;Independent&#39;</span>
+<span class="p">}</span>
+
+<span class="n">topic</span> <span class="o">=</span> <span class="s2">&quot;Increasing government funding for renewable energy research&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Measuring baseline attitude...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Persona: </span><span class="si">{</span><span class="n">test_persona</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">yo </span><span class="si">{</span><span class="n">test_persona</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">test_persona</span><span class="p">[</span><span class="s1">&#39;gender&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Topic: </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">baseline</span> <span class="o">=</span> <span class="n">measure_attitude</span><span class="p">(</span><span class="n">test_persona</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Baseline attitude: </span><span class="si">{</span><span class="n">baseline</span><span class="si">}</span><span class="s2">/7&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>Implements the <strong>baseline measurement</strong> for a pre-test/post-test experiment:</p>
+<p><strong>Key design choices:</strong></p>
+<ul class="simple">
+<li><p><strong>7-point scale</strong> (vs 5-point): More granularity for detecting change</p></li>
+<li><p><strong>Labeled midpoint</strong> (4 = Neutral): Clearer interpretation</p></li>
+<li><p><strong>Temperature = 1.0</strong>: Default (allows some variation)</p></li>
+<li><p><strong>System message</strong>: Persona context</p></li>
+<li><p><strong>User message</strong>: Attitude question</p></li>
+</ul>
+<p><strong>Why this approach:</strong></p>
+<ul class="simple">
+<li><p>Matches standard survey methodology</p></li>
+<li><p>7-point scales common in persuasion research (more sensitive)</p></li>
+<li><p>Separates persona from question (cleaner prompt structure)</p></li>
+</ul>
+<p><strong>Cost:</strong> ~ per measurement with GPT-4o-mini</p>
+</section>
+<hr class="docutils" />
+<section id="part-2-generating-personalized-persuasive-messages">
+<h2>Part 2: Generating Personalized Persuasive Messages<a class="headerlink" href="#part-2-generating-personalized-persuasive-messages" title="Link to this heading">#</a></h2>
+<p>Following <strong>Argyle et al. (2025)</strong>, we’ll test two approaches:</p>
+<ol class="arabic simple">
+<li><p><strong>Generic message</strong>: Same message for everyone</p></li>
+<li><p><strong>Microtargeted message</strong>: Tailored to demographics</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">generate_generic_message</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o&quot;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.8</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate generic persuasive message (NOT personalized)</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        topic: string describing the policy/issue</span>
+<span class="sd">        position: &#39;support&#39; or &#39;oppose&#39;</span>
+<span class="sd">        model: which OpenAI model to use</span>
+<span class="sd">        temperature: creativity level</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        str: persuasive message</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Write a brief persuasive message (2-3 sentences) that argues people should </span><span class="si">{</span><span class="n">position</span><span class="si">}</span><span class="s2"> the following policy:</span>
+
+<span class="si">{</span><span class="n">topic</span><span class="si">}</span>
+
+<span class="s2">The message should:</span>
+<span class="s2">- Be concise and clear</span>
+<span class="s2">- Use factual arguments</span>
+<span class="s2">- Be respectful and non-manipulative</span>
+<span class="s2">- Appeal to common values</span>
+
+<span class="s2">Return only the message text, no preamble.&quot;&quot;&quot;</span>
+    
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span>
+    <span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_microtargeted_message</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o&quot;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.8</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate personalized persuasive message tailored to demographics</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        demographics: dict with demographic attributes</span>
+<span class="sd">        topic: string describing the policy/issue</span>
+<span class="sd">        position: &#39;support&#39; or &#39;oppose&#39;</span>
+<span class="sd">        model: which OpenAI model to use</span>
+<span class="sd">        temperature: creativity level</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        str: personalized persuasive message</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Write a brief persuasive message (2-3 sentences) that argues people should </span><span class="si">{</span><span class="n">position</span><span class="si">}</span><span class="s2"> the following policy:</span>
+
+<span class="si">{</span><span class="n">topic</span><span class="si">}</span>
+
+<span class="s2">Tailor the message to resonate with this specific audience:</span>
+<span class="s2">- Age: </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">- Education: </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">- Region: </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">- Income: $</span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;income&#39;</span><span class="p">]</span><span class="si">}</span>
+
+<span class="s2">The message should:</span>
+<span class="s2">- Use language and examples appropriate for this demographic</span>
+<span class="s2">- Focus on values and concerns likely to matter to them</span>
+<span class="s2">- Be concise, factual, and respectful</span>
+<span class="s2">- Not be manipulative or deceptive</span>
+
+<span class="s2">Return only the message text, no preamble.&quot;&quot;&quot;</span>
+    
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span>
+    <span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+
+<span class="c1"># Generate both types of messages</span>
+<span class="n">topic</span> <span class="o">=</span> <span class="s2">&quot;Increasing government funding for renewable energy research&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;GENERIC MESSAGE (same for everyone):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="n">generic_msg</span> <span class="o">=</span> <span class="n">generate_generic_message</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="s2">&quot;support&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">generic_msg</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">MICROTARGETED MESSAGE (tailored to 35yo college-educated Independent):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="n">microtargeted_msg</span> <span class="o">=</span> <span class="n">generate_microtargeted_message</span><span class="p">(</span><span class="n">test_persona</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="s2">&quot;support&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">microtargeted_msg</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>Implements <strong>two message generation strategies</strong> from Argyle et al. (2025):</p>
+<p><strong>Generic messages:</strong></p>
+<ul class="simple">
+<li><p>Same for all respondents</p></li>
+<li><p>Appeal to universal values</p></li>
+<li><p>Cheaper to generate (one message per topic)</p></li>
+<li><p>Control condition in experiments</p></li>
+</ul>
+<p><strong>Microtargeted messages:</strong></p>
+<ul class="simple">
+<li><p>Tailored to specific demographics</p></li>
+<li><p>Uses age, education, income, region to customize</p></li>
+<li><p>Tests <strong>personalization hypothesis</strong> (more effective?)</p></li>
+<li><p>More expensive (one per demographic group)</p></li>
+</ul>
+<p><strong>Key findings from Argyle et al. (2025):</strong></p>
+<ul class="simple">
+<li><p>Both approaches produce measurable persuasion effects</p></li>
+<li><p><strong>BUT</strong>: Microtargeting didn’t significantly outperform generic messages</p></li>
+<li><p>Simple approaches may be just as effective as complex ones</p></li>
+</ul>
+<p><strong>Ethical considerations:</strong></p>
+<ul class="simple">
+<li><p>Prompt explicitly asks for non-manipulative messages</p></li>
+<li><p>In real research, screen messages for harmful content</p></li>
+<li><p>Consider IRB requirements for persuasion experiments</p></li>
+</ul>
+<p><strong>Temperature = 0.8:</strong></p>
+<ul class="simple">
+<li><p>Allows creativity in message generation</p></li>
+<li><p>Higher than annotation tasks (0.0-0.2)</p></li>
+<li><p>Still controlled enough for consistency</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="part-3-testing-persuasive-effects">
+<h2>Part 3: Testing Persuasive Effects<a class="headerlink" href="#part-3-testing-persuasive-effects" title="Link to this heading">#</a></h2>
+<p>Now we implement the full <strong>pre-test → treatment → post-test</strong> workflow.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">test_persuasion_effect</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run complete persuasion experiment: pre-test -&gt; message -&gt; post-test</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        demographics: dict of demographic attributes</span>
+<span class="sd">        topic: policy/issue being measured</span>
+<span class="sd">        message: persuasive message to show</span>
+<span class="sd">        model: which model to use for respondent</span>
+<span class="sd">        temperature: sampling temperature</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: {&#39;pre&#39;: int, &#39;post&#39;: int, &#39;effect&#39;: int, &#39;message&#39;: str}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Step 1: Pre-test</span>
+    <span class="n">pre_attitude</span> <span class="o">=</span> <span class="n">measure_attitude</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">temperature</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># Small delay between measurements</span>
+    
+    <span class="c1"># Step 2: Show message and measure post-test</span>
+    <span class="n">persona</span> <span class="o">=</span> <span class="n">create_persona</span><span class="p">(</span><span class="n">demographics</span><span class="p">)</span>
+    
+    <span class="n">post_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Please carefully read this message:</span>
+
+<span class="se">\&quot;</span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="se">\&quot;</span>
+
+<span class="s2">Now, on a scale of 1 to 7, how much do you support the following:</span>
+
+<span class="si">{</span><span class="n">topic</span><span class="si">}</span>
+
+<span class="s2">Where:</span>
+<span class="s2">1 = Strongly Oppose</span>
+<span class="s2">4 = Neutral</span>
+<span class="s2">7 = Strongly Support</span>
+
+<span class="s2">Please respond with ONLY a number from 1 to 7.&quot;&quot;&quot;</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">persona</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">post_prompt</span><span class="p">}</span>
+            <span class="p">],</span>
+            <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span>
+        <span class="p">)</span>
+        
+        <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">numbers</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+        
+        <span class="n">post_attitude</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">numbers</span> <span class="ow">and</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">7</span> <span class="k">else</span> <span class="kc">None</span>
+        
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in post-test: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">post_attitude</span> <span class="o">=</span> <span class="kc">None</span>
+    
+    <span class="c1"># Step 3: Calculate effect</span>
+    <span class="k">if</span> <span class="n">pre_attitude</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">post_attitude</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">effect</span> <span class="o">=</span> <span class="n">post_attitude</span> <span class="o">-</span> <span class="n">pre_attitude</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">effect</span> <span class="o">=</span> <span class="kc">None</span>
+    
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;pre&#39;</span><span class="p">:</span> <span class="n">pre_attitude</span><span class="p">,</span>
+        <span class="s1">&#39;post&#39;</span><span class="p">:</span> <span class="n">post_attitude</span><span class="p">,</span>
+        <span class="s1">&#39;effect&#39;</span><span class="p">:</span> <span class="n">effect</span><span class="p">,</span>
+        <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="n">message</span>
+    <span class="p">}</span>
+
+
+<span class="c1"># Test persuasion effect</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Testing persuasion effect...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Respondent: </span><span class="si">{</span><span class="n">test_persona</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">yo </span><span class="si">{</span><span class="n">test_persona</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">test_persona</span><span class="p">[</span><span class="s1">&#39;gender&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Topic: </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">test_persuasion_effect</span><span class="p">(</span><span class="n">test_persona</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">microtargeted_msg</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Message shown:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;</span><span class="p">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]}</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Results:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Pre-test attitude:  </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;pre&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/7&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Post-test attitude: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/7&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Effect:             </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;effect&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">+d</span><span class="si">}</span><span class="s2"> points&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;effect&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;effect&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  → Message increased support&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;effect&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  → Message decreased support (backfire effect)&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  → No effect&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>Implements the <strong>complete persuasion experiment workflow</strong>:</p>
+<p><strong>Three-step process:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Pre-test</strong>: Measure baseline attitude (no message exposure)</p></li>
+<li><p><strong>Treatment</strong>: Show persuasive message</p></li>
+<li><p><strong>Post-test</strong>: Measure attitude again</p></li>
+</ol>
+<p><strong>Key design decisions:</strong></p>
+<ul class="simple">
+<li><p><strong>Separate API calls</strong> for pre and post (more realistic)</p></li>
+<li><p><strong>Short delay</strong> between calls (simulate time passing)</p></li>
+<li><p><strong>Same persona</strong> for both measurements (within-subjects design)</p></li>
+</ul>
+<p><strong>Measuring the effect:</strong></p>
+<ul class="simple">
+<li><p><strong>Effect = Post - Pre</strong></p></li>
+<li><p>Positive effect: Message increased support</p></li>
+<li><p>Negative effect: Backfire (decreased support)</p></li>
+<li><p>Zero effect: No change</p></li>
+</ul>
+<p><strong>Typical findings:</strong></p>
+<ul class="simple">
+<li><p>Argyle et al. (2025): ~2.5-4 percentage point effects</p></li>
+<li><p>On 7-point scale: ~0.2-0.4 point effects typical</p></li>
+<li><p>Larger effects (&gt;1 point) may indicate stereotyping</p></li>
+</ul>
+<p><strong>Limitations of single observation:</strong></p>
+<ul class="simple">
+<li><p>Need multiple respondents for statistical power</p></li>
+<li><p>Need control group (no message) for comparison</p></li>
+<li><p>Next: Scale up to experimental design</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="part-4-experimental-design-with-multiple-conditions">
+<h2>Part 4: Experimental Design with Multiple Conditions<a class="headerlink" href="#part-4-experimental-design-with-multiple-conditions" title="Link to this heading">#</a></h2>
+<p>Now we’ll implement a full experiment comparing:</p>
+<ol class="arabic simple">
+<li><p><strong>Control</strong>: No message</p></li>
+<li><p><strong>Generic message</strong>: Same for everyone</p></li>
+<li><p><strong>Microtargeted message</strong>: Personalized to demographics</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run_persuasion_experiment</span><span class="p">(</span><span class="n">demographics_list</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">n_per_condition</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run full experiment with control and treatment conditions</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        demographics_list: list of demographic dicts</span>
+<span class="sd">        topic: policy/issue to test</span>
+<span class="sd">        n_per_condition: sample size per condition</span>
+<span class="sd">        model: which model for respondents</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: results with all conditions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="c1"># Generate messages once</span>
+    <span class="n">generic_msg</span> <span class="o">=</span> <span class="n">generate_generic_message</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="s2">&quot;support&quot;</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">demographics</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">demographics_list</span><span class="p">[:</span><span class="n">n_per_condition</span><span class="p">]):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">Progress: </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">n_per_condition</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Generate microtargeted message for this person</span>
+        <span class="n">micro_msg</span> <span class="o">=</span> <span class="n">generate_microtargeted_message</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="s2">&quot;support&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Condition 1: Control (no message - measure twice)</span>
+        <span class="n">pre_control</span> <span class="o">=</span> <span class="n">measure_attitude</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">post_control</span> <span class="o">=</span> <span class="n">measure_attitude</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+        
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="o">**</span><span class="n">demographics</span><span class="p">,</span>
+            <span class="s1">&#39;condition&#39;</span><span class="p">:</span> <span class="s1">&#39;control&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;pre&#39;</span><span class="p">:</span> <span class="n">pre_control</span><span class="p">,</span>
+            <span class="s1">&#39;post&#39;</span><span class="p">:</span> <span class="n">post_control</span><span class="p">,</span>
+            <span class="s1">&#39;effect&#39;</span><span class="p">:</span> <span class="n">post_control</span> <span class="o">-</span> <span class="n">pre_control</span> <span class="k">if</span> <span class="p">(</span><span class="n">pre_control</span> <span class="ow">and</span> <span class="n">post_control</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;None&#39;</span>
+        <span class="p">})</span>
+        
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        
+        <span class="c1"># Condition 2: Generic message</span>
+        <span class="n">generic_result</span> <span class="o">=</span> <span class="n">test_persuasion_effect</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">generic_msg</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="o">**</span><span class="n">demographics</span><span class="p">,</span>
+            <span class="s1">&#39;condition&#39;</span><span class="p">:</span> <span class="s1">&#39;generic&#39;</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">generic_result</span>
+        <span class="p">})</span>
+        
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        
+        <span class="c1"># Condition 3: Microtargeted message</span>
+        <span class="n">micro_result</span> <span class="o">=</span> <span class="n">test_persuasion_effect</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">micro_msg</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="o">**</span><span class="n">demographics</span><span class="p">,</span>
+            <span class="s1">&#39;condition&#39;</span><span class="p">:</span> <span class="s1">&#39;microtargeted&#39;</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">micro_result</span>
+        <span class="p">})</span>
+        
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ Experiment complete&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+
+<span class="c1"># Create sample of respondents</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">respondents</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">parties</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Democrat&#39;</span><span class="p">,</span> <span class="s1">&#39;Republican&#39;</span><span class="p">,</span> <span class="s1">&#39;Independent&#39;</span><span class="p">]</span>
+<span class="n">ages</span> <span class="o">=</span> <span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">65</span><span class="p">]</span>
+<span class="n">educations</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;high school&#39;</span><span class="p">,</span> <span class="s1">&#39;some college&#39;</span><span class="p">,</span> <span class="s1">&#39;college degree&#39;</span><span class="p">,</span> <span class="s1">&#39;graduate degree&#39;</span><span class="p">]</span>
+<span class="n">regions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Northeast&#39;</span><span class="p">,</span> <span class="s1">&#39;South&#39;</span><span class="p">,</span> <span class="s1">&#39;Midwest&#39;</span><span class="p">,</span> <span class="s1">&#39;West&#39;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>  <span class="c1"># 5 respondents</span>
+    <span class="n">respondents</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">ages</span><span class="p">),</span>
+        <span class="s1">&#39;race&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="s1">&#39;Black&#39;</span><span class="p">,</span> <span class="s1">&#39;Hispanic&#39;</span><span class="p">]),</span>
+        <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;male&#39;</span><span class="p">,</span> <span class="s1">&#39;female&#39;</span><span class="p">]),</span>
+        <span class="s1">&#39;education&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">educations</span><span class="p">),</span>
+        <span class="s1">&#39;income&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;35,000&#39;</span><span class="p">,</span> <span class="s1">&#39;55,000&#39;</span><span class="p">,</span> <span class="s1">&#39;75,000&#39;</span><span class="p">,</span> <span class="s1">&#39;95,000&#39;</span><span class="p">]),</span>
+        <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">regions</span><span class="p">),</span>
+        <span class="s1">&#39;party&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">parties</span><span class="p">)</span>
+    <span class="p">})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Running experiment with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">respondents</span><span class="p">)</span><span class="si">}</span><span class="s2"> respondents...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Topic: </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Run experiment (this will take a few minutes and cost ~)</span>
+<span class="c1"># Uncomment to run:</span>
+<span class="c1"># df_experiment = run_persuasion_experiment(respondents, topic, n_per_condition=5)</span>
+<span class="c1"># df_experiment.to_csv(&#39;persuasion_experiment_results.csv&#39;, index=False)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Commented out to save API costs - uncomment to run]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Expected output: 15 rows (5 respondents × 3 conditions)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>Implements a <strong>full between-subjects experimental design</strong>:</p>
+<p><strong>Three conditions:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Control</strong>: No message exposure (test-retest)</p>
+<ul class="simple">
+<li><p>Measures natural fluctuation in responses</p></li>
+<li><p>Baseline for comparison</p></li>
+</ul>
+</li>
+<li><p><strong>Generic</strong>: Same message for all</p>
+<ul class="simple">
+<li><p>Tests basic persuasion effect</p></li>
+</ul>
+</li>
+<li><p><strong>Microtargeted</strong>: Personalized message</p>
+<ul class="simple">
+<li><p>Tests whether personalization adds value</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Why this design:</strong></p>
+<ul class="simple">
+<li><p><strong>Control group</strong>: Essential for causal inference</p>
+<ul>
+<li><p>LLM responses may naturally vary (need baseline)</p></li>
+<li><p>Any “effect” in control = noise</p></li>
+</ul>
+</li>
+<li><p><strong>Generic vs Microtargeted</strong>: Tests personalization hypothesis</p>
+<ul>
+<li><p>Argyle et al. (2025) found NO significant difference</p></li>
+<li><p>Challenges common assumption about targeting</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Sample size considerations:</strong></p>
+<ul class="simple">
+<li><p>5 respondents = demonstration only</p></li>
+<li><p>Real study: 30-50+ per condition</p></li>
+<li><p>Power analysis for ≥80% power to detect d=0.3</p></li>
+</ul>
+<p><strong>Cost management:</strong></p>
+<ul class="simple">
+<li><p>Commented out by default</p></li>
+<li><p>5 respondents × 3 conditions × 2 measurements = 30 API calls</p></li>
+<li><p>Plus message generation: ~ total</p></li>
+</ul>
+<p><strong>Next steps:</strong> Analyze results and calculate average treatment effects</p>
+<section id="analyzing-experimental-results">
+<h3>Analyzing experimental results<a class="headerlink" href="#analyzing-experimental-results" title="Link to this heading">#</a></h3>
+<p>After running the experiment, we’d analyze the data:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simulated results for demonstration (replace with real df_experiment)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">simulated_results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">condition</span><span class="p">,</span> <span class="n">true_effect</span> <span class="ow">in</span> <span class="p">[(</span><span class="s1">&#39;control&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;generic&#39;</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;microtargeted&#39;</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">)]:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">):</span>  <span class="c1"># 15 per condition</span>
+        <span class="n">pre</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>  <span class="c1"># Initial attitudes 3-5</span>
+        <span class="c1"># Add effect + noise</span>
+        <span class="n">post</span> <span class="o">=</span> <span class="n">pre</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">true_effect</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
+        <span class="n">post</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+        <span class="n">post</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">post</span><span class="p">))</span>
+        
+        <span class="n">simulated_results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;condition&#39;</span><span class="p">:</span> <span class="n">condition</span><span class="p">,</span>
+            <span class="s1">&#39;pre&#39;</span><span class="p">:</span> <span class="n">pre</span><span class="p">,</span>
+            <span class="s1">&#39;post&#39;</span><span class="p">:</span> <span class="n">post</span><span class="p">,</span>
+            <span class="s1">&#39;effect&#39;</span><span class="p">:</span> <span class="n">post</span> <span class="o">-</span> <span class="n">pre</span>
+        <span class="p">})</span>
+
+<span class="n">df_sim</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">simulated_results</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Experimental Results Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Average Treatment Effects (ATE):</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">summary</span> <span class="o">=</span> <span class="n">df_sim</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;condition&#39;</span><span class="p">)[</span><span class="s1">&#39;effect&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="s1">&#39;count&#39;</span><span class="p">])</span>
+<span class="n">summary</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Mean Effect&#39;</span><span class="p">,</span> <span class="s1">&#39;Std Dev&#39;</span><span class="p">,</span> <span class="s1">&#39;N&#39;</span><span class="p">]</span>
+<span class="n">summary</span><span class="p">[</span><span class="s1">&#39;SE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary</span><span class="p">[</span><span class="s1">&#39;Std Dev&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">summary</span><span class="p">[</span><span class="s1">&#39;N&#39;</span><span class="p">])</span>
+<span class="n">summary</span><span class="p">[</span><span class="s1">&#39;95% CI Lower&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary</span><span class="p">[</span><span class="s1">&#39;Mean Effect&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.96</span> <span class="o">*</span> <span class="n">summary</span><span class="p">[</span><span class="s1">&#39;SE&#39;</span><span class="p">]</span>
+<span class="n">summary</span><span class="p">[</span><span class="s1">&#39;95% CI Upper&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary</span><span class="p">[</span><span class="s1">&#39;Mean Effect&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.96</span> <span class="o">*</span> <span class="n">summary</span><span class="p">[</span><span class="s1">&#39;SE&#39;</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="p">[[</span><span class="s1">&#39;Mean Effect&#39;</span><span class="p">,</span> <span class="s1">&#39;Std Dev&#39;</span><span class="p">,</span> <span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="s1">&#39;95% CI Lower&#39;</span><span class="p">,</span> <span class="s1">&#39;95% CI Upper&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="c1"># Statistical tests</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Statistical Comparisons (t-tests):</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">control_effects</span> <span class="o">=</span> <span class="n">df_sim</span><span class="p">[</span><span class="n">df_sim</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;control&#39;</span><span class="p">][</span><span class="s1">&#39;effect&#39;</span><span class="p">]</span>
+<span class="n">generic_effects</span> <span class="o">=</span> <span class="n">df_sim</span><span class="p">[</span><span class="n">df_sim</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;generic&#39;</span><span class="p">][</span><span class="s1">&#39;effect&#39;</span><span class="p">]</span>
+<span class="n">micro_effects</span> <span class="o">=</span> <span class="n">df_sim</span><span class="p">[</span><span class="n">df_sim</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;microtargeted&#39;</span><span class="p">][</span><span class="s1">&#39;effect&#39;</span><span class="p">]</span>
+
+<span class="c1"># Generic vs Control</span>
+<span class="n">t_stat</span><span class="p">,</span> <span class="n">p_val</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">ttest_ind</span><span class="p">(</span><span class="n">generic_effects</span><span class="p">,</span> <span class="n">control_effects</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generic vs Control:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  t = </span><span class="si">{</span><span class="n">t_stat</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, p = </span><span class="si">{</span><span class="n">p_val</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="s1">&#39;✓ Significant&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">p_val</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">0.05</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;✗ Not significant&#39;</span><span class="si">}</span><span class="s2"> at α=0.05</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Microtargeted vs Control</span>
+<span class="n">t_stat</span><span class="p">,</span> <span class="n">p_val</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">ttest_ind</span><span class="p">(</span><span class="n">micro_effects</span><span class="p">,</span> <span class="n">control_effects</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Microtargeted vs Control:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  t = </span><span class="si">{</span><span class="n">t_stat</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, p = </span><span class="si">{</span><span class="n">p_val</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="s1">&#39;✓ Significant&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">p_val</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">0.05</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;✗ Not significant&#39;</span><span class="si">}</span><span class="s2"> at α=0.05</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Microtargeted vs Generic</span>
+<span class="n">t_stat</span><span class="p">,</span> <span class="n">p_val</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">ttest_ind</span><span class="p">(</span><span class="n">micro_effects</span><span class="p">,</span> <span class="n">generic_effects</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Microtargeted vs Generic:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  t = </span><span class="si">{</span><span class="n">t_stat</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, p = </span><span class="si">{</span><span class="n">p_val</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="s1">&#39;✓ Significant&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">p_val</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">0.05</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;✗ Not significant&#39;</span><span class="si">}</span><span class="s2"> at α=0.05&quot;</span><span class="p">)</span>
+
+<span class="c1"># Visualization</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="c1"># Plot 1: Mean effects with error bars</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">summary_plot</span> <span class="o">=</span> <span class="n">summary</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">summary_plot</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">],</span> <span class="n">summary_plot</span><span class="p">[</span><span class="s1">&#39;Mean Effect&#39;</span><span class="p">],</span> 
+        <span class="n">xerr</span><span class="o">=</span><span class="p">[</span><span class="n">summary_plot</span><span class="p">[</span><span class="s1">&#39;Mean Effect&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">summary_plot</span><span class="p">[</span><span class="s1">&#39;95% CI Lower&#39;</span><span class="p">],</span>
+              <span class="n">summary_plot</span><span class="p">[</span><span class="s1">&#39;95% CI Upper&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">summary_plot</span><span class="p">[</span><span class="s1">&#39;Mean Effect&#39;</span><span class="p">]],</span>
+        <span class="n">capsize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="s1">&#39;steelblue&#39;</span><span class="p">,</span> <span class="s1">&#39;coral&#39;</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;No effect&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Mean Attitude Change (points on 7-point scale)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Average Treatment Effects</span><span class="se">\n</span><span class="s1">(with 95% Confidence Intervals)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="c1"># Plot 2: Distribution of effects</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">df_sim</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;effect&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;condition&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Condition&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Attitude Change (points)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Distribution of Effects by Condition&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># Remove default title</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Key Insights:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">• Control group: Shows natural fluctuation in responses&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;• Generic message: Produces persuasion effect above control&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;• Microtargeted: Effect similar to generic (not significantly different)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Conclusion: Matches Argyle et al. (2025) finding that simple&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;persuasion works, but personalization doesn&#39;t add much value.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this analysis shows:</strong></p>
+<p><strong>Average Treatment Effects (ATE):</strong></p>
+<ul class="simple">
+<li><p><strong>Control</strong>: ~0 points (baseline variation - no message shown)</p></li>
+<li><p><strong>Generic</strong>: Small positive effect (simple message persuasion)</p></li>
+<li><p><strong>Microtargeted</strong>: Small positive effect (similar to generic)</p></li>
+</ul>
+<p><strong>Statistical significance:</strong></p>
+<ul class="simple">
+<li><p>Both treatments likely significant vs control</p></li>
+<li><p>Microtargeted vs generic: NOT significant</p></li>
+<li><p><strong>Key finding</strong>: Personalization doesn’t add value</p></li>
+</ul>
+<p><strong>Why this matters:</strong></p>
+<ul class="simple">
+<li><p>Challenges assumption that microtargeting is necessary</p></li>
+<li><p>Simple generic messages can be just as effective</p></li>
+<li><p>Cost-benefit: Generic is much cheaper</p></li>
+</ul>
+<p><strong>Real-world implications:</strong></p>
+<ul class="simple">
+<li><p>Political campaigns: May not need complex targeting</p></li>
+<li><p>Public health: Generic messages can work</p></li>
+<li><p>BUT: This is from simulations, needs human validation</p></li>
+</ul>
+<p><strong>Limitations:</strong></p>
+<ul class="simple">
+<li><p>Small sample (n=15 per condition)</p></li>
+<li><p>Synthetic respondents (not real humans)</p></li>
+<li><p>Single topic (may vary by issue)</p></li>
+<li><p>Short-term effects only</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="part-5-interactive-multi-turn-conversations">
+<h2>Part 5: Interactive Multi-Turn Conversations<a class="headerlink" href="#part-5-interactive-multi-turn-conversations" title="Link to this heading">#</a></h2>
+<p>Beyond one-shot messages, <strong>Argyle et al. (2025)</strong> tested multi-turn conversations:</p>
+<ul class="simple">
+<li><p><strong>Direct persuasion</strong>: AI tries to convince respondent</p></li>
+<li><p><strong>Motivational interviewing</strong>: AI uses reflective listening</p></li>
+</ul>
+<p>Let’s implement this approach.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">multi_turn_persuasion</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;direct&quot;</span><span class="p">,</span> <span class="n">n_turns</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Conduct multi-turn persuasion conversation</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        demographics: dict of demographic attributes</span>
+<span class="sd">        topic: policy/issue for discussion</span>
+<span class="sd">        strategy: &#39;direct&#39; (persuasive) or &#39;motivational&#39; (reflective)</span>
+<span class="sd">        n_turns: number of conversation rounds</span>
+<span class="sd">        model: which model to use</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: conversation history and attitude change</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">persona</span> <span class="o">=</span> <span class="n">create_persona</span><span class="p">(</span><span class="n">demographics</span><span class="p">)</span>
+    
+    <span class="c1"># Measure pre-conversation attitude</span>
+    <span class="n">pre_attitude</span> <span class="o">=</span> <span class="n">measure_attitude</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+    
+    <span class="c1"># Set up conversation system prompts</span>
+    <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">&quot;direct&quot;</span><span class="p">:</span>
+        <span class="n">persuader_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are having a conversation to persuade someone to support: </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span>
+
+<span class="s2">Your goal: Convince them with clear, factual arguments. Be direct but respectful.</span>
+<span class="s2">Keep responses brief (2-3 sentences).&quot;&quot;&quot;</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># motivational interviewing</span>
+        <span class="n">persuader_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are using motivational interviewing techniques to discuss: </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span>
+
+<span class="s2">Your approach: Ask open-ended questions, reflect their concerns, explore ambivalence.</span>
+<span class="s2">Be empathetic and non-directive. Keep responses brief (2-3 sentences).&quot;&quot;&quot;</span>
+    
+    <span class="c1"># Conversation history</span>
+    <span class="n">conversation</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">respondent_history</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="c1"># Initial question from persuader</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o&quot;</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">persuader_prompt</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Start the conversation about </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+        <span class="p">],</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="mf">0.8</span>
+    <span class="p">)</span>
+    
+    <span class="n">persuader_msg</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+    <span class="n">conversation</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;speaker&quot;</span><span class="p">:</span> <span class="s2">&quot;Persuader&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">persuader_msg</span><span class="p">})</span>
+    <span class="n">respondent_history</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">persuader_msg</span><span class="p">})</span>
+    
+    <span class="c1"># Multi-turn exchange</span>
+    <span class="k">for</span> <span class="n">turn</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_turns</span><span class="p">):</span>
+        <span class="c1"># Respondent replies</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">persona</span><span class="p">},</span>
+                <span class="o">*</span><span class="n">respondent_history</span>
+            <span class="p">],</span>
+            <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">)</span>
+        
+        <span class="n">respondent_msg</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+        <span class="n">conversation</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;speaker&quot;</span><span class="p">:</span> <span class="s2">&quot;Respondent&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">respondent_msg</span><span class="p">})</span>
+        <span class="n">respondent_history</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">respondent_msg</span><span class="p">})</span>
+        
+        <span class="c1"># Persuader responds (if not last turn)</span>
+        <span class="k">if</span> <span class="n">turn</span> <span class="o">&lt;</span> <span class="n">n_turns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o&quot;</span><span class="p">,</span>
+                <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+                    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">persuader_prompt</span><span class="p">},</span>
+                    <span class="o">*</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span> <span class="k">if</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;speaker&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Respondent&quot;</span> <span class="k">else</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> 
+                       <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]}</span> <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">conversation</span><span class="p">]</span>
+                <span class="p">],</span>
+                <span class="n">temperature</span><span class="o">=</span><span class="mf">0.8</span>
+            <span class="p">)</span>
+            
+            <span class="n">persuader_msg</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+            <span class="n">conversation</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;speaker&quot;</span><span class="p">:</span> <span class="s2">&quot;Persuader&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">persuader_msg</span><span class="p">})</span>
+            <span class="n">respondent_history</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">persuader_msg</span><span class="p">})</span>
+        
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    
+    <span class="c1"># Measure post-conversation attitude</span>
+    <span class="n">post_attitude</span> <span class="o">=</span> <span class="n">measure_attitude</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;pre&#39;</span><span class="p">:</span> <span class="n">pre_attitude</span><span class="p">,</span>
+        <span class="s1">&#39;post&#39;</span><span class="p">:</span> <span class="n">post_attitude</span><span class="p">,</span>
+        <span class="s1">&#39;effect&#39;</span><span class="p">:</span> <span class="n">post_attitude</span> <span class="o">-</span> <span class="n">pre_attitude</span> <span class="k">if</span> <span class="p">(</span><span class="n">pre_attitude</span> <span class="ow">and</span> <span class="n">post_attitude</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s1">&#39;conversation&#39;</span><span class="p">:</span> <span class="n">conversation</span><span class="p">,</span>
+        <span class="s1">&#39;strategy&#39;</span><span class="p">:</span> <span class="n">strategy</span>
+    <span class="p">}</span>
+
+
+<span class="c1"># Example conversation (commented to save costs)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Example multi-turn conversation:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[Commented out to save API costs - uncomment to run]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">To run:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;result = multi_turn_persuasion(test_persona, topic, strategy=&#39;direct&#39;, n_turns=3)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Example output:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Turn 1:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Persuader: [Opening argument about renewable energy]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Respondent: [Initial reaction based on persona]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Turn 2:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Persuader: [Follow-up argument]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Respondent: [Response, possibly showing attitude shift]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  ...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Pre-conversation attitude: 4/7&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Post-conversation attitude: 5/7&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Effect: +1 point&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>Implements <strong>multi-turn interactive persuasion</strong> conversations:</p>
+<p><strong>Two conversation strategies:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Direct persuasion</strong>:</p>
+<ul class="simple">
+<li><p>AI presents arguments directly</p></li>
+<li><p>Uses facts, logic, appeals to values</p></li>
+<li><p>Traditional persuasion approach</p></li>
+</ul>
+</li>
+<li><p><strong>Motivational interviewing</strong>:</p>
+<ul class="simple">
+<li><p>AI uses reflective listening</p></li>
+<li><p>Asks open-ended questions</p></li>
+<li><p>Explores respondent’s ambivalence</p></li>
+<li><p>More collaborative, less confrontational</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Conversation structure:</strong></p>
+<ul class="simple">
+<li><p>Persuader (GPT-4o): Generates strategic messages</p></li>
+<li><p>Respondent (GPT-4o-mini): Replies based on persona</p></li>
+<li><p>Multiple rounds of back-and-forth</p></li>
+<li><p>Maintains conversation context throughout</p></li>
+</ul>
+<p><strong>Key findings from Argyle et al. (2025):</strong></p>
+<ul class="simple">
+<li><p>Multi-turn conversations DID produce persuasion effects</p></li>
+<li><p>BUT: Didn’t significantly outperform one-shot messages</p></li>
+<li><p>Direct vs motivational: No significant difference</p></li>
+<li><p><strong>Implication</strong>: Elaboration may not add value (at least in short conversations)</p></li>
+</ul>
+<p><strong>Why multi-turn might not help:</strong></p>
+<ul class="simple">
+<li><p>Short conversations (3-6 turns) may not allow deep engagement</p></li>
+<li><p>LLMs may already “elaborate” internally in one-shot</p></li>
+<li><p>Survey context different from real dialogue</p></li>
+<li><p>Missing non-verbal cues, rapport-building</p></li>
+</ul>
+<p><strong>Cost considerations:</strong></p>
+<ul class="simple">
+<li><p>3 turns × 2 messages per turn = 6 messages</p></li>
+<li><p>Plus pre/post measurements = 8 API calls</p></li>
+<li><p>Using GPT-4o for persuader: ~ per conversation</p></li>
+<li><p>More expensive than one-shot (but tests different theory)</p></li>
+</ul>
+<p><strong>When to use:</strong></p>
+<ul class="simple">
+<li><p>Testing elaboration vs one-shot hypotheses</p></li>
+<li><p>Exploring conversation dynamics</p></li>
+<li><p>Studying resistance and counter-arguments</p></li>
+<li><p>Prototyping chatbot interventions</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="part-6-personalized-outcomes-velez-liu-approach">
+<h2>Part 6: Personalized Outcomes (Velez &amp; Liu Approach)<a class="headerlink" href="#part-6-personalized-outcomes-velez-liu-approach" title="Link to this heading">#</a></h2>
+<p><strong>Velez &amp; Liu (2025)</strong> innovated by personalizing not just messages but also the <strong>outcome measures</strong> themselves.</p>
+<p>Their approach:</p>
+<ol class="arabic simple">
+<li><p>Ask open-ended: “What political issue matters most to you?”</p></li>
+<li><p>Use LLM to summarize their response</p></li>
+<li><p>Generate personalized attitude scales for THEIR specific issue</p></li>
+<li><p>Generate pro/con arguments about THEIR issue</p></li>
+<li><p>Measure attitude change on personalized scales</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">collect_core_issue</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simulate respondent identifying their core political issue</span>
+<span class="sd">    (In real survey, this would be open-ended text entry)</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        demographics: dict of demographic attributes</span>
+<span class="sd">        model: which model to use</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        str: open-ended response about core issue</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">persona</span> <span class="o">=</span> <span class="n">create_persona</span><span class="p">(</span><span class="n">demographics</span><span class="p">)</span>
+    
+    <span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;What political or social issue matters most to you personally?</span>
+
+<span class="s2">Please describe in 2-3 sentences:</span>
+<span class="s2">- What the issue is</span>
+<span class="s2">- Why it matters to you</span>
+<span class="s2">- What you think should be done&quot;&quot;&quot;</span>
+    
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">persona</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}</span>
+        <span class="p">],</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span>
+    <span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">summarize_core_issue</span><span class="p">(</span><span class="n">core_issue_text</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Summarize respondent&#39;s core issue in one sentence</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        core_issue_text: open-ended response</span>
+<span class="sd">        model: which model to use</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        str: one-sentence summary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Summarize this person&#39;s core political concern in ONE clear sentence:</span>
+
+<span class="si">{</span><span class="n">core_issue_text</span><span class="si">}</span>
+
+<span class="s2">Return only the summary sentence.&quot;&quot;&quot;</span>
+    
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="mf">0.3</span>
+    <span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_personalized_scale</span><span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate personalized Likert scale items for their specific issue</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        summary: one-sentence summary of core issue</span>
+<span class="sd">        model: which model to use</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        list: 3 Likert scale items</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Create 3 Likert scale items (statements) to measure someone&#39;s attitude about:</span>
+
+<span class="si">{</span><span class="n">summary</span><span class="si">}</span>
+
+<span class="s2">Requirements:</span>
+<span class="s2">- Each item should be a clear statement (not a question)</span>
+<span class="s2">- Items should measure different aspects (strength, certainty, priority)</span>
+<span class="s2">- Use language from their original concern</span>
+<span class="s2">- Suitable for 1-7 scale (Strongly Disagree to Strongly Agree)</span>
+
+<span class="s2">Return as numbered list.&quot;&quot;&quot;</span>
+    
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span>
+    <span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_personalized_argument</span><span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="n">stance</span><span class="p">,</span> <span class="n">intensity</span><span class="o">=</span><span class="s2">&quot;moderate&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate pro or con argument about their specific issue</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        summary: one-sentence summary of core issue</span>
+<span class="sd">        stance: &#39;pro&#39; or &#39;con&#39;</span>
+<span class="sd">        intensity: &#39;moderate&#39;, &#39;strong&#39;, or &#39;vitriolic&#39;</span>
+<span class="sd">        model: which model to use</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        str: persuasive argument</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">intensity</span> <span class="o">==</span> <span class="s2">&quot;moderate&quot;</span><span class="p">:</span>
+        <span class="n">tone</span> <span class="o">=</span> <span class="s2">&quot;respectful and factual&quot;</span>
+    <span class="k">elif</span> <span class="n">intensity</span> <span class="o">==</span> <span class="s2">&quot;strong&quot;</span><span class="p">:</span>
+        <span class="n">tone</span> <span class="o">=</span> <span class="s2">&quot;strongly worded but civil&quot;</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># vitriolic</span>
+        <span class="n">tone</span> <span class="o">=</span> <span class="s2">&quot;harsh and uncivil (for research purposes only)&quot;</span>
+    
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Write a </span><span class="si">{</span><span class="n">tone</span><span class="si">}</span><span class="s2"> argument that </span><span class="si">{</span><span class="s1">&#39;supports&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">stance</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;pro&#39;</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;opposes&#39;</span><span class="si">}</span><span class="s2">:</span>
+
+<span class="si">{</span><span class="n">summary</span><span class="si">}</span>
+
+<span class="s2">Make it 2-3 sentences. Return only the argument.&quot;&quot;&quot;</span>
+    
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="mf">0.8</span>
+    <span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+
+<span class="c1"># Demonstrate the Velez &amp; Liu pipeline</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Velez &amp; Liu (2025) Personalized Outcome Approach&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+
+<span class="c1"># Step 1: Collect core issue</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 1: Collecting respondent&#39;s core issue...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">core_issue</span> <span class="o">=</span> <span class="n">collect_core_issue</span><span class="p">(</span><span class="n">test_persona</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Respondent says:</span><span class="se">\n\&quot;</span><span class="si">{</span><span class="n">core_issue</span><span class="si">}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Step 2: Summarize</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 2: Summarizing core issue...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">summary</span> <span class="o">=</span> <span class="n">summarize_core_issue</span><span class="p">(</span><span class="n">core_issue</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Summary: </span><span class="si">{</span><span class="n">summary</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Step 3: Generate personalized scales</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 3: Generating personalized attitude scales...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">scale_items</span> <span class="o">=</span> <span class="n">generate_personalized_scale</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Personalized Likert items:</span><span class="se">\n</span><span class="si">{</span><span class="n">scale_items</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Step 4: Generate pro and con arguments</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 4: Generating arguments...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">pro_arg</span> <span class="o">=</span> <span class="n">generate_personalized_argument</span><span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="s2">&quot;pro&quot;</span><span class="p">,</span> <span class="s2">&quot;moderate&quot;</span><span class="p">)</span>
+<span class="n">con_arg</span> <span class="o">=</span> <span class="n">generate_personalized_argument</span><span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="s2">&quot;con&quot;</span><span class="p">,</span> <span class="s2">&quot;moderate&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pro argument:</span><span class="se">\n\&quot;</span><span class="si">{</span><span class="n">pro_arg</span><span class="si">}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Con argument:</span><span class="se">\n\&quot;</span><span class="si">{</span><span class="n">con_arg</span><span class="si">}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Velez &amp; Liu Innovation:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Personalizes BOTH treatment AND outcome&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Maximizes relevance to each respondent&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Tests &#39;easy case&#39; for finding polarization&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Key finding: Even with this personalization, polarization&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;was hard to produce (only emerged with vitriolic messages)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>Implements <strong>Velez &amp; Liu’s (2025) personalized outcome approach</strong>:</p>
+<p><strong>The innovation:</strong></p>
+<ul class="simple">
+<li><p>Most persuasion research: Same topic for everyone</p></li>
+<li><p>Velez &amp; Liu: Let EACH person define their own core issue</p></li>
+<li><p>Then personalize everything to THEIR specific concern</p></li>
+</ul>
+<p><strong>Four-step pipeline:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Collect core issue</strong> (open-ended)</p>
+<ul class="simple">
+<li><p>“What matters most to you?”</p></li>
+<li><p>Respondent writes in their own words</p></li>
+<li><p>Could be anything: healthcare, immigration, climate, etc.</p></li>
+</ul>
+</li>
+<li><p><strong>Summarize</strong> with LLM</p>
+<ul class="simple">
+<li><p>GPT-3 extracts key concern in one sentence</p></li>
+<li><p>Uses respondent’s language</p></li>
+<li><p>Creates consistent format for next steps</p></li>
+</ul>
+</li>
+<li><p><strong>Generate personalized scales</strong></p>
+<ul class="simple">
+<li><p>Create Likert items about THEIR specific issue</p></li>
+<li><p>Measure attitude strength, certainty, extremity</p></li>
+<li><p>All tailored to what they care about</p></li>
+</ul>
+</li>
+<li><p><strong>Generate personalized arguments</strong></p>
+<ul class="simple">
+<li><p>Pro and con arguments about THEIR issue</p></li>
+<li><p>Different intensity levels (moderate → vitriolic)</p></li>
+<li><p>Test what induces polarization</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Why this is powerful:</strong></p>
+<ul class="simple">
+<li><p>Maximum personal relevance</p></li>
+<li><p>“Easy test” for polarization theories</p></li>
+<li><p>If polarization doesn’t happen here, maybe it’s rare</p></li>
+</ul>
+<p><strong>Key findings:</strong></p>
+<ul class="simple">
+<li><p>Even with full personalization, polarization was RARE</p></li>
+<li><p>Moderate arguments: No polarization</p></li>
+<li><p>Strong arguments: Little polarization</p></li>
+<li><p>Vitriolic arguments: Some attitude defense emerged</p></li>
+<li><p><strong>Implication</strong>: Polarization harder to produce than assumed</p></li>
+</ul>
+<p><strong>Practical applications:</strong></p>
+<ul class="simple">
+<li><p>Survey design: Let respondents define dimensions</p></li>
+<li><p>Intervention testing: Personalize to real concerns</p></li>
+<li><p>Theory testing: Create strong tests of hypotheses</p></li>
+</ul>
+<p><strong>Limitations:</strong></p>
+<ul class="simple">
+<li><p>LLM summarization may miss nuance</p></li>
+<li><p>Generated scales may not capture all aspects</p></li>
+<li><p>Still simulated respondents (need human validation)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="open-source-alternatives">
+<h2>Open-Source Alternatives<a class="headerlink" href="#open-source-alternatives" title="Link to this heading">#</a></h2>
+<p>The examples above use OpenAI’s API. Here’s how to run persuasion experiments with open-source models.</p>
+<section id="using-ollama">
+<h3>Using Ollama<a class="headerlink" href="#using-ollama" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ollama</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span> <span class="k">as</span> <span class="n">OllamaClient</span>
+
+<span class="n">ollama_client</span> <span class="o">=</span> <span class="n">OllamaClient</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;http://localhost:11434&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Measure attitude with Ollama</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">measure_attitude_ollama</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;llama3.2&quot;</span><span class="p">):</span>
+    <span class="n">persona</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are a </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">-year-old </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;gender&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;&quot;&quot;</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;On a scale of 1-7, how much do you support </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">?</span>
+<span class="s2">(1=strongly oppose, 7=strongly support)</span>
+
+<span class="s2">Answer with a single number only.&quot;&quot;&quot;</span>
+    
+    <span class="n">response</span> <span class="o">=</span> <span class="n">ollama_client</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">persona</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}</span>
+        <span class="p">],</span>
+        <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
+    <span class="p">)</span>
+    
+    <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">][</span><span class="s1">&#39;content&#39;</span><span class="p">]</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\b([1-7])\b&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="k">if</span> <span class="n">match</span> <span class="k">else</span> <span class="kc">None</span>
+
+<span class="c1"># Generate persuasive message</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_message_ollama</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;llama3.2&quot;</span><span class="p">):</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Write a brief persuasive message (2-3 sentences) arguing that people should </span><span class="si">{</span><span class="n">position</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">.&quot;&quot;&quot;</span>
+    
+    <span class="n">response</span> <span class="o">=</span> <span class="n">ollama_client</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+        <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">}</span>
+    <span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">][</span><span class="s1">&#39;content&#39;</span><span class="p">]</span>
+
+<span class="c1"># Pre-test/post-test experiment</span>
+<span class="n">demographics</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">:</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="s1">&#39;male&#39;</span><span class="p">}</span>
+<span class="n">topic</span> <span class="o">=</span> <span class="s2">&quot;universal basic income&quot;</span>
+
+<span class="n">pre</span> <span class="o">=</span> <span class="n">measure_attitude_ollama</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
+<span class="n">message</span> <span class="o">=</span> <span class="n">generate_message_ollama</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="s2">&quot;support&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Message: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Show message to respondent (simulated by adding to conversation history)</span>
+<span class="n">post</span> <span class="o">=</span> <span class="n">measure_attitude_ollama</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pre-test: </span><span class="si">{</span><span class="n">pre</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Post-test: </span><span class="si">{</span><span class="n">post</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Effect: </span><span class="si">{</span><span class="n">post</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">pre</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">pre</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">post</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;N/A&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-hugging-face">
+<h3>Using Hugging Face<a class="headerlink" href="#using-hugging-face" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Persuasion experiment with Hugging Face</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModelForCausalLM</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+<span class="n">hf_model_name</span> <span class="o">=</span> <span class="s2">&quot;microsoft/Phi-3-mini-4k-instruct&quot;</span>
+<span class="n">hf_tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">hf_model_name</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">hf_model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">hf_model_name</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">measure_attitude_hf</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">):</span>
+    <span class="n">persona</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are a </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">-year-old </span><span class="si">{</span><span class="n">demographics</span><span class="p">[</span><span class="s1">&#39;gender&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;&quot;&quot;</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;On a scale of 1-7, how much do you support </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">? Answer with a single number only.&quot;&quot;&quot;</span>
+    
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">persona</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}]</span>
+    <span class="n">formatted_prompt</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="p">(</span><span class="n">formatted_prompt</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">hf_model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">response_text</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\b([1-7])\b&#39;</span><span class="p">,</span> <span class="n">response_text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="k">if</span> <span class="n">match</span> <span class="k">else</span> <span class="kc">None</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_message_hf</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Write a brief persuasive message (2-3 sentences) arguing that people should </span><span class="si">{</span><span class="n">position</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">.&quot;&quot;&quot;</span>
+    <span class="n">formatted_prompt</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">([{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="p">(</span><span class="n">formatted_prompt</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">hf_model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Run experiment</span>
+<span class="n">pre</span> <span class="o">=</span> <span class="n">measure_attitude_hf</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
+<span class="n">message</span> <span class="o">=</span> <span class="n">generate_message_hf</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="s2">&quot;support&quot;</span><span class="p">)</span>
+<span class="n">post</span> <span class="o">=</span> <span class="n">measure_attitude_hf</span><span class="p">(</span><span class="n">demographics</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pre: </span><span class="si">{</span><span class="n">pre</span><span class="si">}</span><span class="s2">, Post: </span><span class="si">{</span><span class="n">post</span><span class="si">}</span><span class="s2">, Effect: </span><span class="si">{</span><span class="n">post</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">pre</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">pre</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">post</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;N/A&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="summary-and-best-practices">
+<h2>Summary and Best Practices<a class="headerlink" href="#summary-and-best-practices" title="Link to this heading">#</a></h2>
+<p><strong>What we covered:</strong></p>
+<ol class="arabic simple">
+<li><p>Pre-test/post-test experimental design</p></li>
+<li><p>Generic vs microtargeted message generation</p></li>
+<li><p>Testing persuasion effects with synthetic respondents</p></li>
+<li><p>Multi-turn interactive conversations</p></li>
+<li><p>Personalized outcomes approach (Velez &amp; Liu)</p></li>
+</ol>
+<p><strong>Key findings from recent research:</strong></p>
+<ul class="simple">
+<li><p><strong>Argyle et al. (2025)</strong>: Persuasion works, but simple = complex</p>
+<ul>
+<li><p>Microtargeting didn’t beat generic messages</p></li>
+<li><p>Multi-turn didn’t beat one-shot</p></li>
+</ul>
+</li>
+<li><p><strong>Velez &amp; Liu (2025)</strong>: Polarization is hard to produce</p>
+<ul>
+<li><p>Even with maximum personalization</p></li>
+<li><p>Only vitriolic messages showed effects</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Best practices:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Always include control group</strong> (no message)</p></li>
+<li><p><strong>Use 7-point scales</strong> (more sensitive than 5-point)</p></li>
+<li><p><strong>Validate with human data</strong> (essential!)</p></li>
+<li><p><strong>Report effect sizes</strong> with confidence intervals</p></li>
+<li><p><strong>Test simple approaches first</strong> (may be just as good)</p></li>
+<li><p><strong>Document all parameters</strong> (model, temperature, prompts)</p></li>
+<li><p><strong>Consider ethics</strong> (IRB approval, deception protocols)</p></li>
+</ol>
+<p><strong>Limitations to remember:</strong></p>
+<ul class="simple">
+<li><p>LLM responses may not predict human behavior</p></li>
+<li><p>Effect sizes may be inflated or deflated</p></li>
+<li><p>Missing real-world context (face-to-face, trust, etc.)</p></li>
+<li><p>Short-term effects only (no follow-up)</p></li>
+<li><p>Synthetic data for prototyping, not replacement</p></li>
+</ul>
+<p><strong>When to use these methods:</strong></p>
+<ul class="simple">
+<li><p>✓ Rapid prototyping of message variants</p></li>
+<li><p>✓ Testing theoretical mechanisms</p></li>
+<li><p>✓ Exploring design space before expensive studies</p></li>
+<li><p>✗ As sole evidence for claims about humans</p></li>
+<li><p>✗ Without validation against real respondents</p></li>
+</ul>
+<p><strong>Next steps:</strong></p>
+<ul class="simple">
+<li><p>Run your own experiments with real survey topics</p></li>
+<li><p>Compare to actual human experimental data</p></li>
+<li><p>Explore boundary conditions (when does it work/fail?)</p></li>
+<li><p>Consider ethical implications of persuasion research</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="week07_silicon_sampling.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">LLMs for Synthetic Data I: Simulating Survey Respondents</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-are-interactive-persuasion-experiments">What are Interactive Persuasion Experiments?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-pre-test-post-test-experimental-design">Part 1: Pre-test/Post-test Experimental Design</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-generating-personalized-persuasive-messages">Part 2: Generating Personalized Persuasive Messages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-testing-persuasive-effects">Part 3: Testing Persuasive Effects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-experimental-design-with-multiple-conditions">Part 4: Experimental Design with Multiple Conditions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analyzing-experimental-results">Analyzing experimental results</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-interactive-multi-turn-conversations">Part 5: Interactive Multi-Turn Conversations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-6-personalized-outcomes-velez-liu-approach">Part 6: Personalized Outcomes (Velez &amp; Liu Approach)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-source-alternatives">Open-Source Alternatives</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-ollama">Using Ollama</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-hugging-face">Using Hugging Face</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-and-best-practices">Summary and Best Practices</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Christopher Barrie
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

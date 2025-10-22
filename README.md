@@ -19,3 +19,5 @@ Slides are still linked below.
 - Week 4 slides: [https://cjbarrie.quarto.pub/week4genai](https://cjbarrie.quarto.pub/week4genai)
 - Week 5 slides: [https://cjbarrie.quarto.pub/week5genai](https://cjbarrie.quarto.pub/week5genai)
 - Week 6 slides: [https://cjbarrie.quarto.pub/week6genai](https://cjbarrie.quarto.pub/week6genai)
+- Week 7 slides: [https://cjbarrie.quarto.pub/week7genai](https://cjbarrie.quarto.pub/week7genai)
+- Week 8 slides: [https://cjbarrie.quarto.pub/week8genai](https://cjbarrie.quarto.pub/week8genai)

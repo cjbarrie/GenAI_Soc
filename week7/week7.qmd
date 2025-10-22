@@ -1,0 +1,362 @@
+
+---
+title: "Week 7: Gen AI for Sociology"
+format:
+  revealjs:
+    toc: false
+    slide-number: true
+    incremental: true
+    transition: fade
+    code-line-numbers: true
+---
+
+## This week
+
+**LLMs for Synthetic Data I: Simulating Survey Respondents**
+
+- Using LLMs to simulate survey respondents ("silicon sampling")
+- Algorithmic fidelity and bias in synthetic samples
+- Practical applications and limitations
+
+---
+
+## New book
+
+[https://cjbarrie.github.io/GenAI_Soc/intro.html](https://cjbarrie.github.io/GenAI_Soc/intro.html)
+
+## What we'll cover & why it matters
+
+- **Silicon sampling**: Using LLMs as synthetic survey respondents
+- **Algorithmic fidelity**: How well LLMs replicate real survey distributions
+- **Biases**: Invariance and subpopulation stereotyping
+- **Practical implementation**: Conditioning on demographic personas
+
+---
+
+## Why it matters
+
+Traditional surveys are:
+
+- Expensive (time and money)
+- Slow to conduct
+- Limited in sample size
+- Subject to declining response rates
+- **So can LLMs replace or augment survey research?**
+
+---
+
+## The promise of silicon sampling
+
+::: {.incremental}
+- **Rapid prototyping** of survey instruments
+- **Large-scale simulations** of public opinion
+- **Exploratory research** before expensive fieldwork
+- **Counterfactual scenarios** not possible with real humans
+:::
+
+---
+
+## Historical context: Simulating public opinion before LLMs
+
+Before LLMs, social scientists used several approaches:
+
+::: {.incremental}
+1. **Agent-based models (ABMs)**: Rule-based simulations of individual behavior
+2. **Synthetic populations**: Statistical matching/reweighting of real survey data
+3. **Imputation methods**: Multiple imputation to fill missing responses
+4. **Bayesian hierarchical models**: MRP (multilevel regression with poststratification)
+:::
+
+---
+
+## Traditional simulation approaches
+
+**Agent-based models**:
+
+- Agents follow programmed rules (e.g., "if neighbor votes, increase turnout probability")
+- Useful for studying **processes** (diffusion, polarization)
+- But: Rules must be **hand-coded**, not learned from data
+
+---
+
+## Traditional simulation approaches
+
+![Schelling segregation model visualization. Taken from: http://vinkovic.org/Projects/Schelling/.](images/schelling.png){fig-align="center"}
+
+---
+
+## Traditional simulation approaches
+
+![Schelling segregation model visualization. Taken from: my own head.](images/schelling2.png){fig-align="center"}
+
+---
+
+## Traditional simulation approaches
+
+**Synthetic populations**:
+
+- Combine census data with survey samples
+- Use statistical matching to create "complete" populations
+- Example: Creating state-level estimates from national surveys
+
+---
+
+## Traditional simulation approaches
+
+::: {.callout-note}
+**Problem**: Still constrained by original survey responses—can't generate truly novel attitudes
+:::
+
+---
+
+## Traditional simulation approaches
+
+**MRP (Multilevel Regression with Poststratification)**:
+
+- Fit hierarchical model on survey data
+- Predict for all combinations of demographic groups
+- Poststratify using census weights
+
+---
+
+## Traditional simulation approaches
+
+![MRP example: Area-level estimates from national surveys. Taken from: https://www.moreincommon.org.uk/latest-insights/more-in-common-s-april-mrp/.](images/mrp.png){fig-align="center"}
+
+---
+
+## Traditional simulation approaches
+
+::: {.callout-tip}
+**Advantage**: Principled uncertainty quantification
+:::
+
+::: {.callout-warning}
+**Limitation**: Parametric assumptions, requires good survey data
+:::
+
+---
+
+## What LLMs offer differently
+
+::: {.incremental}
+- **Pre-existing knowledge bank**: Black box *understanding* of human attitudes
+- **Natural language**: Can simulate open-ended responses, not just scales
+- **Few-shot learning**: Adapt to new questions without retraining
+- **But**: New challenges around fidelity and bias
+:::
+
+---
+
+## The challenges
+
+::: {.incremental}
+- **Algorithmic fidelity**: Do LLM responses match real distributions? (especially low-resource contexts)
+- **Invariance**: Do models fail to capture within-group diversity?
+- **Stereotyping**: Do models reproduce harmful stereotypes?
+- **Validity**: When can we trust synthetic data?
+- **Global structure**: Do models capture emergent structure of belief networks?
+:::
+
+---
+
+## Reading 1 — Argyle et al. (2023): Silicon Sampling
+
+**Key contribution**: First systematic test of whether GPT-3 can replicate survey responses when conditioned on demographic personas.
+
+**Method**: Prompt GPT-3 with demographic profiles + survey questions from ANES, GSS, Pew.
+
+**Finding**: Correlations of 0.6-0.9 with real marginal distributions, but significant biases.
+
+---
+
+## Argyle et al. (2023): Study Design
+
+![](images/argyle.png){fig-align="center"}
+
+---
+
+
+## Argyle et al. (2023): Method
+
+```python
+# Example persona prompt
+persona = """You are a 45-year-old white male
+from the Midwest with a college degree
+and an income of $75,000."""
+
+question = """On a scale of 1-5, how much do you
+support increased government spending on healthcare?"""
+
+prompt = f"{persona}\n\n{question}"
+```
+
+---
+
+## Argyle et al. (2023): Results
+
+![Cramer's V between real and synthetic responses](images/argyle_correlations.png){fig-align="center"}
+
+---
+
+## Argyle et al. (2023): Results
+
+**Strengths**:
+
+- High correlation on partisan and ideological questions
+- Captures broad demographic patterns
+
+---
+
+## Argyle et al. (2023): Results
+
+**Limitations**:
+
+- Fails to capture within-group heterogeneity
+- Struggles with e.g., weak partisans
+
+---
+
+## Reading 2 — Bisbee et al. (2024): When does it work?
+
+**Key contribution**: Identifies boundary conditions for successful silicon sampling.
+
+**Research question**: Under what conditions can LLMs accurately simulate survey responses?
+
+**Method**: Repeated prompting to recover: 1) averages; 2) variance; 3) conditional (partial) correlations.
+
+---
+
+## Bisbee et al. (2024): Research design
+
+![](images/bisbee_design.png){fig-align="center"}
+---
+
+## Bisbee et al. (2024): Research design
+
+![](images/bisbee_design2.png){fig-align="center"}
+---
+
+## Bisbee et al. (2024): Key results
+
+![](images/bisbee_results.png){fig-align="center"}
+
+---
+
+## Bisbee et al. (2024): Key results
+
+![](images/bisbee_results2.png){fig-align="center"}
+
+---
+
+## Three key concepts
+
+1. **Algorithmic fidelity**: Statistical correspondence between synthetic and real distributions
+2. **Invariance**: Lack of within-group diversity in LLM responses
+3. **Subpopulation stereotyping**: Exaggerated between-group differences
+
+---
+
+## Measuring algorithmic fidelity
+
+From the Argyle paper, personas include:
+
+- Age
+- Gender
+- Race/ethnicity
+- Education level
+- Income bracket
+- Geographic region
+- Political party (for political questions)
+
+---
+
+## Implementation: Argyle-style basic approach
+
+```python
+from openai import OpenAI
+client = OpenAI()
+
+def create_persona(demographics):
+    """Create persona string following Argyle et al. (2023)"""
+    return f"""You are a {demographics['age']}-year-old
+{demographics['race']} {demographics['gender']} from
+{demographics['region']} with {demographics['education']}
+education and an income of ${demographics['income']}."""
+
+def silicon_sample(demographics, question):
+    persona = create_persona(demographics)
+
+    messages = [
+        {"role": "system", "content": persona},
+        {"role": "user", "content": question}
+    ]
+
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",  # Argyle used GPT-3
+        messages=messages,
+        temperature=1.0  # Default in original study
+    )
+
+    return response.choices[0].message.content
+```
+
+---
+
+## Implementation: Structured output for scales
+
+```python
+def silicon_sample_likert(demographics, question, scale=(1,5)):
+    """Get numeric response on Likert scale"""
+    persona = create_persona(demographics)
+
+    prompt = f"""{question}
+
+Please respond with only a number from {scale[0]} to {scale[1]},
+where {scale[0]} = Strongly Disagree and {scale[1]} = Strongly Agree."""
+
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": persona},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=1.0
+    )
+
+    # Extract numeric response
+    try:
+        return int(response.choices[0].message.content.strip())
+    except ValueError:
+        # Fallback if model doesn't return clean number
+        return None
+```
+
+---
+
+## Practical implementation: Validation pipeline (Bisbee)
+
+```python
+def validate_silicon_sample(synthetic_df, real_df, demographic_vars):
+    """Compare synthetic to real survey data"""
+
+    results = {}
+
+    # 1. Within-group variance
+    for var in demographic_vars:
+        real_var = real_df.groupby(var)['response'].var()
+        synth_var = synthetic_df.groupby(var)['response'].var()
+        results[f'{var}_invariance'] = (synth_var / real_var).mean()
+
+    return results
+```
+
+---
+
+## Summary
+
+- **Silicon sampling** offers exciting possibilities for social research
+- But faces serious challenges around **fidelity**, **invariance**, and **stereotyping**
+- Requires careful **validation** and **ethical reflection**
+- New **fine-tuning** techniques offer some future promise...
+

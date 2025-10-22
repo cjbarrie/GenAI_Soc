@@ -177,9 +177,10 @@
         </ul>
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">LLMs for Annotation I</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="week05_qualitative.html">LLMs for Annotation II</a></li>
 <li class="toctree-l1"><a class="reference internal" href="week06_annotation.html">LLMs for Annotation III</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week07_silicon_sampling.html">LLMs for Synthetic Data I: Simulating Survey Respondents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week08_interactive_experiments.html">LLMs for Synthetic Data II: Interactive Experiments and Persuasion</a></li>
 </ul>
 
     </div>
@@ -406,7 +407,6 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">LLMs for Annotation I</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-text-generation-with-gpt-2">Part 1: Text Generation with GPT-2</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-gpt-2-model">Load GPT-2 model</a></li>
@@ -430,14 +430,23 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-testing-for-bias-in-api-models">Part 4: Testing for Bias in API Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-open-source-alternatives-to-openai-api">Part 5: Open-Source Alternatives to OpenAI API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-1-using-ollama">Option 1: Using Ollama</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#text-generation-with-ollama">Text Generation with Ollama</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#text-annotation-with-ollama">Text Annotation with Ollama</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#json-mode-with-ollama">JSON Mode with Ollama</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#test-occupation-completion">Test occupation completion</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-2-using-hugging-face-transformers">Option 2: Using Hugging Face Transformers</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#text-generation-with-hugging-face">Text Generation with Hugging Face</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#text-annotation-with-hugging-face">Text Annotation with Hugging Face</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notes-on-running-locations">Notes on Running Locations</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
 </ul>
-</li>
-</ul>
-
             </nav>
         </div>
     </div>
@@ -1138,76 +1147,388 @@ document.write(`
 <p>Let’s test for similar biases in GPT-4.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delete this cell</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test occupation completion</span>
+<span class="n">prompts</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;The man worked as a&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;The woman worked as a&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;GPT-4 occupation completions:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">prompt</span> <span class="ow">in</span> <span class="n">prompts</span><span class="p">:</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Complete the sentence naturally. Return only the completion.&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}</span>
+        <span class="p">],</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+        <span class="n">max_tokens</span><span class="o">=</span><span class="mi">10</span>
+    <span class="p">)</span>
+    <span class="n">completion</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prompt: &#39;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Completion: </span><span class="si">{</span><span class="n">completion</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="test-occupation-completion">
-<h1>Test occupation completion<a class="headerlink" href="#test-occupation-completion" title="Link to this heading">#</a></h1>
-<p>prompts = [
-“The man worked as a”,
-“The woman worked as a”,
-]</p>
-<p>print(“GPT-4 occupation completions:\n”)
-print(“=” * 70)</p>
-<p>for prompt in prompts:
-response = client.chat.completions.create(
-model=”gpt-4o-mini”,
-messages=[
-{“role”: “system”, “content”: “Complete the sentence naturally. Return only the completion.”},
-{“role”: “user”, “content”: prompt}
-],
-temperature=0.7,
-max_tokens=10
-)
-completion = response.choices[0].message.content
-print(f”Prompt: ‘{prompt}’”)
-print(f”  Completion: {completion}\n”)</p>
+<hr class="docutils" />
+<section id="part-5-open-source-alternatives-to-openai-api">
+<h2>Part 5: Open-Source Alternatives to OpenAI API<a class="headerlink" href="#part-5-open-source-alternatives-to-openai-api" title="Link to this heading">#</a></h2>
+<p>The examples above use OpenAI’s paid API. Here we show how to accomplish the same tasks using <strong>free, open-source alternatives</strong>:</p>
+<ol class="arabic simple">
+<li><p><strong>Ollama</strong> - Run models locally with an OpenAI-compatible API</p></li>
+<li><p><strong>Hugging Face</strong> - Direct model access with more control</p></li>
+</ol>
+<p>Both approaches keep your data private and cost nothing to run.</p>
+<section id="option-1-using-ollama">
+<h3>Option 1: Using Ollama<a class="headerlink" href="#option-1-using-ollama" title="Link to this heading">#</a></h3>
+<p><strong>Ollama</strong> provides an OpenAI-compatible API for running models locally.</p>
+<p><strong>Setup:</strong></p>
+<ol class="arabic simple">
+<li><p>Install Ollama: <a class="reference external" href="https://ollama.com/download">https://ollama.com/download</a></p></li>
+<li><p>Pull a model: <code class="docutils literal notranslate"><span class="pre">ollama</span> <span class="pre">pull</span> <span class="pre">llama3.2</span></code> (or browse models at <a class="reference external" href="https://ollama.com/library">https://ollama.com/library</a>)</p></li>
+<li><p>Ollama runs a local API server automatically</p></li>
+</ol>
+<p><strong>Advantages:</strong></p>
+<ul class="simple">
+<li><p>✓ OpenAI-compatible API (minimal code changes)</p></li>
+<li><p>✓ Easy to install and use</p></li>
+<li><p>✓ Supports many open models (Llama, Mistral, Phi, Gemma, etc.)</p></li>
+<li><p>✓ Automatic model management</p></li>
+<li><p>✓ Free and runs locally</p></li>
+</ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install Ollama client</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>-q<span class="w"> </span>ollama
 
-<span class="c1">## Summary</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ollama</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span> <span class="k">as</span> <span class="n">OllamaClient</span>
 
-<span class="o">**</span><span class="n">What</span> <span class="n">we</span> <span class="n">learned</span><span class="p">:</span><span class="o">**</span>
-<span class="mf">1.</span> <span class="err">✓</span> <span class="n">How</span> <span class="o">**</span><span class="n">causal</span> <span class="n">language</span> <span class="n">models</span><span class="o">**</span> <span class="n">generate</span> <span class="n">text</span> <span class="p">(</span><span class="nb">next</span><span class="o">-</span><span class="n">token</span> <span class="n">prediction</span><span class="p">)</span>
-<span class="mf">2.</span> <span class="err">✓</span> <span class="n">How</span> <span class="o">**</span><span class="n">temperature</span><span class="o">**</span> <span class="ow">and</span> <span class="o">**</span><span class="n">sampling</span><span class="o">**</span> <span class="n">control</span> <span class="n">randomness</span>
-<span class="mf">3.</span> <span class="err">✓</span> <span class="n">How</span> <span class="n">to</span> <span class="n">detect</span> <span class="o">**</span><span class="n">bias</span><span class="o">**</span> <span class="ow">in</span> <span class="n">model</span> <span class="n">outputs</span> <span class="p">(</span><span class="n">both</span> <span class="nb">open</span><span class="o">-</span><span class="n">source</span> <span class="ow">and</span> <span class="n">API</span> <span class="n">models</span><span class="p">)</span>
-<span class="mf">4.</span> <span class="err">✓</span> <span class="n">How</span> <span class="n">to</span> <span class="n">use</span> <span class="o">**</span><span class="n">OpenAI</span> <span class="n">API</span><span class="o">**</span> <span class="k">for</span> <span class="n">text</span> <span class="n">generation</span> <span class="ow">and</span> <span class="n">simple</span> <span class="n">annotation</span>
+<span class="c1"># Connect to local Ollama server</span>
+<span class="n">ollama_client</span> <span class="o">=</span> <span class="n">OllamaClient</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;http://localhost:11434&#39;</span><span class="p">)</span>
 
-<span class="o">**</span><span class="n">Key</span> <span class="n">insights</span><span class="p">:</span><span class="o">**</span>
-<span class="o">-</span> <span class="n">LLMs</span> <span class="n">learn</span> <span class="kn">from</span><span class="w"> </span><span class="nn">their</span> <span class="n">training</span> <span class="n">data</span><span class="p">,</span> <span class="n">including</span> <span class="o">**</span><span class="n">biases</span><span class="o">**</span>
-<span class="o">-</span> <span class="o">**</span><span class="n">Temperature</span><span class="o">**</span> <span class="ow">is</span> <span class="n">crucial</span><span class="p">:</span> <span class="n">low</span> <span class="p">(</span><span class="mi">0</span><span class="o">-</span><span class="mf">0.3</span><span class="p">)</span> <span class="k">for</span> <span class="n">annotation</span><span class="p">,</span> <span class="n">higher</span> <span class="p">(</span><span class="mf">0.7</span><span class="o">+</span><span class="p">)</span> <span class="k">for</span> <span class="n">creative</span> <span class="n">tasks</span>
-<span class="o">-</span> <span class="o">**</span><span class="n">API</span> <span class="n">models</span><span class="o">**</span> <span class="p">(</span><span class="n">GPT</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span> <span class="n">are</span> <span class="n">more</span> <span class="n">capable</span> <span class="n">but</span> <span class="n">less</span> <span class="n">transparent</span> <span class="n">than</span> <span class="nb">open</span> <span class="n">models</span>
-<span class="o">-</span> <span class="n">Simple</span> <span class="n">prompting</span> <span class="n">works</span> <span class="k">for</span> <span class="n">exploration</span><span class="p">,</span> <span class="n">but</span> <span class="o">**</span><span class="n">structured</span> <span class="n">outputs</span><span class="o">**</span> <span class="n">needed</span> <span class="k">for</span> <span class="n">production</span>
-
-<span class="o">**</span><span class="n">Open</span><span class="o">-</span><span class="n">source</span> <span class="n">vs</span><span class="o">.</span> <span class="n">API</span> <span class="n">comparison</span><span class="p">:</span><span class="o">**</span>
-
-<span class="o">|</span> <span class="n">Aspect</span> <span class="o">|</span> <span class="n">Open</span><span class="o">-</span><span class="n">source</span> <span class="p">(</span><span class="n">GPT</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="n">API</span> <span class="p">(</span><span class="n">GPT</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span> <span class="o">|</span>
-<span class="o">|--------|---------------------|-------------|</span>
-<span class="o">|</span> <span class="n">Cost</span> <span class="o">|</span> <span class="n">Free</span> <span class="o">|</span> <span class="n">Pay</span> <span class="n">per</span> <span class="n">token</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Quality</span> <span class="o">|</span> <span class="n">Lower</span> <span class="o">|</span> <span class="n">Higher</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Privacy</span> <span class="o">|</span> <span class="n">Local</span> <span class="n">data</span> <span class="o">|</span> <span class="n">Sent</span> <span class="n">to</span> <span class="n">provider</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Reproducibility</span> <span class="o">|</span> <span class="n">Fixed</span> <span class="n">weights</span> <span class="o">|</span> <span class="n">Version</span> <span class="n">drift</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Speed</span> <span class="o">|</span> <span class="n">Depends</span> <span class="n">on</span> <span class="n">hardware</span> <span class="o">|</span> <span class="n">Fast</span><span class="p">,</span> <span class="n">optimized</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Control</span> <span class="o">|</span> <span class="n">Full</span> <span class="n">access</span> <span class="o">|</span> <span class="n">Black</span> <span class="n">box</span> <span class="o">|</span>
-
-<span class="o">**</span><span class="n">Next</span> <span class="n">steps</span><span class="p">:</span><span class="o">**</span>
-<span class="o">-</span> <span class="o">**</span><span class="n">Week</span> <span class="mi">5</span><span class="o">**</span> <span class="p">(</span><span class="n">LLMs</span> <span class="k">for</span> <span class="n">Annotation</span> <span class="n">II</span><span class="p">):</span> <span class="n">Qualitative</span> <span class="n">coding</span> <span class="ow">and</span> <span class="n">thematic</span> <span class="n">analysis</span>
-<span class="o">-</span> <span class="o">**</span><span class="n">Week</span> <span class="mi">6</span><span class="o">**</span> <span class="p">(</span><span class="n">LLMs</span> <span class="k">for</span> <span class="n">Annotation</span> <span class="n">III</span><span class="p">):</span> <span class="n">Structured</span> <span class="n">outputs</span> <span class="p">(</span><span class="n">JSON</span><span class="p">,</span> <span class="n">function</span> <span class="n">calling</span><span class="p">)</span> <span class="k">for</span> <span class="n">production</span> <span class="n">annotation</span>
-
-<span class="o">**</span><span class="n">Ethical</span> <span class="n">considerations</span><span class="p">:</span><span class="o">**</span>
-<span class="o">-</span> <span class="n">Always</span> <span class="n">test</span> <span class="k">for</span> <span class="n">demographic</span> <span class="n">biases</span> <span class="n">before</span> <span class="n">deploying</span>
-<span class="o">-</span> <span class="n">Document</span> <span class="n">model</span> <span class="n">versions</span> <span class="ow">and</span> <span class="n">settings</span>
-<span class="o">-</span> <span class="n">Validate</span> <span class="n">against</span> <span class="n">human</span> <span class="n">annotations</span>
-<span class="o">-</span> <span class="n">Be</span> <span class="n">transparent</span> <span class="n">about</span> <span class="n">using</span> <span class="n">AI</span> <span class="ow">in</span> <span class="n">research</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Ollama client initialized&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Available models:&quot;</span><span class="p">)</span>
+<span class="n">models</span> <span class="o">=</span> <span class="n">ollama_client</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">[</span><span class="s1">&#39;models&#39;</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - </span><span class="si">{</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
+<section id="text-generation-with-ollama">
+<h4>Text Generation with Ollama<a class="headerlink" href="#text-generation-with-ollama" title="Link to this heading">#</a></h4>
+<p>The API is nearly identical to OpenAI’s - just change the client and model name.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Text generation with Ollama (same API as OpenAI!)</span>
+<span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a creative writer.&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Write a two-sentence sci-fi plot hook.&quot;</span><span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">ollama_client</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;llama3.2&quot;</span><span class="p">,</span>  <span class="c1"># Use your installed model</span>
+    <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
+    <span class="n">options</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+        <span class="s2">&quot;num_predict&quot;</span><span class="p">:</span> <span class="mi">100</span>  <span class="c1"># equivalent to max_tokens</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">generated</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">][</span><span class="s1">&#39;content&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated plot (Ollama):</span><span class="se">\n</span><span class="si">{</span><span class="n">generated</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="text-annotation-with-ollama">
+<h4>Text Annotation with Ollama<a class="headerlink" href="#text-annotation-with-ollama" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">annotate_text_ollama</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;llama3.2&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Annotate a single text using Ollama</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a careful social science annotator. Return only the label, nothing else.&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;&#39;&#39;Label this text as one of: protest, discrimination, or solidarity.</span>
+
+<span class="s1">Text: &quot;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&quot;</span>
+
+<span class="s1">Label:&#39;&#39;&#39;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+    
+    <span class="n">response</span> <span class="o">=</span> <span class="n">ollama_client</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
+        <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">}</span>
+    <span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">][</span><span class="s1">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="c1"># Batch annotate with Ollama</span>
+<span class="n">texts</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Thousands gathered in front of parliament.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Volunteers cleaned the park and cooked for neighbors.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;He yelled slurs at a woman on the tram.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Police blocked the march after clashes.&quot;</span>
+<span class="p">]</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">:</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">annotate_text_ollama</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">label</span><span class="p">})</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Annotation results (Ollama):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="json-mode-with-ollama">
+<h4>JSON Mode with Ollama<a class="headerlink" href="#json-mode-with-ollama" title="Link to this heading">#</a></h4>
+<p>Ollama also supports structured JSON outputs:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Approach 1: Simple JSON mode</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">annotate_with_json_ollama</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;llama3.2&quot;</span><span class="p">):</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a careful social science annotator. Return valid JSON only.&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;&#39;&#39;Label this text as one of: protest, discrimination, or solidarity.</span>
+
+<span class="s1">Text: &quot;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&quot;</span>
+
+<span class="s1">Return JSON with keys: label, confidence (0-1), reasoning.&#39;&#39;&#39;</span><span class="p">}</span>
+    <span class="p">]</span>
+    
+    <span class="n">response</span> <span class="o">=</span> <span class="n">ollama_client</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;json&quot;</span>  <span class="c1"># Basic JSON mode</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">][</span><span class="s1">&#39;content&#39;</span><span class="p">])</span>
+
+<span class="c1"># Approach 2: Pydantic structured outputs (stronger typing)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Annotation</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">reasoning</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">annotate_with_pydantic_ollama</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;llama3.2&quot;</span><span class="p">):</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a careful social science annotator.&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;&#39;&#39;Label this text as one of: protest, discrimination, or solidarity.</span>
+
+<span class="s1">Text: &quot;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&quot;&#39;&#39;&#39;</span><span class="p">}</span>
+    <span class="p">]</span>
+    
+    <span class="n">response</span> <span class="o">=</span> <span class="n">ollama_client</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">Annotation</span><span class="o">.</span><span class="n">model_json_schema</span><span class="p">()</span>  <span class="c1"># Pydantic schema</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">Annotation</span><span class="o">.</span><span class="n">model_validate_json</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">][</span><span class="s1">&#39;content&#39;</span><span class="p">])</span>
+
+<span class="c1"># Example with both approaches</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Thousands gathered in front of parliament.&quot;</span>
+
+<span class="c1"># Using simple JSON mode</span>
+<span class="n">result1</span> <span class="o">=</span> <span class="n">annotate_with_json_ollama</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Simple JSON mode:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Label: </span><span class="si">{</span><span class="n">result1</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Confidence: </span><span class="si">{</span><span class="n">result1</span><span class="p">[</span><span class="s1">&#39;confidence&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Using Pydantic structured outputs</span>
+<span class="n">result2</span> <span class="o">=</span> <span class="n">annotate_with_pydantic_ollama</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pydantic structured outputs:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Label: </span><span class="si">{</span><span class="n">result2</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Confidence: </span><span class="si">{</span><span class="n">result2</span><span class="o">.</span><span class="n">confidence</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="option-2-using-hugging-face-transformers">
+<h3>Option 2: Using Hugging Face Transformers<a class="headerlink" href="#option-2-using-hugging-face-transformers" title="Link to this heading">#</a></h3>
+<p><strong>Hugging Face</strong> provides direct access to model internals.</p>
+<p><strong>Setup:</strong></p>
+<ul class="simple">
+<li><p>Models run locally</p></li>
+<li><p>Requires more VRAM for larger models</p></li>
+<li><p>Can use quantized models to reduce memory usage</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load a chat-optimized model from Hugging Face</span>
+<span class="c1"># Example: Microsoft Phi-3</span>
+<span class="c1"># Note: On Google Colab, you&#39;ll need a GPU runtime for reasonable speed</span>
+<span class="n">hf_model_name</span> <span class="o">=</span> <span class="s2">&quot;microsoft/Phi-3-mini-4k-instruct&quot;</span>
+
+<span class="n">hf_tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">hf_model_name</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">hf_model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="n">hf_model_name</span><span class="p">,</span>
+    <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span>  <span class="c1"># Use half precision to save memory</span>
+    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Loaded </span><span class="si">{</span><span class="n">hf_model_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Device: </span><span class="si">{</span><span class="n">device</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="text-generation-with-hugging-face">
+<h4>Text Generation with Hugging Face<a class="headerlink" href="#text-generation-with-hugging-face" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">generate_text_hf</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate text using Hugging Face model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Format prompt as chat message</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a creative writer.&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}</span>
+    <span class="p">]</span>
+    
+    <span class="c1"># Apply chat template</span>
+    <span class="n">formatted_prompt</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
+        <span class="n">messages</span><span class="p">,</span> 
+        <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+        <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="p">(</span><span class="n">formatted_prompt</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">hf_model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+        <span class="o">**</span><span class="n">inputs</span><span class="p">,</span>
+        <span class="n">max_new_tokens</span><span class="o">=</span><span class="n">max_new_tokens</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+        <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">pad_token_id</span><span class="o">=</span><span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">eos_token_id</span>
+    <span class="p">)</span>
+    
+    <span class="c1"># Decode and extract only new tokens</span>
+    <span class="n">generated_ids</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:]</span>
+    <span class="n">generated_text</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">generated_ids</span><span class="p">,</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">generated_text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="c1"># Test generation</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;Write a two-sentence sci-fi plot hook.&quot;</span>
+<span class="n">generated</span> <span class="o">=</span> <span class="n">generate_text_hf</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prompt: </span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated (Hugging Face): </span><span class="si">{</span><span class="n">generated</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="text-annotation-with-hugging-face">
+<h4>Text Annotation with Hugging Face<a class="headerlink" href="#text-annotation-with-hugging-face" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">annotate_text_hf</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Annotate a single text using Hugging Face model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a careful social science annotator. Return only the label, nothing else.&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;&#39;&#39;Label this text as one of: protest, discrimination, or solidarity.</span>
+
+<span class="s1">Text: &quot;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&quot;</span>
+
+<span class="s1">Label:&#39;&#39;&#39;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+    
+    <span class="n">formatted_prompt</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
+        <span class="n">messages</span><span class="p">,</span> 
+        <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+        <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="p">(</span><span class="n">formatted_prompt</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">hf_model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+        <span class="o">**</span><span class="n">inputs</span><span class="p">,</span>
+        <span class="n">max_new_tokens</span><span class="o">=</span><span class="n">max_new_tokens</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">pad_token_id</span><span class="o">=</span><span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">eos_token_id</span>
+    <span class="p">)</span>
+    
+    <span class="n">generated_ids</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:]</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">generated_ids</span><span class="p">,</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">label</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="c1"># Batch annotate with Hugging Face</span>
+<span class="n">texts</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Thousands gathered in front of parliament.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Volunteers cleaned the park and cooked for neighbors.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;He yelled slurs at a woman on the tram.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Police blocked the march after clashes.&quot;</span>
+<span class="p">]</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">:</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">annotate_text_hf</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">label</span><span class="p">})</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Annotation results (Hugging Face):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="notes-on-running-locations">
+<h3>Notes on Running Locations<a class="headerlink" href="#notes-on-running-locations" title="Link to this heading">#</a></h3>
+<p><strong>Ollama:</strong></p>
+<ul class="simple">
+<li><p>Requires local installation (cannot run on Google Colab)</p></li>
+<li><p>Download from <a class="reference external" href="https://ollama.com/download">https://ollama.com/download</a></p></li>
+<li><p>Runs models on your own machine</p></li>
+</ul>
+<p><strong>Hugging Face Transformers:</strong></p>
+<ul class="simple">
+<li><p>Works on Google Colab (requires GPU runtime for reasonable speed)</p></li>
+<li><p>Works locally</p></li>
+<li><p>Downloads models automatically on first use</p></li>
+</ul>
+<p><strong>OpenAI API:</strong></p>
+<ul class="simple">
+<li><p>Works anywhere with internet connection</p></li>
+<li><p>No local installation of models required</p></li>
+<li><p>Requires API key and incurs costs per token</p></li>
+</ul>
+</section>
+</section>
 <hr class="docutils" />
 <section id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
@@ -1341,7 +1662,6 @@ print(f”  Completion: {completion}\n”)</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">LLMs for Annotation I</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-text-generation-with-gpt-2">Part 1: Text Generation with GPT-2</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-gpt-2-model">Load GPT-2 model</a></li>
@@ -1365,14 +1685,23 @@ print(f”  Completion: {completion}\n”)</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-testing-for-bias-in-api-models">Part 4: Testing for Bias in API Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-open-source-alternatives-to-openai-api">Part 5: Open-Source Alternatives to OpenAI API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-1-using-ollama">Option 1: Using Ollama</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#text-generation-with-ollama">Text Generation with Ollama</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#text-annotation-with-ollama">Text Annotation with Ollama</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#json-mode-with-ollama">JSON Mode with Ollama</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#test-occupation-completion">Test occupation completion</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-2-using-hugging-face-transformers">Option 2: Using Hugging Face Transformers</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#text-generation-with-hugging-face">Text Generation with Hugging Face</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#text-annotation-with-hugging-face">Text Annotation with Hugging Face</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notes-on-running-locations">Notes on Running Locations</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
 </ul>
-</li>
-</ul>
-
   </nav></div>
 
 </div></div>

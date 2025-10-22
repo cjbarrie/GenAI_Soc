@@ -1,0 +1,4 @@
+- source: week7.qmd
+  quarto-pub:
+    - id: 0f416337-61fc-424d-a992-40373c4a08d6
+      url: https://cjbarrie.quarto.pub/week7genai

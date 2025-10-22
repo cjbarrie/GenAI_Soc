@@ -63,7 +63,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Structured Text Annotation with LLMs" href="week06_annotation.html" />
-    <link rel="prev" title="Large Language Models - Generation, Prompting, and Bias" href="week04_llms.html" />
+    <link rel="prev" title="LLMs for Annotation I" href="week04_llms.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -179,6 +179,8 @@
 <li class="toctree-l1"><a class="reference internal" href="week04_llms.html">LLMs for Annotation I</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">LLMs for Annotation II</a></li>
 <li class="toctree-l1"><a class="reference internal" href="week06_annotation.html">LLMs for Annotation III</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week07_silicon_sampling.html">LLMs for Synthetic Data I: Simulating Survey Respondents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week08_interactive_experiments.html">LLMs for Synthetic Data II: Interactive Experiments and Persuasion</a></li>
 </ul>
 
     </div>
@@ -417,17 +419,17 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-handling-long-documents-chunking">Part 4: Handling Long Documents (Chunking)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-theme-aggregation-and-deduplication">Part 5: Theme Aggregation and Deduplication</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-6-interactive-reflexive-dialogue">Part 6: Interactive Reflexive Dialogue</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductive-thematic-analysis">1. Inductive Thematic Analysis</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-condensation">2. Code Condensation</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reflexive-coding">3. Reflexive Coding</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#long-document-handling">4. Long Document Handling</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-dialogue">5. Interactive Dialogue</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-7-open-source-alternatives">Part 7: Open-Source Alternatives</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-1-using-ollama">Option 1: Using Ollama</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inductive-thematic-analysis-with-ollama">Inductive Thematic Analysis with Ollama</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-2-using-hugging-face-transformers">Option 2: Using Hugging Face Transformers</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inductive-thematic-analysis-with-hugging-face">Inductive Thematic Analysis with Hugging Face</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -644,6 +646,12 @@ document.write(`
 <li><p><strong>Match by text content:</strong> If no index, try to find the text in original list</p></li>
 <li><p><strong>Substring matching:</strong> Handle partial quotes or truncated text</p></li>
 </ol>
+<p><strong>Note on variable key names:</strong></p>
+<ul class="simple">
+<li><p>LLMs may return different key names (e.g., “themes” vs “labels” vs “categories”)</p></li>
+<li><p>The code handles this by checking multiple possible keys: <code class="docutils literal notranslate"><span class="pre">assignment.get(&quot;themes&quot;,</span> <span class="pre">assignment.get(&quot;labels&quot;,</span> <span class="pre">assignment.get(&quot;categories&quot;,</span> <span class="pre">[])))</span></code></p></li>
+<li><p>This flexibility makes the code robust to LLM output variations</p></li>
+</ul>
 <p><strong>Why this matters:</strong></p>
 <ul class="simple">
 <li><p>Makes code robust to LLM output variations</p></li>
@@ -717,41 +725,6 @@ document.write(`
 </div>
 </div>
 </div>
-<p><strong>What this code does:</strong></p>
-<p>Demonstrates <strong>code condensation</strong> - a key qualitative analysis technique:</p>
-<p><strong>What is code condensation:</strong></p>
-<ul class="simple">
-<li><p>Start with many detailed codes (13 in this example)</p></li>
-<li><p>Group them into fewer, broader themes (3-5)</p></li>
-<li><p>Creates a hierarchical codebook structure</p></li>
-</ul>
-<p><strong>Why this matters:</strong></p>
-<ul class="simple">
-<li><p>Mirrors iterative qualitative analysis workflow</p></li>
-<li><p>Helps manage complexity in large datasets</p></li>
-<li><p>Makes patterns more visible</p></li>
-</ul>
-<p><strong>How the prompt works:</strong></p>
-<ol class="arabic simple">
-<li><p>Provides all initial codes as context</p></li>
-<li><p>Asks for 3-5 broader categories</p></li>
-<li><p>Requests mapping of initial → condensed codes</p></li>
-<li><p>Wants definitions for each condensed theme</p></li>
-</ol>
-<p><strong>Temperature: 0.2 (very low)</strong></p>
-<ul class="simple">
-<li><p>Code condensation should be consistent</p></li>
-<li><p>We want logical groupings, not creative ones</p></li>
-<li><p>Higher temperature might produce inconsistent hierarchies</p></li>
-</ul>
-<p><strong>How to use this:</strong></p>
-<ul class="simple">
-<li><p>Start by coding 20-50 texts with detailed codes</p></li>
-<li><p>Feed those codes to this condensation step</p></li>
-<li><p>Iterate if the condensed themes don’t feel right</p></li>
-<li><p>Use human judgment to validate the groupings</p></li>
-</ul>
-<p><strong>Expected output:</strong> 3-5 broader themes, each encompassing multiple initial codes, with clear definitions.</p>
 </section>
 <hr class="docutils" />
 <section id="part-2-code-condensation">
@@ -788,6 +761,41 @@ document.write(`
 </div>
 </div>
 </div>
+<p><strong>What this code does:</strong></p>
+<p>Demonstrates <strong>code condensation</strong> - a key qualitative analysis technique:</p>
+<p><strong>What is code condensation:</strong></p>
+<ul class="simple">
+<li><p>Start with many detailed codes (13 in this example)</p></li>
+<li><p>Group them into fewer, broader themes (3-5)</p></li>
+<li><p>Creates a hierarchical codebook structure</p></li>
+</ul>
+<p><strong>Why this matters:</strong></p>
+<ul class="simple">
+<li><p>Mirrors iterative qualitative analysis workflow</p></li>
+<li><p>Helps manage complexity in large datasets</p></li>
+<li><p>Makes patterns more visible</p></li>
+</ul>
+<p><strong>How the prompt works:</strong></p>
+<ol class="arabic simple">
+<li><p>Provides all initial codes as context</p></li>
+<li><p>Asks for 3-5 broader categories</p></li>
+<li><p>Requests mapping of initial → condensed codes</p></li>
+<li><p>Wants definitions for each condensed theme</p></li>
+</ol>
+<p><strong>Temperature: 0.2 (very low)</strong></p>
+<ul class="simple">
+<li><p>Code condensation should be consistent</p></li>
+<li><p>We want logical groupings, not creative ones</p></li>
+<li><p>Higher temperature might produce inconsistent hierarchies</p></li>
+</ul>
+<p><strong>How to use this:</strong></p>
+<ul class="simple">
+<li><p>Start by coding 20-50 texts with detailed codes</p></li>
+<li><p>Feed those codes to this condensation step</p></li>
+<li><p>Iterate if the condensed themes don’t feel right</p></li>
+<li><p>Use human judgment to validate the groupings</p></li>
+</ul>
+<p><strong>Expected output:</strong> 3-5 broader themes, each encompassing multiple initial codes, with clear definitions.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ask LLM to condense codes into higher-level themes</span>
@@ -1021,44 +1029,6 @@ document.write(`
 </div>
 </div>
 </div>
-<p><strong>What this code does:</strong></p>
-<p>Uses the LLM to <strong>deduplicate and consolidate</strong> similar themes:</p>
-<p><strong>Why LLMs are good at this:</strong></p>
-<ul class="simple">
-<li><p>Can recognize semantic similarity (“cost concerns” ≈ “financial burden”)</p></li>
-<li><p>Understand broader categories that encompass multiple themes</p></li>
-<li><p>Generate clear definitions for consolidated themes</p></li>
-</ul>
-<p><strong>The deduplication prompt:</strong></p>
-<ol class="arabic simple">
-<li><p>Shows all unique themes from chunk coding</p></li>
-<li><p>Asks LLM to merge similar/overlapping ones</p></li>
-<li><p>Requests 3-5 final distinct themes</p></li>
-<li><p>Wants mapping: which original themes → which final theme</p></li>
-</ol>
-<p><strong>Temperature: 0.2 (low)</strong></p>
-<ul class="simple">
-<li><p>Consolidation should be logical and consistent</p></li>
-<li><p>Too high = creative but inconsistent groupings</p></li>
-</ul>
-<p><strong>How this differs from code condensation:</strong></p>
-<ul class="simple">
-<li><p><strong>Code condensation:</strong> Hierarchical grouping (initial → broader)</p></li>
-<li><p><strong>Deduplication:</strong> Horizontal merging (similar themes → single theme)</p></li>
-</ul>
-<p><strong>Alternative approaches:</strong></p>
-<ul class="simple">
-<li><p><strong>Embedding similarity:</strong> Use cosine similarity on theme embeddings to auto-cluster</p></li>
-<li><p><strong>Manual review:</strong> Export theme list and manually mark duplicates</p></li>
-<li><p><strong>Hybrid:</strong> LLM suggests merges, human approves</p></li>
-</ul>
-<p><strong>When to use:</strong></p>
-<ul class="simple">
-<li><p>After coding 20+ chunks (enough variation to cause duplicates)</p></li>
-<li><p>When you see obvious semantic overlap in theme names</p></li>
-<li><p>Before final codebook creation</p></li>
-</ul>
-<p><strong>Expected output:</strong> Clean, non-redundant final codebook with 3-5 themes, each with clear definition and list of merged original themes.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Step 2: Challenge the initial coding</span>
@@ -1287,6 +1257,44 @@ document.write(`
 </div>
 </div>
 </div>
+<p><strong>What this code does:</strong></p>
+<p>Uses the LLM to <strong>deduplicate and consolidate</strong> similar themes:</p>
+<p><strong>Why LLMs are good at this:</strong></p>
+<ul class="simple">
+<li><p>Can recognize semantic similarity (“cost concerns” ≈ “financial burden”)</p></li>
+<li><p>Understand broader categories that encompass multiple themes</p></li>
+<li><p>Generate clear definitions for consolidated themes</p></li>
+</ul>
+<p><strong>The deduplication prompt:</strong></p>
+<ol class="arabic simple">
+<li><p>Shows all unique themes from chunk coding</p></li>
+<li><p>Asks LLM to merge similar/overlapping ones</p></li>
+<li><p>Requests 3-5 final distinct themes</p></li>
+<li><p>Wants mapping: which original themes → which final theme</p></li>
+</ol>
+<p><strong>Temperature: 0.2 (low)</strong></p>
+<ul class="simple">
+<li><p>Consolidation should be logical and consistent</p></li>
+<li><p>Too high = creative but inconsistent groupings</p></li>
+</ul>
+<p><strong>How this differs from code condensation:</strong></p>
+<ul class="simple">
+<li><p><strong>Code condensation:</strong> Hierarchical grouping (initial → broader)</p></li>
+<li><p><strong>Deduplication:</strong> Horizontal merging (similar themes → single theme)</p></li>
+</ul>
+<p><strong>Alternative approaches:</strong></p>
+<ul class="simple">
+<li><p><strong>Embedding similarity:</strong> Use cosine similarity on theme embeddings to auto-cluster</p></li>
+<li><p><strong>Manual review:</strong> Export theme list and manually mark duplicates</p></li>
+<li><p><strong>Hybrid:</strong> LLM suggests merges, human approves</p></li>
+</ul>
+<p><strong>When to use:</strong></p>
+<ul class="simple">
+<li><p>After coding 20+ chunks (enough variation to cause duplicates)</p></li>
+<li><p>When you see obvious semantic overlap in theme names</p></li>
+<li><p>Before final codebook creation</p></li>
+</ul>
+<p><strong>Expected output:</strong> Clean, non-redundant final codebook with 3-5 themes, each with clear definition and list of merged original themes.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use LLM to deduplicate and merge similar themes</span>
@@ -1380,81 +1388,210 @@ document.write(`
 </div>
 </div>
 </div>
+<p><strong>What this code does:</strong></p>
+<p>Implements <strong>robust JSON extraction with retry logic</strong> for when parsing fails:</p>
+<p><strong>The three-phase approach:</strong></p>
+<p><strong>Phase 1: Initial request</strong></p>
+<ul class="simple">
+<li><p>Clear instructions: “Return only a JSON object”</p></li>
+<li><p>Low temperature (0.1) for consistency</p></li>
+<li><p>Specify exact schema in prompt</p></li>
+</ul>
+<p><strong>Phase 2: Parse attempt</strong></p>
+<ul class="simple">
+<li><p>Try <code class="docutils literal notranslate"><span class="pre">json.loads()</span></code> on response</p></li>
+<li><p>If successful → return result</p></li>
+<li><p>If fails → proceed to Phase 3</p></li>
+</ul>
+<p><strong>Phase 3: Retry with correction</strong></p>
+<ul class="simple">
+<li><p>Send original prompt + failed response + correction instruction</p></li>
+<li><p>Use temperature 0.0 (most deterministic)</p></li>
+<li><p>Try parsing again</p></li>
+<li><p>If still fails → raise exception for manual review</p></li>
+</ul>
+<p><strong>Key features:</strong></p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">max_retries</span></code> parameter:</strong> Control how many attempts (1 is usually enough)</p></li>
+<li><p><strong>Error logging:</strong> Print failed output for debugging</p></li>
+<li><p><strong>Gradual temperature reduction:</strong> 0.1 → 0.0 increases determinism</p></li>
+</ul>
+<p><strong>Note about <code class="docutils literal notranslate"><span class="pre">get_labels_robust</span></code>:</strong></p>
+<ul class="simple">
+<li><p>This function is defined here for demonstration purposes to show robust JSON extraction with retry logic</p></li>
+<li><p>However, the actual batch annotation code in this notebook uses a simpler approach with JSON mode API</p></li>
+<li><p>JSON mode API (shown earlier) is more reliable and doesn’t require this retry logic</p></li>
+<li><p>This function is useful when working with models that don’t support JSON mode or for understanding error handling</p></li>
+</ul>
+<p><strong>When to use retry logic:</strong></p>
+<ul class="simple">
+<li><p>Using Approach 1 or 2 (not JSON mode)</p></li>
+<li><p>Critical annotations (can’t skip failures)</p></li>
+<li><p>Debugging schema issues</p></li>
+</ul>
+<p><strong>When NOT needed:</strong></p>
+<ul class="simple">
+<li><p>Using JSON mode or function calling (already reliable)</p></li>
+<li><p>Batch processing (skip failures, review later)</p></li>
+</ul>
+<p><strong>Success rates:</strong></p>
+<ul class="simple">
+<li><p>Without retry: ~85% (prompt-only) to ~95% (few-shot)</p></li>
+<li><p>With retry: ~98%</p></li>
+<li><p>Remaining 2%: Usually schema issues or model limitations</p></li>
+</ul>
+<p><strong>Best practice:</strong> Use JSON mode (Approach 3) to avoid needing this complexity.</p>
 </section>
 <hr class="docutils" />
-<section id="summary">
-<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
-<p>This notebook demonstrated key techniques for LLM-assisted qualitative coding:</p>
-<section id="inductive-thematic-analysis">
-<h3>1. Inductive Thematic Analysis<a class="headerlink" href="#inductive-thematic-analysis" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Let the LLM derive themes from data</p></li>
-<li><p>Use JSON mode for structured output</p></li>
-<li><p>Get justifications with supporting quotes</p></li>
-</ul>
+<section id="part-7-open-source-alternatives">
+<h2>Part 7: Open-Source Alternatives<a class="headerlink" href="#part-7-open-source-alternatives" title="Link to this heading">#</a></h2>
+<p>The examples above use OpenAI’s API. Here’s how to accomplish the same qualitative coding tasks using free, open-source alternatives.</p>
+<section id="option-1-using-ollama">
+<h3>Option 1: Using Ollama<a class="headerlink" href="#option-1-using-ollama" title="Link to this heading">#</a></h3>
+<p>Using the same Ollama setup from Week 04:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ollama</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span> <span class="k">as</span> <span class="n">OllamaClient</span>
+
+<span class="n">ollama_client</span> <span class="o">=</span> <span class="n">OllamaClient</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;http://localhost:11434&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Ollama client initialized&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="inductive-thematic-analysis-with-ollama">
+<h4>Inductive Thematic Analysis with Ollama<a class="headerlink" href="#inductive-thematic-analysis-with-ollama" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Approach 1: Simple JSON mode</span>
+<span class="n">system_instructions</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;You are a careful qualitative analyst.</span>
+<span class="s2">Return valid JSON only. Create 3–6 concise themes with clear names and</span>
+<span class="s2">1–2 sentence definitions. Then assign each input text an array of theme names</span>
+<span class="s2">(best matches), and include a short justification using quotes when possible.</span>
+<span class="s2">If uncertain, allow an empty array. Keys: themes, assignments.&quot;&quot;&quot;</span>
+
+<span class="n">user_prompt</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;task&quot;</span><span class="p">:</span> <span class="s2">&quot;Inductive theming of short survey responses&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;n_themes_range&quot;</span><span class="p">:</span> <span class="s2">&quot;3-6&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;texts&quot;</span><span class="p">:</span> <span class="n">texts</span>
+<span class="p">}</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">ollama_client</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;llama3.2&quot;</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">system_instructions</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">user_prompt</span><span class="p">)}</span>
+    <span class="p">],</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;json&quot;</span>  <span class="c1"># Simple JSON mode</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">][</span><span class="s1">&#39;content&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Thematic analysis complete (Ollama)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Keys in response: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Approach 2: Pydantic structured outputs</span>
+<span class="c1"># For complex nested structures, define the schema:</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Theme</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">definition</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Assignment</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">themes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">justification</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ThematicAnalysis</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">themes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Theme</span><span class="p">]</span>
+    <span class="n">assignments</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Assignment</span><span class="p">]</span>
+
+<span class="c1"># Note: For such complex schemas, simple JSON mode (above) often works well</span>
+<span class="c1"># Pydantic approach provides stronger validation but requires more setup</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
-<section id="code-condensation">
-<h3>2. Code Condensation<a class="headerlink" href="#code-condensation" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Start with detailed codes</p></li>
-<li><p>Group into higher-level themes</p></li>
-<li><p>Create hierarchical codebooks</p></li>
-</ul>
 </section>
-<section id="reflexive-coding">
-<h3>3. Reflexive Coding<a class="headerlink" href="#reflexive-coding" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Challenge initial interpretations</p></li>
-<li><p>Consider alternative themes</p></li>
-<li><p>Surface researcher biases</p></li>
-</ul>
+<section id="option-2-using-hugging-face-transformers">
+<h3>Option 2: Using Hugging Face Transformers<a class="headerlink" href="#option-2-using-hugging-face-transformers" title="Link to this heading">#</a></h3>
+<p>Using Hugging Face models directly (works on Google Colab with GPU):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModelForCausalLM</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="c1"># Load model</span>
+<span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+<span class="n">hf_model_name</span> <span class="o">=</span> <span class="s2">&quot;microsoft/Phi-3-mini-4k-instruct&quot;</span>
+<span class="n">hf_tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">hf_model_name</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">hf_model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="n">hf_model_name</span><span class="p">,</span>
+    <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span>
+    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Loaded </span><span class="si">{</span><span class="n">hf_model_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="inductive-thematic-analysis-with-hugging-face">
+<h4>Inductive Thematic Analysis with Hugging Face<a class="headerlink" href="#inductive-thematic-analysis-with-hugging-face" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">analyze_themes_hf</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform thematic analysis using Hugging Face model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">system_instructions</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">user_prompt</span><span class="p">)}</span>
+    <span class="p">]</span>
+    
+    <span class="n">formatted_prompt</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
+        <span class="n">messages</span><span class="p">,</span>
+        <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="p">(</span><span class="n">formatted_prompt</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">hf_model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+        <span class="o">**</span><span class="n">inputs</span><span class="p">,</span>
+        <span class="n">max_new_tokens</span><span class="o">=</span><span class="n">max_new_tokens</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+        <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">pad_token_id</span><span class="o">=</span><span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">eos_token_id</span>
+    <span class="p">)</span>
+    
+    <span class="n">generated_ids</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:]</span>
+    <span class="n">response_text</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">generated_ids</span><span class="p">,</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="c1"># Extract JSON from response</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response_text</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+        <span class="c1"># Try to find JSON in response</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+        <span class="n">json_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\{.*\}&#39;</span><span class="p">,</span> <span class="n">response_text</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">json_match</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_match</span><span class="o">.</span><span class="n">group</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not parse JSON from response&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">result</span>
+
+<span class="n">result_hf</span> <span class="o">=</span> <span class="n">analyze_themes_hf</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Thematic analysis complete (Hugging Face)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Identified </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result_hf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;themes&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">[]))</span><span class="si">}</span><span class="s2"> themes&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
-<section id="long-document-handling">
-<h3>4. Long Document Handling<a class="headerlink" href="#long-document-handling" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Chunk text into manageable segments</p></li>
-<li><p>Code each chunk separately</p></li>
-<li><p>Aggregate and deduplicate themes</p></li>
-</ul>
 </section>
-<section id="interactive-dialogue">
-<h3>5. Interactive Dialogue<a class="headerlink" href="#interactive-dialogue" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Have LLM ask clarifying questions</p></li>
-<li><p>Incorporate researcher feedback</p></li>
-<li><p>Iterate toward refined coding</p></li>
-</ul>
-</section>
-</section>
-<section id="best-practices">
-<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p><strong>Use low temperature</strong> (0.2-0.4) for consistent coding</p></li>
-<li><p><strong>Always validate</strong> LLM themes against your domain knowledge</p></li>
-<li><p><strong>Use JSON mode</strong> for structured, parseable outputs</p></li>
-<li><p><strong>Document your process</strong> (prompts, model versions, settings)</p></li>
-<li><p><strong>Combine LLM + human judgment</strong> - never fully automate interpretation</p></li>
-<li><p><strong>Check for bias</strong> - LLMs can reproduce stereotypes in coding</p></li>
-<li><p><strong>Iterate</strong> - qualitative analysis is rarely one-shot</p></li>
-</ol>
-</section>
-<section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p><strong>Find real interview data</strong> (e.g., from <a class="reference external" href="https://zenodo.org/records/1163698">Zenodo</a>) and apply the techniques above</p></li>
-<li><p><strong>Compare different models</strong> (GPT-4 vs GPT-4o-mini) on the same coding task</p></li>
-<li><p><strong>Implement intercoder reliability</strong> by running the same prompt multiple times and calculating Cohen’s κ</p></li>
-<li><p><strong>Try few-shot coding</strong> by providing example coded segments in your prompt</p></li>
-<li><p><strong>Experiment with temperature</strong> - how does it affect theme consistency?</p></li>
-</ol>
-</section>
-<section id="further-reading">
-<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Ziems et al. (2024). “Can Large Language Models Transform Computational Social Science?” <em>Computational Linguistics</em></p></li>
-<li><p>Argyle et al. (2023). “Out of One, Many: Using Language Models to Simulate Human Samples.” <em>Political Analysis</em></p></li>
-<li><p>Braun &amp; Clarke (2006). “Using thematic analysis in psychology.” <em>Qualitative Research in Psychology</em></p></li>
-</ul>
 </section>
 </section>
 
@@ -1494,7 +1631,7 @@ document.write(`
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Large Language Models - Generation, Prompting, and Bias</p>
+        <p class="prev-next-title">LLMs for Annotation I</p>
       </div>
     </a>
     <a class="right-next"
@@ -1534,17 +1671,17 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-handling-long-documents-chunking">Part 4: Handling Long Documents (Chunking)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-theme-aggregation-and-deduplication">Part 5: Theme Aggregation and Deduplication</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-6-interactive-reflexive-dialogue">Part 6: Interactive Reflexive Dialogue</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductive-thematic-analysis">1. Inductive Thematic Analysis</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-condensation">2. Code Condensation</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reflexive-coding">3. Reflexive Coding</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#long-document-handling">4. Long Document Handling</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-dialogue">5. Interactive Dialogue</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-7-open-source-alternatives">Part 7: Open-Source Alternatives</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-1-using-ollama">Option 1: Using Ollama</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inductive-thematic-analysis-with-ollama">Inductive Thematic Analysis with Ollama</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-2-using-hugging-face-transformers">Option 2: Using Hugging Face Transformers</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inductive-thematic-analysis-with-hugging-face">Inductive Thematic Analysis with Hugging Face</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

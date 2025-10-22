@@ -60,6 +60,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'week06_annotation';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="LLMs for Synthetic Data I: Simulating Survey Respondents" href="week07_silicon_sampling.html" />
     <link rel="prev" title="Qualitative Coding with LLMs" href="week05_qualitative.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -173,10 +174,11 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="week04_llms.html">Large Language Models - Generation, Prompting, and Bias</a></li>
-
+<li class="toctree-l1"><a class="reference internal" href="week04_llms.html">LLMs for Annotation I</a></li>
 <li class="toctree-l1"><a class="reference internal" href="week05_qualitative.html">LLMs for Annotation II</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">LLMs for Annotation III</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week07_silicon_sampling.html">LLMs for Synthetic Data I: Simulating Survey Respondents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week08_interactive_experiments.html">LLMs for Synthetic Data II: Interactive Experiments and Persuasion</a></li>
 </ul>
 
     </div>
@@ -417,35 +419,27 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-three-approaches-to-getting-structured-outputs-json">Part 2: Three Approaches to Getting Structured Outputs (JSON)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-1-prompt-for-json-simplest-least-reliable">Approach 1: Prompt for JSON (Simplest, Least Reliable)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-2-json-mode-api-parameter-recommended-for-most-tasks">Approach 2: JSON Mode API Parameter (Recommended for Most Tasks)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-3-provider-json-mode-more-reliable">Approach 3: Provider JSON Mode (More Reliable)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-3-function-calling-most-structured-type-safe">Approach 3: Function Calling (Most Structured, Type-Safe)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-summary">Comparison Summary</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-robust-json-extraction">Part 3: Robust JSON Extraction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-batch-annotation">Part 4: Batch Annotation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-mixture-of-experts-ensemble">Part 5: Mixture of Experts (Ensemble)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-6-validation-and-replication">Part 6: Validation and Replication</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-comprehensive-logging">6A. Comprehensive Logging</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-model-fingerprinting-detect-api-drift">6B. Model Fingerprinting (Detect API Drift)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-validation-with-human-labels">6C. Validation with Human Labels</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#d-promptbook-documentation">6D. Promptbook Documentation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-source-alternatives">Open-Source Alternatives</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-ollama">Using Ollama</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-hugging-face">Using Hugging Face</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt-formatting">1. Prompt Formatting</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#structured-outputs-four-approaches">2. Structured Outputs (Four Approaches)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#structured-outputs-three-approaches">2. Structured Outputs (Three Approaches)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#robust-extraction">3. Robust Extraction</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-annotation">4. Batch Annotation</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mixture-of-experts">5. Mixture of Experts</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validation-replication">6. Validation &amp; Replication</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices-checklist">Best Practices Checklist</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recommended-workflow">Recommended Workflow</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 </ul>
             </nav>
         </div>
@@ -473,7 +467,6 @@ document.write(`
 </li>
 <li><p>Implement <strong>robust JSON extraction</strong> with error handling and retries</p></li>
 <li><p>Perform <strong>batch annotation</strong> with quality checks and logging</p></li>
-<li><p>Apply <strong>mixture of experts</strong> (ensemble) approaches for increased reliability</p></li>
 <li><p>Follow <strong>replication best practices</strong> (validation, logging, fingerprinting)</p></li>
 </ul>
 </section>
@@ -589,7 +582,7 @@ document.write(`
 <li><p>Interactive exploration</p></li>
 <li><p>Single-shot annotations where you’ll read the output</p></li>
 </ul>
-<p><strong>For production:</strong> Use structured outputs (Approach 3 or 4 later in this notebook)</p>
+<p><strong>For production:</strong> Use structured outputs (Approach 2 or 3 later in this notebook)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample political texts for annotation</span>
@@ -655,6 +648,35 @@ document.write(`
 <section id="b-reusable-template-with-format">
 <h3>1B. Reusable Template with .format()<a class="headerlink" href="#b-reusable-template-with-format" title="Link to this heading">#</a></h3>
 <p>For batch processing, create a template you can reuse across multiple texts.</p>
+<p><strong>What this code does:</strong></p>
+<p>Improves on f-strings by using <strong>reusable templates</strong> with <code class="docutils literal notranslate"><span class="pre">.format()</span></code>:</p>
+<p><strong>Why templates are better:</strong></p>
+<ul class="simple">
+<li><p>Define prompt once, reuse for all texts</p></li>
+<li><p>Ensures consistency across annotations</p></li>
+<li><p>Easy to modify prompt for entire batch</p></li>
+<li><p>Supports batch processing naturally</p></li>
+</ul>
+<p><strong>How <code class="docutils literal notranslate"><span class="pre">.format()</span></code> works:</strong></p>
+<ul class="simple">
+<li><p>Template contains <code class="docutils literal notranslate"><span class="pre">{variable_name}</span></code> placeholders</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.format(variable_name=value)</span></code> fills them in</p></li>
+<li><p>More explicit than f-strings (clearer what’s being inserted)</p></li>
+</ul>
+<p><strong>Best practices for template prompts:</strong></p>
+<ol class="arabic simple">
+<li><p>Keep instructions consistent across all texts</p></li>
+<li><p>Clearly define categories (Progressive/Conservative/Centrist)</p></li>
+<li><p>Place variable at the end (reduces interference)</p></li>
+<li><p>Use imperative tone (“Classify the…”) not questions</p></li>
+</ol>
+<p><strong>Still limited:</strong></p>
+<ul class="simple">
+<li><p>Output is free text, not structured</p></li>
+<li><p>Need parsing logic to extract stance</p></li>
+<li><p>Model might be verbose or inconsistent</p></li>
+</ul>
+<p><strong>Next steps:</strong> Add few-shot examples or use JSON mode (Part 2)</p>
 <p><strong>What this code does:</strong></p>
 <p>Demonstrates <strong>few-shot prompting</strong> - providing examples to guide the model:</p>
 <p><strong>What is few-shot learning:</strong></p>
@@ -726,60 +748,10 @@ document.write(`
 </div>
 </div>
 </div>
-<p><strong>What this code does:</strong></p>
-<p>Implements <strong>chain-of-thought (CoT) prompting</strong> - asking the model to reason step-by-step:</p>
-<p><strong>What is chain-of-thought:</strong></p>
-<ul class="simple">
-<li><p>Ask model to show its reasoning before giving final answer</p></li>
-<li><p>Originated in Wei et al. (2022) “Chain-of-Thought Prompting Elicits Reasoning”</p></li>
-<li><p>Dramatically improves performance on reasoning tasks</p></li>
-</ul>
-<p><strong>Why CoT helps:</strong></p>
-<ul class="simple">
-<li><p><strong>Better accuracy:</strong> Especially on multi-step problems</p></li>
-<li><p><strong>Transparency:</strong> Can see model’s logic</p></li>
-<li><p><strong>Debugging:</strong> Identify where reasoning goes wrong</p></li>
-<li><p><strong>Trust:</strong> Justifications build confidence in annotations</p></li>
-</ul>
-<p><strong>Temperature: 0.3 (slightly higher)</strong></p>
-<ul class="simple">
-<li><p>CoT needs some creativity for explanations</p></li>
-<li><p>But still low enough for consistency</p></li>
-<li><p>Trade-off between rigid and random</p></li>
-</ul>
-<p><strong>When to use CoT:</strong></p>
-<ul class="simple">
-<li><p>Complex classification (multiple factors to consider)</p></li>
-<li><p>Need justifications for auditing</p></li>
-<li><p>Debugging misclassifications</p></li>
-<li><p>Training human annotators (shows reasoning process)</p></li>
-</ul>
-<p><strong>When NOT to use CoT:</strong></p>
-<ul class="simple">
-<li><p>Simple tasks (adds unnecessary tokens/cost)</p></li>
-<li><p>Speed critical (CoT is slower)</p></li>
-<li><p>Don’t need explanations</p></li>
-</ul>
-<p><strong>Cost consideration:</strong> CoT generates more tokens (reasoning + answer), so ~2-3x more expensive than direct classification.</p>
-<p><strong>Alternative:</strong> Use JSON mode (Approach 3) to get structured reasoning + classification</p>
 </section>
 <section id="c-few-shot-prompting">
 <h3>1C. Few-Shot Prompting<a class="headerlink" href="#c-few-shot-prompting" title="Link to this heading">#</a></h3>
 <p>Provide <strong>examples</strong> in the prompt to guide the model’s behavior.</p>
-<p><strong>Why this approach often fails:</strong></p>
-<p>Common problems:</p>
-<ol class="arabic simple">
-<li><p><strong>Extra text:</strong> “Here’s the JSON: {…}”</p></li>
-<li><p><strong>Markdown fences:</strong> ```json {…} ```</p></li>
-<li><p><strong>Prose instead:</strong> “The stance is Progressive because…”</p></li>
-<li><p><strong>Malformed JSON:</strong> Trailing commas, unquoted keys</p></li>
-</ol>
-<p><strong>When to use:</strong></p>
-<ul class="simple">
-<li><p>Quick prototyping only</p></li>
-<li><p>Not recommended for production</p></li>
-</ul>
-<p><strong>Better alternatives:</strong> Approach 2 (JSON mode API parameter) or Approach 3 (function calling)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Few-shot template with examples</span>
@@ -882,6 +854,42 @@ document.write(`
 <li><p>Want IDE autocomplete on schema</p></li>
 </ul>
 <p><strong>Cost:</strong> Same as normal API calls - no extra charge for JSON mode.</p>
+<p><strong>What this code does:</strong></p>
+<p>Implements <strong>chain-of-thought (CoT) prompting</strong> - asking the model to reason step-by-step:</p>
+<p><strong>What is chain-of-thought:</strong></p>
+<ul class="simple">
+<li><p>Ask model to show its reasoning before giving final answer</p></li>
+<li><p>Originated in Wei et al. (2022) “Chain-of-Thought Prompting Elicits Reasoning”</p></li>
+<li><p>Dramatically improves performance on reasoning tasks</p></li>
+</ul>
+<p><strong>Why CoT helps:</strong></p>
+<ul class="simple">
+<li><p><strong>Better accuracy:</strong> Especially on multi-step problems</p></li>
+<li><p><strong>Transparency:</strong> Can see model’s logic</p></li>
+<li><p><strong>Debugging:</strong> Identify where reasoning goes wrong</p></li>
+<li><p><strong>Trust:</strong> Justifications build confidence in annotations</p></li>
+</ul>
+<p><strong>Temperature: 0.3 (slightly higher)</strong></p>
+<ul class="simple">
+<li><p>CoT needs some creativity for explanations</p></li>
+<li><p>But still low enough for consistency</p></li>
+<li><p>Trade-off between rigid and random</p></li>
+</ul>
+<p><strong>When to use CoT:</strong></p>
+<ul class="simple">
+<li><p>Complex classification (multiple factors to consider)</p></li>
+<li><p>Need justifications for auditing</p></li>
+<li><p>Debugging misclassifications</p></li>
+<li><p>Training human annotators (shows reasoning process)</p></li>
+</ul>
+<p><strong>When NOT to use CoT:</strong></p>
+<ul class="simple">
+<li><p>Simple tasks (adds unnecessary tokens/cost)</p></li>
+<li><p>Speed critical (CoT is slower)</p></li>
+<li><p>Don’t need explanations</p></li>
+</ul>
+<p><strong>Cost consideration:</strong> CoT generates more tokens (reasoning + answer), so ~2-3x more expensive than direct classification.</p>
+<p><strong>Alternative:</strong> Use JSON mode (Part 2) to get structured reasoning + classification</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">COT_TEMPLATE</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Classify the stance and explain your reasoning.</span>
@@ -906,7 +914,8 @@ document.write(`
 <span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Text: </span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Response:</span><span class="se">\n</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Chain-of-Thought Response:</span><span class="se">\n</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ CoT provides reasoning steps before final classification&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -963,22 +972,17 @@ document.write(`
 <li><p>Enables downstream analysis</p></li>
 </ul>
 <p>Let’s compare the three approaches from simplest to most reliable.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### Approach 1: Prompt for JSON (Simplest, Least Reliable)</span>
-
-<span class="o">**</span><span class="n">How</span> <span class="n">it</span> <span class="n">works</span><span class="p">:</span><span class="o">**</span> <span class="n">Just</span> <span class="n">ask</span> <span class="n">the</span> <span class="n">LLM</span> <span class="n">to</span> <span class="k">return</span> <span class="n">JSON</span> <span class="ow">in</span> <span class="n">your</span> <span class="n">prompt</span><span class="o">.</span> <span class="n">No</span> <span class="n">special</span> <span class="n">API</span> <span class="n">parameters</span><span class="o">.</span>
-
-<span class="o">**</span><span class="n">What</span> <span class="n">you</span> <span class="n">do</span><span class="p">:</span><span class="o">**</span>
-<span class="o">-</span> <span class="n">Include</span> <span class="s2">&quot;Return JSON&quot;</span> <span class="ow">in</span> <span class="n">your</span> <span class="n">prompt</span>
-<span class="o">-</span> <span class="n">Hope</span> <span class="n">the</span> <span class="n">model</span> <span class="n">follows</span> <span class="n">instructions</span>
-<span class="o">-</span> <span class="n">Try</span> <span class="n">to</span> <span class="n">parse</span> <span class="n">the</span> <span class="n">response</span> <span class="k">with</span> <span class="err">`</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">()</span><span class="err">`</span>
-
-<span class="o">**</span><span class="n">Success</span> <span class="n">rate</span><span class="p">:</span><span class="o">**</span> <span class="o">~</span><span class="mi">60</span><span class="o">-</span><span class="mi">80</span><span class="o">%</span> <span class="p">(</span><span class="n">varies</span> <span class="n">by</span> <span class="n">model</span> <span class="ow">and</span> <span class="n">complexity</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
+<section id="approach-1-prompt-for-json-simplest-least-reliable">
+<h3>Approach 1: Prompt for JSON (Simplest, Least Reliable)<a class="headerlink" href="#approach-1-prompt-for-json-simplest-least-reliable" title="Link to this heading">#</a></h3>
+<p><strong>How it works:</strong> Just ask the LLM to return JSON in your prompt. No special API parameters.</p>
+<p><strong>What you do:</strong></p>
+<ul class="simple">
+<li><p>Include “Return JSON” in your prompt</p></li>
+<li><p>Hope the model follows instructions</p></li>
+<li><p>Try to parse the response with <code class="docutils literal notranslate"><span class="pre">json.loads()</span></code></p></li>
+</ul>
+<p><strong>Success rate:</strong> ~60-80% (varies by model and complexity)</p>
+</section>
 <section id="approach-2-json-mode-api-parameter-recommended-for-most-tasks">
 <h3>Approach 2: JSON Mode API Parameter (Recommended for Most Tasks)<a class="headerlink" href="#approach-2-json-mode-api-parameter-recommended-for-most-tasks" title="Link to this heading">#</a></h3>
 <p><strong>How it works:</strong> Use <code class="docutils literal notranslate"><span class="pre">response_format={&quot;type&quot;:</span> <span class="pre">&quot;json_object&quot;}</span></code> in your API call. The API <strong>guarantees</strong> valid JSON.</p>
@@ -1069,6 +1073,20 @@ document.write(`
 <section id="approach-3-provider-json-mode-more-reliable">
 <h3>Approach 3: Provider JSON Mode (More Reliable)<a class="headerlink" href="#approach-3-provider-json-mode-more-reliable" title="Link to this heading">#</a></h3>
 <p>Use the API’s <strong>JSON mode</strong> to <strong>force</strong> valid JSON output. This is the recommended approach for most annotation tasks.</p>
+<p><strong>Why this approach often fails:</strong></p>
+<p>Common problems:</p>
+<ol class="arabic simple">
+<li><p><strong>Extra text:</strong> “Here’s the JSON: {…}”</p></li>
+<li><p><strong>Markdown fences:</strong> ```json {…} ```</p></li>
+<li><p><strong>Prose instead:</strong> “The stance is Progressive because…”</p></li>
+<li><p><strong>Malformed JSON:</strong> Trailing commas, unquoted keys</p></li>
+</ol>
+<p><strong>When to use:</strong></p>
+<ul class="simple">
+<li><p>Quick prototyping only</p></li>
+<li><p>Not recommended for production</p></li>
+</ul>
+<p><strong>Better alternatives:</strong> Approach 2 (JSON mode API parameter) or Approach 3 (function calling)</p>
 <p><strong>What this code does:</strong></p>
 <p>Implements <strong>production-grade batch annotation</strong> with comprehensive logging and error handling:</p>
 <p><strong>The <code class="docutils literal notranslate"><span class="pre">annotate_text</span></code> function:</strong></p>
@@ -1143,17 +1161,6 @@ document.write(`
 </div>
 </div>
 </div>
-</section>
-<section id="approach-3-function-calling-most-structured-type-safe">
-<h3>Approach 3: Function Calling (Most Structured, Type-Safe)<a class="headerlink" href="#approach-3-function-calling-most-structured-type-safe" title="Link to this heading">#</a></h3>
-<p><strong>How it works:</strong> Define a function schema with types and constraints. The API forces the model to match your schema exactly.</p>
-<p><strong>What you do:</strong></p>
-<ol class="arabic simple">
-<li><p>Define a JSON Schema with types (<code class="docutils literal notranslate"><span class="pre">string</span></code>, <code class="docutils literal notranslate"><span class="pre">number</span></code>, <code class="docutils literal notranslate"><span class="pre">enum</span></code>)</p></li>
-<li><p>Send as <code class="docutils literal notranslate"><span class="pre">tools</span></code> parameter</p></li>
-<li><p>Extract typed arguments from response</p></li>
-</ol>
-<p><strong>Success rate:</strong> ~99.9% (guaranteed valid + type-checked)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define function schema with typed arguments</span>
@@ -1724,11 +1731,6 @@ document.write(`
 </div>
 </div>
 </div>
-</section>
-<hr class="docutils" />
-<section id="part-5-mixture-of-experts-ensemble">
-<h2>Part 5: Mixture of Experts (Ensemble)<a class="headerlink" href="#part-5-mixture-of-experts-ensemble" title="Link to this heading">#</a></h2>
-<p>Using <strong>multiple models</strong> and aggregating their predictions can increase reliability. This is based on Kraft et al. (2024).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_stance_score</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">):</span>
@@ -1804,224 +1806,103 @@ document.write(`
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Batch analysis with ensemble</span>
-<span class="n">sample_texts</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;Expand Medicare to cover everyone&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Cut taxes and regulations on businesses&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Protect voting rights and access&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Secure the border and enforce immigration laws&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Invest in public schools and teacher salaries&quot;</span>
-<span class="p">]</span>
-
-<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Analyzing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sample_texts</span><span class="p">)</span><span class="si">}</span><span class="s2"> texts with ensemble...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sample_texts</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sample_texts</span><span class="p">)</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">ensemble</span> <span class="o">=</span> <span class="n">ensemble_stance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">models</span><span class="p">)</span>
-    
-    <span class="k">if</span> <span class="n">ensemble</span><span class="p">:</span>
-        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span>
-            <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="n">ensemble</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;uncertainty&quot;</span><span class="p">:</span> <span class="n">ensemble</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;n_models&quot;</span><span class="p">:</span> <span class="n">ensemble</span><span class="p">[</span><span class="s2">&quot;n_models&quot;</span><span class="p">]</span>
-        <span class="p">})</span>
-    <span class="nb">print</span><span class="p">()</span>
-
-<span class="n">ensemble_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Position scores (negative = progressive, positive = conservative):&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">ensemble_df</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
 </section>
 <hr class="docutils" />
-<section id="part-6-validation-and-replication">
-<h2>Part 6: Validation and Replication<a class="headerlink" href="#part-6-validation-and-replication" title="Link to this heading">#</a></h2>
-<p>Best practices for <strong>reproducible</strong> and <strong>validated</strong> LLM annotation.</p>
-<section id="a-comprehensive-logging">
-<h3>6A. Comprehensive Logging<a class="headerlink" href="#a-comprehensive-logging" title="Link to this heading">#</a></h3>
+<section id="open-source-alternatives">
+<h2>Open-Source Alternatives<a class="headerlink" href="#open-source-alternatives" title="Link to this heading">#</a></h2>
+<p>The examples above use OpenAI’s API. Here’s how to use open-source alternatives with Ollama or Hugging Face.</p>
+<section id="using-ollama">
+<h3>Using Ollama<a class="headerlink" href="#using-ollama" title="Link to this heading">#</a></h3>
+<p>Using the Ollama setup from Week 04:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">annotate_with_logging</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4-0613&quot;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Annotate text with complete logging for reproducibility&quot;&quot;&quot;</span>
-    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Analyze political stance: </span><span class="si">{</span><span class="n">text</span><span class="si">}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ollama</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span> <span class="k">as</span> <span class="n">OllamaClient</span>
 
-<span class="s2">Return JSON with stance, confidence, reasoning.&quot;&quot;&quot;</span>
+<span class="n">ollama_client</span> <span class="o">=</span> <span class="n">OllamaClient</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;http://localhost:11434&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Ollama client initialized&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Annotation with structured outputs using Ollama</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">StanceAnnotation</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">stance</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Progressive, Conservative, or Centrist</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">reasoning</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">annotate_with_ollama</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;llama3.2&quot;</span><span class="p">):</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a careful social science annotator.&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;&#39;&#39;Classify the political stance of this statement as Progressive, Conservative, or Centrist.</span>
+
+<span class="s1">Statement: &quot;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&quot;&#39;&#39;&#39;</span><span class="p">}</span>
+    <span class="p">]</span>
     
-    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">ollama_client</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
         <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-        <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
-            <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a political analyst. Return valid JSON only.&quot;</span><span class="p">},</span>
-            <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}</span>
-        <span class="p">],</span>
-        <span class="n">response_format</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_object&quot;</span><span class="p">},</span>
-        <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
-        <span class="n">seed</span><span class="o">=</span><span class="n">seed</span>
+        <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">StanceAnnotation</span><span class="o">.</span><span class="n">model_json_schema</span><span class="p">()</span>
     <span class="p">)</span>
     
-    <span class="c1"># Parse result</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
-    
-    <span class="c1"># Create comprehensive log entry</span>
-    <span class="n">log_entry</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
-        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span>
-        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
-        <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="n">temperature</span><span class="p">,</span>
-        <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="n">seed</span><span class="p">,</span>
-        <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span>
-        <span class="s2">&quot;response&quot;</span><span class="p">:</span> <span class="n">result</span><span class="p">,</span>
-        <span class="s2">&quot;usage&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;prompt_tokens&quot;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">usage</span><span class="o">.</span><span class="n">prompt_tokens</span><span class="p">,</span>
-            <span class="s2">&quot;completion_tokens&quot;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">usage</span><span class="o">.</span><span class="n">completion_tokens</span><span class="p">,</span>
-            <span class="s2">&quot;total_tokens&quot;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">usage</span><span class="o">.</span><span class="n">total_tokens</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;finish_reason&quot;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">finish_reason</span>
-    <span class="p">}</span>
-    
-    <span class="k">return</span> <span class="n">result</span><span class="p">,</span> <span class="n">log_entry</span>
+    <span class="k">return</span> <span class="n">StanceAnnotation</span><span class="o">.</span><span class="n">model_validate_json</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">][</span><span class="s1">&#39;content&#39;</span><span class="p">])</span>
 
-<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Expand social safety nets and increase minimum wage&quot;</span>
-<span class="n">result</span><span class="p">,</span> <span class="n">log</span> <span class="o">=</span> <span class="n">annotate_with_logging</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Annotated: </span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Stance: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;stance&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Log entry includes: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># Example</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;We need stronger social safety nets and universal healthcare.&quot;</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">annotate_with_ollama</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stance: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Confidence: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">confidence</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reasoning: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">reasoning</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section id="b-model-fingerprinting-detect-api-drift">
-<h3>6B. Model Fingerprinting (Detect API Drift)<a class="headerlink" href="#b-model-fingerprinting-detect-api-drift" title="Link to this heading">#</a></h3>
-<p>Create a <strong>fingerprint</strong> of model behavior to detect when the API changes.</p>
+<section id="using-hugging-face">
+<h3>Using Hugging Face<a class="headerlink" href="#using-hugging-face" title="Link to this heading">#</a></h3>
+<p>Works on Google Colab with GPU runtime:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">model_fingerprint</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">test_prompts</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create fingerprint to detect if model behavior has changed.</span>
-<span class="sd">    Returns: SHA256 hash of concatenated responses</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">responses</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModelForCausalLM</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="c1"># Load model</span>
+<span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+<span class="n">hf_model_name</span> <span class="o">=</span> <span class="s2">&quot;microsoft/Phi-3-mini-4k-instruct&quot;</span>
+<span class="n">hf_tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">hf_model_name</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">hf_model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="n">hf_model_name</span><span class="p">,</span>
+    <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span>
+    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">annotate_with_hf</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a careful social science annotator. Return valid JSON only.&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;&#39;&#39;Classify the political stance as Progressive, Conservative, or Centrist.</span>
+
+<span class="s1">Statement: &quot;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&quot;</span>
+
+<span class="s1">Return JSON with keys: stance, confidence, reasoning.&#39;&#39;&#39;</span><span class="p">}</span>
+    <span class="p">]</span>
     
-    <span class="k">for</span> <span class="n">prompt</span> <span class="ow">in</span> <span class="n">test_prompts</span><span class="p">:</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-            <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
-            <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
-            <span class="n">seed</span><span class="o">=</span><span class="n">seed</span>
-        <span class="p">)</span>
-        <span class="n">responses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+    <span class="n">formatted_prompt</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="p">(</span><span class="n">formatted_prompt</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
     
-    <span class="c1"># Hash concatenated responses</span>
-    <span class="n">fingerprint</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span>
-        <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">hf_model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="n">max_new_tokens</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">generated_ids</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:]</span>
+    <span class="n">response_text</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">generated_ids</span><span class="p">,</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     
-    <span class="k">return</span> <span class="n">fingerprint</span>
+    <span class="c1"># Parse JSON</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+    <span class="n">json_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\{.*\}&#39;</span><span class="p">,</span> <span class="n">response_text</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_match</span><span class="o">.</span><span class="n">group</span><span class="p">())</span> <span class="k">if</span> <span class="n">json_match</span> <span class="k">else</span> <span class="p">{}</span>
 
-<span class="c1"># Create test set for fingerprinting</span>
-<span class="n">test_prompts</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;Classify: &#39;Cut taxes for businesses&#39; - Progressive/Conservative/Centrist&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Classify: &#39;Expand healthcare coverage&#39; - Progressive/Conservative/Centrist&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Classify: &#39;Balanced budget amendment&#39; - Progressive/Conservative/Centrist&quot;</span>
-<span class="p">]</span>
-
-<span class="n">fingerprint</span> <span class="o">=</span> <span class="n">model_fingerprint</span><span class="p">(</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span> <span class="n">test_prompts</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model fingerprint: </span><span class="si">{</span><span class="n">fingerprint</span><span class="p">[:</span><span class="mi">16</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ Save this fingerprint and check periodically for drift&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ If fingerprint changes, model behavior has changed!&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="c-validation-with-human-labels">
-<h3>6C. Validation with Human Labels<a class="headerlink" href="#c-validation-with-human-labels" title="Link to this heading">#</a></h3>
-<p>Measure agreement between LLM and human annotations using <strong>Cohen’s kappa</strong>.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simulate human and LLM labels for validation</span>
-<span class="c1"># 0 = Progressive, 1 = Centrist, 2 = Conservative</span>
-<span class="n">human_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="n">llm_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-
-<span class="c1"># Calculate agreement metrics</span>
-<span class="n">kappa</span> <span class="o">=</span> <span class="n">cohen_kappa_score</span><span class="p">(</span><span class="n">human_labels</span><span class="p">,</span> <span class="n">llm_labels</span><span class="p">)</span>
-<span class="n">accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">human_labels</span><span class="p">,</span> <span class="n">llm_labels</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Human-LLM Agreement:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cohen&#39;s κ: </span><span class="si">{</span><span class="n">kappa</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Accuracy:  </span><span class="si">{</span><span class="n">accuracy</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="n">kappa</span> <span class="o">&gt;</span> <span class="mf">0.80</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Substantial agreement&quot;</span><span class="p">)</span>
-<span class="k">elif</span> <span class="n">kappa</span> <span class="o">&gt;</span> <span class="mf">0.60</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠ Moderate agreement - consider refinement&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✗ Low agreement - significant issues&quot;</span><span class="p">)</span>
-
-<span class="c1"># Confusion matrix</span>
-<span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">human_labels</span><span class="p">,</span> <span class="n">llm_labels</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Confusion Matrix (rows=human, cols=LLM):&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;              Prog  Cent  Cons&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s2">&quot;Progressive&quot;</span><span class="p">,</span> <span class="s2">&quot;Centrist&quot;</span><span class="p">,</span> <span class="s2">&quot;Conservative&quot;</span><span class="p">]):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">:</span><span class="s2">12</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">cm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="d-promptbook-documentation">
-<h3>6D. Promptbook Documentation<a class="headerlink" href="#d-promptbook-documentation" title="Link to this heading">#</a></h3>
-<p>A <strong>promptbook</strong> documents your entire annotation pipeline for replication.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">promptbook</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;task&quot;</span><span class="p">:</span> <span class="s2">&quot;political_stance_classification&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;date_created&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span>
-    <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1.0&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;api&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;provider&quot;</span><span class="p">:</span> <span class="s2">&quot;openai&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
-            <span class="s2">&quot;response_format&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span>
-        <span class="p">}</span>
-    <span class="p">],</span>
-    <span class="s2">&quot;prompt_template&quot;</span><span class="p">:</span> <span class="s2">&quot;Analyze political stance: </span><span class="si">{text}</span><span class="se">\n\n</span><span class="s2">Return JSON with stance, confidence, reasoning.&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;output_schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;stance&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Progressive&quot;</span><span class="p">,</span> <span class="s2">&quot;Conservative&quot;</span><span class="p">,</span> <span class="s2">&quot;Centrist&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="s2">&quot;float (0-1)&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;reasoning&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;validation&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;human_comparison&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;sample_size&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
-        <span class="s2">&quot;cohen_kappa&quot;</span><span class="p">:</span> <span class="mf">0.78</span><span class="p">,</span>
-        <span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="mf">0.82</span><span class="p">,</span>
-        <span class="s2">&quot;validation_date&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;fingerprint&quot;</span><span class="p">:</span> <span class="n">fingerprint</span><span class="p">,</span>
-    <span class="s2">&quot;notes&quot;</span><span class="p">:</span> <span class="s2">&quot;Validated on US political tweets. Low confidence (&lt;0.7) texts manually reviewed.&quot;</span>
-<span class="p">}</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Promptbook created&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Promptbook includes:&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">promptbook</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  • </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Promptbook (excerpt):&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">promptbook</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:</span><span class="mi">500</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">annotate_with_hf</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stance: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;stance&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2041,11 +1922,10 @@ document.write(`
 <li><p><strong>Chain-of-thought</strong>: Ask for step-by-step reasoning</p></li>
 </ul>
 </section>
-<section id="structured-outputs-four-approaches">
-<h3>2. Structured Outputs (Four Approaches)<a class="headerlink" href="#structured-outputs-four-approaches" title="Link to this heading">#</a></h3>
+<section id="structured-outputs-three-approaches">
+<h3>2. Structured Outputs (Three Approaches)<a class="headerlink" href="#structured-outputs-three-approaches" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Prompt-only</strong>: Ask for JSON (least reliable)</p></li>
-<li><p><strong>Few-shot with schema</strong>: Show examples (better)</p></li>
 <li><p><strong>JSON mode</strong>: Force valid JSON with API parameter (recommended)</p></li>
 <li><p><strong>Function calling</strong>: Typed schemas (most structured)</p></li>
 </ul>
@@ -2066,23 +1946,6 @@ document.write(`
 <li><p>Quality checks (low confidence, failures)</p></li>
 </ul>
 </section>
-<section id="mixture-of-experts">
-<h3>5. Mixture of Experts<a class="headerlink" href="#mixture-of-experts" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Aggregate predictions from multiple models</p></li>
-<li><p>Measure uncertainty (standard deviation)</p></li>
-<li><p>Identify high/low agreement cases</p></li>
-</ul>
-</section>
-<section id="validation-replication">
-<h3>6. Validation &amp; Replication<a class="headerlink" href="#validation-replication" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p><strong>Comprehensive logging</strong>: All parameters and outputs</p></li>
-<li><p><strong>Model fingerprinting</strong>: Detect API drift</p></li>
-<li><p><strong>Human validation</strong>: Cohen’s κ &gt; 0.80 target</p></li>
-<li><p><strong>Promptbook</strong>: Document entire pipeline</p></li>
-</ul>
-</section>
 </section>
 <section id="best-practices-checklist">
 <h2>Best Practices Checklist<a class="headerlink" href="#best-practices-checklist" title="Link to this heading">#</a></h2>
@@ -2098,34 +1961,6 @@ document.write(`
 <li><p>☐ Share code and configs for replication</p></li>
 <li><p>☐ Consider open models for perfect reproducibility</p></li>
 </ul>
-</section>
-<section id="recommended-workflow">
-<h2>Recommended Workflow<a class="headerlink" href="#recommended-workflow" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p><strong>Start simple</strong>: JSON mode zero-shot on validation sample</p></li>
-<li><p><strong>If needed</strong>: Fine-tune open model (LoRA) with 100-1000 labels</p></li>
-<li><p><strong>Add replication harness</strong>: Fixed params, logs, regression tests</p></li>
-<li><p><strong>Report validation</strong>: Human-LLM κ, test-retest, promptbook</p></li>
-</ol>
-</section>
-<section id="further-reading">
-<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Kraft et al. (2024): “Mixture of Experts for Ideological Scaling”</p></li>
-<li><p>Alizadeh et al. (2024): “Open-Source LLMs for Text Classification”</p></li>
-<li><p>Heseltine &amp; Clemm von Hohenberg (2024): “GPT-4 Accuracy on Political Texts”</p></li>
-<li><p>Ziems et al. (2024): “Can Large Language Models Transform Computational Social Science?”</p></li>
-</ul>
-</section>
-<section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p><strong>Compare approaches</strong>: Annotate the same 20 texts with all 4 structured output approaches. Which is most reliable?</p></li>
-<li><p><strong>Measure test-retest</strong>: Run the same annotation twice with identical settings. Calculate Cohen’s κ between runs.</p></li>
-<li><p><strong>Build ensemble</strong>: Use 3+ models and compare ensemble vs. individual model performance.</p></li>
-<li><p><strong>Create promptbook</strong>: Document a complete annotation pipeline for your research domain.</p></li>
-<li><p><strong>Validate</strong>: Annotate 100 texts yourself, then with LLM. Calculate agreement metrics.</p></li>
-</ol>
 </section>
 </section>
 
@@ -2168,6 +2003,15 @@ document.write(`
         <p class="prev-next-title">Qualitative Coding with LLMs</p>
       </div>
     </a>
+    <a class="right-next"
+       href="week07_silicon_sampling.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">LLMs for Synthetic Data I: Simulating Survey Respondents</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -2198,35 +2042,27 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-three-approaches-to-getting-structured-outputs-json">Part 2: Three Approaches to Getting Structured Outputs (JSON)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-1-prompt-for-json-simplest-least-reliable">Approach 1: Prompt for JSON (Simplest, Least Reliable)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-2-json-mode-api-parameter-recommended-for-most-tasks">Approach 2: JSON Mode API Parameter (Recommended for Most Tasks)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-3-provider-json-mode-more-reliable">Approach 3: Provider JSON Mode (More Reliable)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-3-function-calling-most-structured-type-safe">Approach 3: Function Calling (Most Structured, Type-Safe)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-summary">Comparison Summary</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-robust-json-extraction">Part 3: Robust JSON Extraction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-batch-annotation">Part 4: Batch Annotation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-mixture-of-experts-ensemble">Part 5: Mixture of Experts (Ensemble)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-6-validation-and-replication">Part 6: Validation and Replication</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-comprehensive-logging">6A. Comprehensive Logging</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-model-fingerprinting-detect-api-drift">6B. Model Fingerprinting (Detect API Drift)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-validation-with-human-labels">6C. Validation with Human Labels</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#d-promptbook-documentation">6D. Promptbook Documentation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-source-alternatives">Open-Source Alternatives</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-ollama">Using Ollama</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-hugging-face">Using Hugging Face</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt-formatting">1. Prompt Formatting</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#structured-outputs-four-approaches">2. Structured Outputs (Four Approaches)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#structured-outputs-three-approaches">2. Structured Outputs (Three Approaches)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#robust-extraction">3. Robust Extraction</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-annotation">4. Batch Annotation</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mixture-of-experts">5. Mixture of Experts</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validation-replication">6. Validation &amp; Replication</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices-checklist">Best Practices Checklist</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recommended-workflow">Recommended Workflow</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 </ul>
   </nav></div>
 
