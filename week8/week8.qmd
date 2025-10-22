@@ -1,0 +1,381 @@
+
+---
+title: "Week 8: Gen AI for Sociology"
+format:
+  revealjs:
+    toc: false
+    slide-number: true
+    incremental: true
+    transition: fade
+    code-line-numbers: true
+---
+
+## This week
+
+**LLMs for Synthetic Data II: Interactive and Behavioral Scenarios**
+
+- Using LLMs for interactive experiments and behavioral tests
+- Personalized persuasion and microtargeting
+- Belief-change dialogues
+- Practical applications and ethical considerations
+
+---
+
+## What we'll cover & why it matters
+
+- **Interactive experiments**: Moving beyond static surveys to dynamic interactions
+- **Persuasion research**: Testing personalized messaging at scale
+- **Microtargeting**: Understanding demographic-based persuasion
+- **How the readings do it, focusing on**: Velez and Liu; Argyle et al.
+
+---
+
+## Lecture aims
+
+By the end of this session, you will:
+
+::: {.incremental}
+1. Understand how to design **interactive experiments** with LLMs
+2. Implement **personalized persuasion** message generation
+3. Critically assess **validity and ethical concerns** of behavioral simulations
+4. Apply these techniques in **practical code examples**
+:::
+
+---
+
+## Why it matters
+
+Traditional experimental research faces constraints:
+
+- **Costly** to run large-scale experiments with multiple follow-ups
+- **Time-intensive** to recruit and test participants
+- **Hard to personalize** on the fly without the assistance of technology
+
+---
+
+## Why it matters
+
+LLMs offer new possibilities:
+
+::: {.incremental}
+- **Rapid prototyping** of experimental designs, but ALSO:
+- **Large-scale testing** of *tailored* persuasive messages
+- **But**: Questions about **validity** and **reproducibility**
+:::
+
+---
+
+## What came before this?
+
+**Human confederates** in experiments:
+
+- Researchers hire actors to play specific roles
+- Classic examples: Asch conformity, Milgram obedience
+- **Labor-intensive** and **expensive** to scale
+- Hard to standardize confederate behavior
+
+---
+
+##
+
+![Asch conformity experiment. Taken from: https://www.youtube.com/watch?v=LgKWTXQcV0U.](images/asch.png){fig-align="center"}
+
+---
+
+##
+
+![Asch conformity experiment. Taken from: https://www.youtube.com/watch?v=LgKWTXQcV0U.](images/asch2.png){fig-align="center"}
+
+---
+
+##
+
+![Asch conformity experiment. Taken from: https://www.youtube.com/watch?v=LgKWTXQcV0U.](images/asch3.png){fig-align="center"}
+
+---
+
+## What else came before this?
+
+**Field experiments**:
+
+- Human beings would deliver some treatment
+- Often in collaboration with NGO (for \$\$\$)
+- Same set template as in laboratory experiments but *in the wild*
+- Example: **Broockman and Kalla (2016)** - Reducing transphobic bias thorugh conversation
+
+---
+
+##
+
+![Brookman and Kalla experiment. Taken from: https://www.science.org/doi/10.1126/science.aad9713](images/brookalla.png){fig-align="center"}
+
+---
+
+##
+
+![Brookman and Kalla experiment. Taken from: https://www.science.org/doi/10.1126/science.aad9713](images/brookalla3.png){fig-align="center"}
+
+---
+
+## What can't these approaches do?
+
+- **Highly costly**: Having 900 conversations with people costs lots of money
+- **Limited adaptability**: Humans can't adapt (easily) to known target demographics or interests
+
+---
+
+## What else came before this?
+
+**Bot confederates** (pre-LLM):
+
+- Automated accounts on social media platforms
+- Rule-based or simple scripted responses
+- Example: **Munger (2017)** - Twitter bots intervening against racist language
+
+---
+
+##
+
+![Munger Twitter experiment. Taken from: https://link.springer.com/article/10.1007/s11109-016-9373-5.](images/munger.png){fig-align="center"}
+
+---
+
+##
+
+![Munger Twitter experiment. Taken from: https://link.springer.com/article/10.1007/s11109-016-9373-5.](images/munger2.png){fig-align="center"}
+
+---
+
+##
+
+![Munger Twitter experiment. Taken from: https://link.springer.com/article/10.1007/s11109-016-9373-5.](images/munger3.png){fig-align="center"}
+
+---
+
+## What can't these approaches do?
+
+- **Limited interactivity**: Bots can't actively *interact*
+- **Limited adaptability**: Bots can't (well it's hard to) adapt to new contexts
+
+---
+
+## Reading 1 — Velez & Liu (2025): Confronting Core Issues
+
+**Key contribution**: A critical assessment of attitude polarization using AI-tailored experiments.
+
+**Research question**: Can we detect attitude polarization when we personalize both treatments and outcomes around each participant's core issue?
+
+---
+
+## Velez & Liu (2025): Design
+
+**Five online experiments** with full personalization pipeline:
+
+::: {.incremental}
+1. Open-ended response: participants identify their "core issue"
+2. **GPT-3 summarizes** the issue in participant's own words
+3. Summary used to build **personalized Likert items** and **tailored arguments**
+4. Measure attitude strength, certainty, defense, and extremity
+:::
+
+---
+
+## Velez & Liu (2025): Stacking the deck for polarization
+
+**"Easy test" conditions**:
+
+- Strong baseline attitudes on **core issues**
+- **GPT-3 generated arguments** (pro/mixed/con)
+- **Increasing treatment intensity**: from single sentences to paragraphs
+- **Vitriolic language** in later experiments
+- **Motivational primes**: directional vs. accuracy goals
+- **New outcome measures** to reduce ceiling effects
+
+---
+
+##
+
+![Velez and Liu (2025). Taken from: https://doi.org/10.1017/S0003055424000819](images/velez.png){fig-align="center"}
+
+---
+
+##
+
+![Velez and Liu (2025). Taken from: https://doi.org/10.1017/S0003055424000819](images/velez2.png){fig-align="center"}
+
+---
+
+##
+
+![Velez and Liu (2025). Taken from: https://doi.org/10.1017/S0003055424000819](images/velez3.png){fig-align="center"}
+
+---
+
+## Velez & Liu (2025): Key findings
+
+::: {.incremental}
+- **Validated** motivated reasoning mechanisms (disconfirmation bias)
+- **Failed to find broad attitude polarization** under many favorable conditions
+- When they **cranked up incivility** (Experiments 4-5), attitude defense and extremity did rise
+- **Implication**: Polarization may be harder to produce than we think---even with personalization
+:::
+
+---
+
+## Velez & Liu (2025): Question marks
+
+::: {.incremental}
+- Are these results **generalizable** beyond GPT-3?
+- Are these results **reproducible**?
+- Do LLM-generated arguments **capture real-world persuasion** dynamics?    
+- Does respondent knowledge of AI provenance matter?
+- Are there **ethical concerns** with using AI-generated content in persuasion experiments...?
+:::
+
+---
+
+## Reading 2 — Argyle et al. (2025): Testing Theories of Political Persuasion Using AI
+
+**Key contribution**: Using LLMs to test core theories of political persuasion (microtargeting, elaboration) at scale.
+
+**Research question**: Do classic persuasion theories (customization, interactive elaboration) work when implemented via GPT-4?
+
+---
+
+## Argyle et al. (2025): Design
+
+**Two preregistered online experiments** (May 2024):
+
+- Study 1: Immigration (n≈1,862)
+- Study 2: K-12 education (n≈1,819)
+- Randomized to **six conditions**: 2 controls + 4 GPT-4 treatments
+
+---
+
+##
+
+![Argyle et al. (2025). Taken from: https://www.pnas.org/doi/10.1073/pnas.2412815122](images/argyle.png){fig-align="center"}
+
+---
+
+
+## Argyle et al. (2025): Design
+
+**Four GPT-4 treatment styles**:
+
+1. One-shot **generic** message
+2. One-shot **microtargeted** message (using respondent demographics)
+3. Interactive **6-turn direct persuasion**
+4. Interactive **6-turn motivational interviewing**
+
+---
+
+##
+
+![Argyle et al. (2025). Taken from: https://www.pnas.org/doi/10.1073/pnas.2412815122](images/argyle2.png){fig-align="center"}
+
+---
+
+##
+
+![Argyle et al. (2025). Taken from: https://www.pnas.org/doi/10.1073/pnas.2412815122](images/argyle3.png){fig-align="center"}
+
+---
+
+
+## Argyle et al. (2025): Key findings
+
+::: {.incremental}
+- **All four AI strategies** nudged attitudes reliably (≈2.5-4 percentage points)
+- **But**: Microtargeting and elaboration (interactive chats) **didn't beat** simple one-shot generic message
+- Democratic reciprocity boosts were **inconsistent**
+- **Implication**: Simple AI persuasion works, but fancier personalization/interaction may not add much
+:::
+
+---
+
+## Argyle et al. (2025): Caveats
+
+**Limitations**:
+
+- **Short interactions**: 6-turn conversations; longer dialogues might differ
+- **Powered for ≥1.5-2pp**: Very tiny microtargeting advantages could exist
+- **Survey context**: Can't capture face-to-face rapport or social pressure
+- **Narrow scope**: Specific GPT-4 implementation; other customization routes untested
+
+---
+
+## Comparing the two studies
+
+**Velez & Liu**:
+- Maximum personalization (core issues + tailored outcomes)
+- **Polarization hard to find** even under favorable conditions
+
+**Argyle et al.**:
+- Testing classic persuasion theories via AI
+- **Persuasion works but personalization doesn't add much**
+
+::: {.callout-note}
+**Common theme**: AI enables sophisticated experimental designs, but simple approaches may be just as effective?
+:::
+
+---
+
+## Implementing personalized persuasion
+
+```python
+def generate_persuasive_message(target_demographics, topic, position):
+    """Generate personalized persuasive message"""
+
+    prompt = f"""Create a persuasive message about {topic}
+that argues for {position}.
+
+Target audience:
+- Age: {target_demographics['age']}
+- Education: {target_demographics['education']}
+- Region: {target_demographics['region']}
+
+The message should:
+1. Be 2-3 sentences long
+2. Use language appropriate for the audience
+3. Focus on values likely to resonate with this demographic
+4. Be compelling but not manipulative
+
+Return only the message text."""
+
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.8
+    )
+
+    return response.choices[0].message.content
+```
+
+---
+
+## Validation challenges
+
+**Key questions**:
+
+::: {.incremental}
+1. **External validity**: Do LLM responses reflect real human behavior/Do groups respond as they would in reality?
+2. **Effect size accuracy**: Are magnitudes realistic/powered?
+3. **Mechanism validity**: What mechanisms of belief change are the LLMs capturing/targeting?
+4. **Dosage**: Should we expect effects after small dose? Does this mimic real-world dynamics?
+:::
+
+---
+
+## Validation challenges
+
+**Key questions**:
+
+::: {.incremental}
+1. **Reproducibility**: How are we thinking about reproducibility here? Are we just trusting model outcomes?
+2. **Verification**: How do we check treatment text is faithful to prompt design? What does embedding not capture?
+3. **Alternative randomization procedures**: Randomize both prompt templates + message realizations to isolate effects?
+4. **AI Disclosure**: Does knowing the message is AI-generated change e.g., credibility or reactance?
+:::
+
+---

@@ -10,3 +10,5 @@ chapters:
     title: "LLMs for Annotation III"
   - file: week07_silicon_sampling
     title: "LLMs for Synthetic Data I: Simulating Survey Respondents"
+  - file: week08_interactive_experiments
+    title: "LLMs for Synthetic Data II: Interactive Experiments and Persuasion"

@@ -1,0 +1,8 @@
+- source: project
+  quarto-pub:
+    - id: week8genai
+      url: https://quartopub.com/sites/cjbarrie/week8genai
+- source: week8.qmd
+  quarto-pub:
+    - id: d7d35678-257e-442f-8125-7b7b4a43e187
+      url: https://cjbarrie.quarto.pub/week8genai
