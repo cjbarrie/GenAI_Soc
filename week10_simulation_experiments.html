@@ -1,0 +1,1621 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>LLMs for Simulation II: Experiments &#8212; GenAI for Sociology</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'week10_simulation_experiments';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="LLMs for Simulation I: Generative Agents" href="week09_simulation_agents.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">GenAI for Sociology</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    GenAI for Sociology
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="week04_llms.html">LLMs for Annotation I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week05_qualitative.html">LLMs for Annotation II</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week06_annotation.html">LLMs for Annotation III</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week07_silicon_sampling.html">LLMs for Synthetic Data I: Simulating Survey Respondents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week08_interactive_experiments.html">LLMs for Synthetic Data II - Behavioral Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week09_simulation_agents.html">LLMs for Simulation I: Generative Agents</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">LLMs for Simulation II: Experiments</a></li>
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/cjbarrie/GenAI_Soc/blob/main/genai_book/week10_simulation_experiments.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cjbarrie/GenAI_Soc" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cjbarrie/GenAI_Soc/issues/new?title=Issue%20on%20page%20%2Fweek10_simulation_experiments.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/week10_simulation_experiments.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>LLMs for Simulation II: Experiments</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">LLMs for Simulation II: Experiments</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-two-approaches-to-experimental-simulation">Introduction: Two Approaches to Experimental Simulation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-1-zero-shot-prediction-hewitt-et-al">Approach 1: Zero-shot prediction (Hewitt et al.)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-2-fine-tuned-behavioral-model-centaur">Approach 2: Fine-tuned behavioral model (Centaur)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-zero-shot-experimental-prediction">Part 1: Zero-shot Experimental Prediction</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-define-the-experimental-setup">Step 1: Define the Experimental Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-create-demographic-profiles">Step 2: Create Demographic Profiles</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-simulate-experimental-responses">Step 3: Simulate Experimental Responses</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-analyze-predicted-treatment-effects">Step 4: Analyze Predicted Treatment Effects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-compare-to-actual-results">Step 5: Compare to Actual Results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reflections-on-zero-shot-prediction">Reflections on Zero-shot Prediction</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-fine-tuned-behavioral-models-mini-centaur">Part 2: Fine-tuned Behavioral Models (Mini Centaur)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-for-mini-centaur">Setup for Mini Centaur</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-mini-centaur-model">Load the Mini Centaur Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-asch-conformity-experiment">The Asch Conformity Experiment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#format-of-behavioral-data-for-centaur">Format of Behavioral Data for Centaur</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-predictions-with-mini-centaur">Generate Predictions with Mini Centaur</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-multiple-trials">Run Multiple Trials</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-approaches-zero-shot-vs-fine-tuned">Comparing Approaches: Zero-shot vs. Fine-tuned</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-zero-shot-hewitt-et-al">Part 1: Zero-shot (Hewitt et al.)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-fine-tuned-centaur">Part 2: Fine-tuned (Centaur)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-and-best-practices">Summary and Best Practices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-exploration">Further Exploration</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="llms-for-simulation-ii-experiments">
+<h1>LLMs for Simulation II: Experiments<a class="headerlink" href="#llms-for-simulation-ii-experiments" title="Link to this heading">#</a></h1>
+<p><strong>Learning objectives:</strong></p>
+<ul class="simple">
+<li><p>Use LLMs to predict experimental outcomes before data collection</p></li>
+<li><p>Implement zero-shot experimental forecasting (Hewitt et al. approach)</p></li>
+<li><p>Understand fine-tuned behavioral models (Centaur approach)</p></li>
+<li><p>Apply both methods to real experimental designs</p></li>
+<li><p>Critically evaluate when simulation is appropriate</p></li>
+</ul>
+<p><strong>How to run this notebook:</strong></p>
+<ul class="simple">
+<li><p><strong>Google Colab</strong> (recommended for Part 2): Fine-tuning requires GPU</p></li>
+<li><p><strong>Local/Colab</strong> (Part 1): Zero-shot prediction works anywhere</p></li>
+<li><p><strong>API key needed</strong>: OpenAI for Part 1</p></li>
+</ul>
+<p><strong>Key papers:</strong></p>
+<ul class="simple">
+<li><p><strong>Hewitt, Ashokkumar et al. (2024)</strong>: Predicting Results of Social Science Experiments</p></li>
+<li><p><strong>Binz &amp; Schulz et al. (2025)</strong>: Centaur: Foundation Model of Human Cognition</p></li>
+</ul>
+<hr class="docutils" />
+<section id="introduction-two-approaches-to-experimental-simulation">
+<h2>Introduction: Two Approaches to Experimental Simulation<a class="headerlink" href="#introduction-two-approaches-to-experimental-simulation" title="Link to this heading">#</a></h2>
+<p>This chapter demonstrates two complementary approaches to simulating experimental outcomes:</p>
+<section id="approach-1-zero-shot-prediction-hewitt-et-al">
+<h3>Approach 1: Zero-shot prediction (Hewitt et al.)<a class="headerlink" href="#approach-1-zero-shot-prediction-hewitt-et-al" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Use a <strong>general-purpose LLM</strong> (no fine-tuning)</p></li>
+<li><p>Prompt with demographic profiles + experimental conditions</p></li>
+<li><p>Generate simulated responses to predict treatment effects</p></li>
+<li><p><strong>Advantage</strong>: Fast, no training data needed</p></li>
+<li><p><strong>Limitation</strong>: Relies on LLM’s prior knowledge</p></li>
+</ul>
+</section>
+<section id="approach-2-fine-tuned-behavioral-model-centaur">
+<h3>Approach 2: Fine-tuned behavioral model (Centaur)<a class="headerlink" href="#approach-2-fine-tuned-behavioral-model-centaur" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Fine-tune on real human behavioral data</strong></p></li>
+<li><p>Train on trial-by-trial choices across experiments</p></li>
+<li><p>Model learns general principles of human decision-making</p></li>
+<li><p><strong>Advantage</strong>: More accurate predictions within domain</p></li>
+<li><p><strong>Limitation</strong>: Requires large behavioral corpus</p></li>
+</ul>
+<p><strong>When to use which:</strong></p>
+<ul class="simple">
+<li><p><strong>Zero-shot</strong>: Quick forecasts before data collection, exploring many scenarios</p></li>
+<li><p><strong>Fine-tuned</strong>: When you have behavioral data, need precision, studying specific paradigms</p></li>
+</ul>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="part-1-zero-shot-experimental-prediction">
+<h1>Part 1: Zero-shot Experimental Prediction<a class="headerlink" href="#part-1-zero-shot-experimental-prediction" title="Link to this heading">#</a></h1>
+<p>We’ll replicate the <strong>Hewitt et al. (2024)</strong> approach using a real preregistered experiment:</p>
+<p><strong>Connors (2020): “Everyone’s Doing It: Affective Polarization is Inflated by Social Pressure”</strong></p>
+<p><strong>Research question</strong>: Does perceived privacy affect how much affective polarization people report?</p>
+<p><strong>Design</strong>:</p>
+<ul class="simple">
+<li><p><strong>N = 3,333</strong> participants</p></li>
+<li><p><strong>4 conditions</strong>: Public, Private, Friends, Control</p></li>
+<li><p><strong>Outcome</strong>: Affective polarization (feeling thermometers toward out-party)</p></li>
+<li><p><strong>Hypothesis</strong>: Privacy increases → reported polarization decreases</p></li>
+</ul>
+<p><strong>Actual results</strong>:</p>
+<ul class="simple">
+<li><p><strong>No main effect</strong> of privacy conditions</p></li>
+<li><p>Evidence that social pressure inflates polarization measures</p></li>
+<li><p>Effects depend on individual differences in social conformity</p></li>
+</ul>
+<p>Let’s see if an LLM can predict these findings!</p>
+<hr class="docutils" />
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install packages</span>
+<span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">q</span> <span class="n">openai</span> <span class="n">pandas</span> <span class="n">numpy</span> <span class="n">matplotlib</span> <span class="n">seaborn</span> <span class="n">scipy</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">getpass</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="c1"># Set API key</span>
+<span class="k">if</span> <span class="s2">&quot;OPENAI_API_KEY&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getpass</span><span class="p">(</span><span class="s2">&quot;Enter your OpenAI API key: &quot;</span><span class="p">)</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">()</span>
+
+<span class="c1"># Set plotting style</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Setup complete!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="step-1-define-the-experimental-setup">
+<h2>Step 1: Define the Experimental Setup<a class="headerlink" href="#step-1-define-the-experimental-setup" title="Link to this heading">#</a></h2>
+<p>We need to translate the Connors study into prompts for the LLM:</p>
+<ol class="arabic simple">
+<li><p><strong>Study context</strong>: Background about the survey</p></li>
+<li><p><strong>Treatment conditions</strong>: Four privacy manipulations</p></li>
+<li><p><strong>Outcome measure</strong>: Feeling thermometer (0-100)</p></li>
+<li><p><strong>Demographic profiles</strong>: Representative U.S. sample</p></li>
+</ol>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Study context</span>
+<span class="n">STUDY_CONTEXT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">You are participating in a research study about political attitudes in America.</span>
+<span class="s2">You will answer questions about how you feel toward different political groups.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="c1"># Treatment conditions (exactly as in Connors 2020)</span>
+<span class="n">CONDITIONS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;control&#39;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>  <span class="c1"># No reminder</span>
+    
+    <span class="s1">&#39;public&#39;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Just a reminder, the results based on your responses may be published.</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">,</span>
+    
+    <span class="s1">&#39;private&#39;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Just a reminder, your responses are completely private.</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">,</span>
+    
+    <span class="s1">&#39;friends&#39;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Imagine your friends will read your responses to the following questions.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="p">}</span>
+
+<span class="c1"># Outcome measure - feeling thermometer</span>
+<span class="c1"># We&#39;ll ask about the out-party (opposite of respondent&#39;s party)</span>
+<span class="n">OUTCOME_TEMPLATE</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">On a scale from 0 to 100, where 0 means very cold/unfavorable and </span>
+<span class="s2">100 means very warm/favorable, how do you feel toward </span><span class="si">{target_party}</span><span class="s2">?</span>
+
+<span class="s2">Respond with ONLY a number from 0 to 100.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Experimental setup defined&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="step-2-create-demographic-profiles">
+<h2>Step 2: Create Demographic Profiles<a class="headerlink" href="#step-2-create-demographic-profiles" title="Link to this heading">#</a></h2>
+<p>Following <strong>Hewitt et al. (2024)</strong>, we’ll create realistic demographic profiles representing the U.S. population.</p>
+<p>Key dimensions:</p>
+<ul class="simple">
+<li><p><strong>Political party</strong>: Democrat, Republican, Independent</p></li>
+<li><p><strong>Age</strong>: Range of age groups</p></li>
+<li><p><strong>Gender</strong>: Male, Female</p></li>
+<li><p><strong>Education</strong>: High school, Some college, College degree, Graduate degree</p></li>
+<li><p><strong>Region</strong>: Different U.S. regions</p></li>
+</ul>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_demographic_profiles</span><span class="p">(</span><span class="n">n_profiles</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate representative demographic profiles</span>
+<span class="sd">    </span>
+<span class="sd">    Following typical U.S. population distributions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># For reproducibility</span>
+    
+    <span class="n">profiles</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="c1"># Demographic distributions (approximate U.S. proportions)</span>
+    <span class="n">parties</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Democrat&#39;</span><span class="p">,</span> <span class="s1">&#39;Republican&#39;</span><span class="p">,</span> <span class="s1">&#39;Independent&#39;</span><span class="p">]</span>
+    <span class="n">party_probs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">]</span>
+    
+    <span class="n">ages</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;25-34&#39;</span><span class="p">,</span> <span class="s1">&#39;35-44&#39;</span><span class="p">,</span> <span class="s1">&#39;45-54&#39;</span><span class="p">,</span> <span class="s1">&#39;55-64&#39;</span><span class="p">,</span> <span class="s1">&#39;65+&#39;</span><span class="p">]</span>
+    <span class="n">age_probs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">]</span>
+    
+    <span class="n">genders</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;male&#39;</span><span class="p">,</span> <span class="s1">&#39;female&#39;</span><span class="p">]</span>
+    <span class="n">gender_probs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.49</span><span class="p">,</span> <span class="mf">0.51</span><span class="p">]</span>
+    
+    <span class="n">educations</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;high school diploma&#39;</span><span class="p">,</span> <span class="s1">&#39;some college&#39;</span><span class="p">,</span> <span class="s1">&#39;college degree&#39;</span><span class="p">,</span> <span class="s1">&#39;graduate degree&#39;</span><span class="p">]</span>
+    <span class="n">edu_probs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">]</span>
+    
+    <span class="n">regions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Northeast&#39;</span><span class="p">,</span> <span class="s1">&#39;South&#39;</span><span class="p">,</span> <span class="s1">&#39;Midwest&#39;</span><span class="p">,</span> <span class="s1">&#39;West&#39;</span><span class="p">]</span>
+    <span class="n">region_probs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.17</span><span class="p">,</span> <span class="mf">0.38</span><span class="p">,</span> <span class="mf">0.21</span><span class="p">,</span> <span class="mf">0.24</span><span class="p">]</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_profiles</span><span class="p">):</span>
+        <span class="n">party</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">parties</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">party_probs</span><span class="p">)</span>
+        <span class="n">age</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">ages</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">age_probs</span><span class="p">)</span>
+        <span class="n">gender</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">genders</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">gender_probs</span><span class="p">)</span>
+        <span class="n">education</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">educations</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">edu_probs</span><span class="p">)</span>
+        <span class="n">region</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">regions</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">region_probs</span><span class="p">)</span>
+        
+        <span class="c1"># Determine out-party (target for feeling thermometer)</span>
+        <span class="k">if</span> <span class="n">party</span> <span class="o">==</span> <span class="s1">&#39;Democrat&#39;</span><span class="p">:</span>
+            <span class="n">out_party</span> <span class="o">=</span> <span class="s1">&#39;Republicans&#39;</span>
+        <span class="k">elif</span> <span class="n">party</span> <span class="o">==</span> <span class="s1">&#39;Republican&#39;</span><span class="p">:</span>
+            <span class="n">out_party</span> <span class="o">=</span> <span class="s1">&#39;Democrats&#39;</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># Independent</span>
+            <span class="n">out_party</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;Democrats&#39;</span><span class="p">,</span> <span class="s1">&#39;Republicans&#39;</span><span class="p">])</span>
+        
+        <span class="n">profile</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span>
+            <span class="s1">&#39;party&#39;</span><span class="p">:</span> <span class="n">party</span><span class="p">,</span>
+            <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="n">age</span><span class="p">,</span>
+            <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="n">gender</span><span class="p">,</span>
+            <span class="s1">&#39;education&#39;</span><span class="p">:</span> <span class="n">education</span><span class="p">,</span>
+            <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="n">region</span><span class="p">,</span>
+            <span class="s1">&#39;out_party&#39;</span><span class="p">:</span> <span class="n">out_party</span><span class="p">,</span>
+            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;a </span><span class="si">{</span><span class="n">age</span><span class="si">}</span><span class="s2">-year-old </span><span class="si">{</span><span class="n">gender</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">party</span><span class="si">}</span><span class="s2"> from the </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2"> with a </span><span class="si">{</span><span class="n">education</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">}</span>
+        
+        <span class="n">profiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">profiles</span><span class="p">)</span>
+
+<span class="c1"># Generate profiles</span>
+<span class="n">profiles_df</span> <span class="o">=</span> <span class="n">create_demographic_profiles</span><span class="p">(</span><span class="n">n_profiles</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">profiles_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> demographic profiles&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Example profiles:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">profiles_df</span><span class="p">[[</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;out_party&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="step-3-simulate-experimental-responses">
+<h2>Step 3: Simulate Experimental Responses<a class="headerlink" href="#step-3-simulate-experimental-responses" title="Link to this heading">#</a></h2>
+<p>Now we’ll use GPT-4 to simulate how each demographic profile would respond in each condition.</p>
+<p><strong>Key parameters:</strong></p>
+<ul class="simple">
+<li><p><strong>temperature = 1.0</strong>: Allows realistic variation in responses</p></li>
+<li><p><strong>Multiple runs per profile</strong>: Capture within-person variability</p></li>
+<li><p><strong>Extract numeric responses</strong>: Parse feeling thermometer scores</p></li>
+</ul>
+<p><strong>This takes ~5-10 minutes to run all simulations.</strong></p>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">simulate_response</span><span class="p">(</span><span class="n">demographic_desc</span><span class="p">,</span> <span class="n">out_party</span><span class="p">,</span> <span class="n">condition_text</span><span class="p">,</span> 
+                     <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o&quot;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simulate a single response from LLM</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        demographic_desc: String describing the respondent</span>
+<span class="sd">        out_party: Target party for feeling thermometer</span>
+<span class="sd">        condition_text: Treatment condition reminder</span>
+<span class="sd">        model: Which OpenAI model to use</span>
+<span class="sd">        temperature: Sampling temperature</span>
+<span class="sd">        max_retries: Number of attempts if parsing fails</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        int: Feeling thermometer score (0-100), or None if failed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">outcome_question</span> <span class="o">=</span> <span class="n">OUTCOME_TEMPLATE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target_party</span><span class="o">=</span><span class="n">out_party</span><span class="p">)</span>
+    
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are </span><span class="si">{</span><span class="n">demographic_desc</span><span class="si">}</span><span class="s2">.</span>
+
+<span class="si">{</span><span class="n">STUDY_CONTEXT</span><span class="si">}</span>
+
+<span class="si">{</span><span class="n">condition_text</span><span class="si">}</span>
+
+<span class="si">{</span><span class="n">outcome_question</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+    
+    <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_retries</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+                <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+                <span class="n">max_tokens</span><span class="o">=</span><span class="mi">10</span>
+            <span class="p">)</span>
+            
+            <span class="c1"># Extract numeric response</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            
+            <span class="c1"># Try to parse as integer</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">isdigit</span><span class="p">,</span> <span class="n">content</span><span class="p">)))</span>
+            
+            <span class="c1"># Validate range</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">score</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">score</span>
+        
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">attempt</span> <span class="o">==</span> <span class="n">max_retries</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to parse response after </span><span class="si">{</span><span class="n">max_retries</span><span class="si">}</span><span class="s2"> attempts: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="kc">None</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Simulation function defined&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run_experiment_simulation</span><span class="p">(</span><span class="n">profiles_df</span><span class="p">,</span> <span class="n">conditions</span><span class="p">,</span> <span class="n">n_responses_per_profile</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run full experimental simulation across all conditions and profiles</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        profiles_df: DataFrame of demographic profiles</span>
+<span class="sd">        conditions: Dict of condition names and texts</span>
+<span class="sd">        n_responses_per_profile: Number of responses to simulate per profile</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: All simulated responses</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">total_simulations</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">profiles_df</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span> <span class="o">*</span> <span class="n">n_responses_per_profile</span>
+    <span class="n">completed</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting simulation: </span><span class="si">{</span><span class="n">total_simulations</span><span class="si">}</span><span class="s2"> total responses to generate...&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated time: ~</span><span class="si">{</span><span class="n">total_simulations</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">60</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> minutes</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">profile</span> <span class="ow">in</span> <span class="n">profiles_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">condition_name</span><span class="p">,</span> <span class="n">condition_text</span> <span class="ow">in</span> <span class="n">conditions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">response_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_responses_per_profile</span><span class="p">):</span>
+                <span class="n">score</span> <span class="o">=</span> <span class="n">simulate_response</span><span class="p">(</span>
+                    <span class="n">demographic_desc</span><span class="o">=</span><span class="n">profile</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">],</span>
+                    <span class="n">out_party</span><span class="o">=</span><span class="n">profile</span><span class="p">[</span><span class="s1">&#39;out_party&#39;</span><span class="p">],</span>
+                    <span class="n">condition_text</span><span class="o">=</span><span class="n">condition_text</span>
+                <span class="p">)</span>
+                
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                    <span class="s1">&#39;profile_id&#39;</span><span class="p">:</span> <span class="n">profile</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;party&#39;</span><span class="p">:</span> <span class="n">profile</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="n">profile</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="n">profile</span><span class="p">[</span><span class="s1">&#39;gender&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;education&#39;</span><span class="p">:</span> <span class="n">profile</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="n">profile</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;out_party&#39;</span><span class="p">:</span> <span class="n">profile</span><span class="p">[</span><span class="s1">&#39;out_party&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;condition&#39;</span><span class="p">:</span> <span class="n">condition_name</span><span class="p">,</span>
+                    <span class="s1">&#39;response_num&#39;</span><span class="p">:</span> <span class="n">response_num</span><span class="p">,</span>
+                    <span class="s1">&#39;feeling_thermometer&#39;</span><span class="p">:</span> <span class="n">score</span>
+                <span class="p">})</span>
+                
+                <span class="n">completed</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">completed</span> <span class="o">%</span> <span class="mi">50</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Progress: </span><span class="si">{</span><span class="n">completed</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">total_simulations</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="mi">100</span><span class="o">*</span><span class="n">completed</span><span class="o">/</span><span class="n">total_simulations</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+                
+                <span class="c1"># Rate limiting</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ Simulation complete!&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+<span class="c1"># Run the simulation (this takes ~10 minutes with 100 profiles, 4 conditions, 2 responses each)</span>
+<span class="c1"># For faster testing, reduce n_profiles in create_demographic_profiles() above</span>
+<span class="n">simulated_data</span> <span class="o">=</span> <span class="n">run_experiment_simulation</span><span class="p">(</span>
+    <span class="n">profiles_df</span><span class="p">,</span> 
+    <span class="n">CONDITIONS</span><span class="p">,</span> 
+    <span class="n">n_responses_per_profile</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Generated </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">simulated_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> simulated responses&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing responses: </span><span class="si">{</span><span class="n">simulated_data</span><span class="p">[</span><span class="s1">&#39;feeling_thermometer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="step-4-analyze-predicted-treatment-effects">
+<h2>Step 4: Analyze Predicted Treatment Effects<a class="headerlink" href="#step-4-analyze-predicted-treatment-effects" title="Link to this heading">#</a></h2>
+<p>Now we’ll analyze the LLM’s predictions to see if it forecasts the same patterns as the actual study.</p>
+<p><strong>Key analyses:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Main effect of privacy</strong>: Do private conditions reduce polarization?</p></li>
+<li><p><strong>Comparison across conditions</strong>: Which shows lowest polarization?</p></li>
+<li><p><strong>Effect sizes</strong>: How large are the predicted differences?</p></li>
+</ol>
+<p><strong>Actual Connors (2020) findings:</strong></p>
+<ul class="simple">
+<li><p>No simple main effect of privacy conditions</p></li>
+<li><p>Effects moderated by individual differences</p></li>
+<li><p>Friends and private conditions showed some effects</p></li>
+</ul>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove missing responses</span>
+<span class="n">clean_data</span> <span class="o">=</span> <span class="n">simulated_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feeling_thermometer&#39;</span><span class="p">])</span>
+
+<span class="c1"># Compute means by condition</span>
+<span class="n">condition_means</span> <span class="o">=</span> <span class="n">clean_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;condition&#39;</span><span class="p">)[</span><span class="s1">&#39;feeling_thermometer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="s1">&#39;count&#39;</span><span class="p">])</span>
+<span class="n">condition_means</span> <span class="o">=</span> <span class="n">condition_means</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Predicted Feeling Thermometer Scores by Condition&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">condition_means</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Note: Lower scores = more polarization (colder toward out-party)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize predicted effects</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="c1"># Create violin plot</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">clean_data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;condition&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;feeling_thermometer&#39;</span><span class="p">,</span> 
+               <span class="n">order</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;control&#39;</span><span class="p">,</span> <span class="s1">&#39;public&#39;</span><span class="p">,</span> <span class="s1">&#39;private&#39;</span><span class="p">,</span> <span class="s1">&#39;friends&#39;</span><span class="p">],</span>
+               <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;Set2&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+
+<span class="c1"># Add mean markers</span>
+<span class="n">means</span> <span class="o">=</span> <span class="n">clean_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;condition&#39;</span><span class="p">)[</span><span class="s1">&#39;feeling_thermometer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">condition</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s1">&#39;control&#39;</span><span class="p">,</span> <span class="s1">&#39;public&#39;</span><span class="p">,</span> <span class="s1">&#39;private&#39;</span><span class="p">,</span> <span class="s1">&#39;friends&#39;</span><span class="p">]):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">means</span><span class="p">[</span><span class="n">condition</span><span class="p">],</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> 
+            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Mean&#39;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Condition&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Feeling Thermometer (0-100)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;LLM-Predicted Treatment Effects on Affective Polarization&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Statistical tests: Compare each treatment to control</span>
+<span class="n">control_scores</span> <span class="o">=</span> <span class="n">clean_data</span><span class="p">[</span><span class="n">clean_data</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;control&#39;</span><span class="p">][</span><span class="s1">&#39;feeling_thermometer&#39;</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Statistical Tests: Treatment vs. Control&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">condition</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;public&#39;</span><span class="p">,</span> <span class="s1">&#39;private&#39;</span><span class="p">,</span> <span class="s1">&#39;friends&#39;</span><span class="p">]:</span>
+    <span class="n">treatment_scores</span> <span class="o">=</span> <span class="n">clean_data</span><span class="p">[</span><span class="n">clean_data</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">condition</span><span class="p">][</span><span class="s1">&#39;feeling_thermometer&#39;</span><span class="p">]</span>
+    
+    <span class="c1"># t-test</span>
+    <span class="n">t_stat</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">ttest_ind</span><span class="p">(</span><span class="n">treatment_scores</span><span class="p">,</span> <span class="n">control_scores</span><span class="p">)</span>
+    
+    <span class="c1"># Effect size (Cohen&#39;s d)</span>
+    <span class="n">pooled_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">treatment_scores</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">control_scores</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">cohens_d</span> <span class="o">=</span> <span class="p">(</span><span class="n">treatment_scores</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">control_scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="n">pooled_std</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">condition</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> vs. Control:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Mean difference: </span><span class="si">{</span><span class="n">treatment_scores</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">control_scores</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> points&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  t-statistic: </span><span class="si">{</span><span class="n">t_stat</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  p-value: </span><span class="si">{</span><span class="n">p_value</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;*&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">p_value</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">0.05</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;(n.s.)&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Cohen&#39;s d: </span><span class="si">{</span><span class="n">cohens_d</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">* = statistically significant at p &lt; 0.05&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="step-5-compare-to-actual-results">
+<h2>Step 5: Compare to Actual Results<a class="headerlink" href="#step-5-compare-to-actual-results" title="Link to this heading">#</a></h2>
+<p><strong>Actual Connors (2020) findings:</strong></p>
+<ul class="simple">
+<li><p><strong>No main treatment effects</strong> for any condition</p></li>
+<li><p>Effects varied based on individual differences in social conformity</p></li>
+<li><p>Private and friends conditions showed some reduction in polarization</p></li>
+<li><p><strong>Conclusion</strong>: Social pressure inflates polarization measures</p></li>
+</ul>
+<p><strong>LLM predictions:</strong></p>
+<ul class="simple">
+<li><p>See results above</p></li>
+<li><p>Compare effect directions and magnitudes</p></li>
+</ul>
+<p><strong>Questions to consider:</strong></p>
+<ol class="arabic simple">
+<li><p>Did the LLM predict the right <strong>direction</strong> of effects?</p></li>
+<li><p>Are the <strong>magnitudes</strong> realistic?</p></li>
+<li><p>Did it capture the <strong>null main effect</strong>?</p></li>
+<li><p>What does this tell us about using LLMs for experimental forecasting?</p></li>
+</ol>
+<hr class="docutils" />
+</section>
+<hr class="docutils" />
+<section id="reflections-on-zero-shot-prediction">
+<h2>Reflections on Zero-shot Prediction<a class="headerlink" href="#reflections-on-zero-shot-prediction" title="Link to this heading">#</a></h2>
+<p><strong>What we learned:</strong></p>
+<ol class="arabic simple">
+<li><p>LLMs can generate plausible experimental predictions</p></li>
+<li><p>Easy to test many demographic subgroups</p></li>
+<li><p>Fast and cheap compared to real data collection</p></li>
+</ol>
+<p><strong>Limitations:</strong></p>
+<ol class="arabic simple">
+<li><p>May miss subtle moderators and individual differences</p></li>
+<li><p>Effect sizes may be off</p></li>
+<li><p>Can’t discover truly novel phenomena</p></li>
+<li><p>Relies on LLM’s training data biases</p></li>
+</ol>
+<p><strong>Best use cases:</strong></p>
+<ul class="simple">
+<li><p><strong>Pre-testing</strong> experimental designs before expensive fieldwork</p></li>
+<li><p><strong>Power analysis</strong>: Estimate sample sizes needed</p></li>
+<li><p><strong>Exploring heterogeneity</strong>: Which subgroups to focus on?</p></li>
+<li><p><strong>Theory development</strong>: Generate hypotheses to test</p></li>
+</ul>
+<p><strong>Always validate with real humans!</strong></p>
+</section>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="part-2-fine-tuned-behavioral-models-mini-centaur">
+<h1>Part 2: Fine-tuned Behavioral Models (Mini Centaur)<a class="headerlink" href="#part-2-fine-tuned-behavioral-models-mini-centaur" title="Link to this heading">#</a></h1>
+<p>Now we’ll explore the <strong>Centaur approach</strong>: fine-tuning an LLM on real behavioral data.</p>
+<p><strong>Key difference from Part 1:</strong></p>
+<ul class="simple">
+<li><p>Part 1 (zero-shot): LLM uses its general knowledge</p></li>
+<li><p>Part 2 (fine-tuned): LLM learns from actual human choices</p></li>
+</ul>
+<p><strong>Example: Asch Conformity Experiment</strong></p>
+<p>Classic social psychology study (1951):</p>
+<ul class="simple">
+<li><p>Participants judge which line matches a target line</p></li>
+<li><p><strong>Confederates</strong> (actors) give obviously wrong answers</p></li>
+<li><p><strong>Question</strong>: Will participants conform to group pressure?</p></li>
+<li><p><strong>Result</strong>: ~75% of people conformed at least once</p></li>
+</ul>
+<p>We’ll use a <strong>mini Centaur model</strong> fine-tuned on behavioral data to predict conformity!</p>
+<hr class="docutils" />
+<section id="setup-for-mini-centaur">
+<h2>Setup for Mini Centaur<a class="headerlink" href="#setup-for-mini-centaur" title="Link to this heading">#</a></h2>
+<p><strong>Important</strong>: This section requires GPU and specific libraries.</p>
+<p><strong>Recommended</strong>: Run this in Google Colab with GPU enabled.</p>
+<p>The model uses:</p>
+<ul class="simple">
+<li><p><strong>Llama 3.1 8B</strong> base model</p></li>
+<li><p><strong>QLoRA fine-tuning</strong> (efficient parameter updates)</p></li>
+<li><p>Pre-trained on behavioral experiments (“Minitaur”)</p></li>
+</ul>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install required packages (only in Colab)</span>
+<span class="c1"># This may take a few minutes</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">google.colab</span>
+    <span class="n">IN_COLAB</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">IN_COLAB</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">if</span> <span class="n">IN_COLAB</span><span class="p">:</span>
+    <span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">q</span> <span class="n">unsloth</span> <span class="n">transformers</span> <span class="n">accelerate</span> <span class="n">bitsandbytes</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Installed packages for Colab&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠ Not in Colab - you may need to install packages manually&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Run: pip install unsloth transformers accelerate bitsandbytes&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import libraries for fine-tuned model</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">unsloth</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastLanguageModel</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">transformers</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Successfully imported model libraries&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PyTorch version: </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CUDA available: </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠ Warning: No GPU detected. Model loading will be slow.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  In Colab: Runtime → Change runtime type → GPU&quot;</span><span class="p">)</span>
+        
+<span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;❌ Error importing libraries: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Please install required packages or run in Colab with GPU.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="load-the-mini-centaur-model">
+<h2>Load the Mini Centaur Model<a class="headerlink" href="#load-the-mini-centaur-model" title="Link to this heading">#</a></h2>
+<p>We’ll load a pre-trained model that has been fine-tuned on behavioral experiments.</p>
+<p><strong>Model details:</strong></p>
+<ul class="simple">
+<li><p>Base: Llama 3.1 8B</p></li>
+<li><p>Fine-tuned using QLoRA on behavioral data</p></li>
+<li><p>Trained on trial-by-trial human choices</p></li>
+<li><p>Can predict responses in multiple experimental paradigms</p></li>
+</ul>
+<p><strong>This takes ~2-3 minutes to download and load.</strong></p>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the mini Centaur model</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loading mini Centaur model...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This may take 2-3 minutes on first run.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">FastLanguageModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+        <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;marcelbinz/Llama-3.1-Minitaur-8B-adapter&quot;</span><span class="p">,</span>
+        <span class="n">max_seq_length</span><span class="o">=</span><span class="mi">32768</span><span class="p">,</span>  <span class="c1"># Long context for full trial histories</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># Auto-detect optimal dtype</span>
+        <span class="n">load_in_4bit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Use 4-bit quantization to save memory</span>
+    <span class="p">)</span>
+    
+    <span class="c1"># Set model to inference mode</span>
+    <span class="n">FastLanguageModel</span><span class="o">.</span><span class="n">for_inference</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Model loaded successfully!&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Model: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">_name_or_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Max sequence length: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">max_position_embeddings</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;❌ Error loading model: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Troubleshooting:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Make sure you&#39;re using a GPU runtime in Colab&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Check your internet connection (model downloads from HuggingFace)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create inference pipeline</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">transformers</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
+    <span class="s2">&quot;text-generation&quot;</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+    <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
+    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">pad_token_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Sample to get variation</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Standard temperature for behavioral simulation</span>
+    <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Only generate next choice token</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Inference pipeline ready&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="the-asch-conformity-experiment">
+<h2>The Asch Conformity Experiment<a class="headerlink" href="#the-asch-conformity-experiment" title="Link to this heading">#</a></h2>
+<p><strong>Classic study</strong> (Asch, 1951):</p>
+<ol class="arabic simple">
+<li><p>Participants see a <strong>target line</strong> and three <strong>comparison lines</strong> (A, B, C)</p></li>
+<li><p>Task: Choose which comparison line matches the target length</p></li>
+<li><p><strong>Twist</strong>: 6-7 confederates give wrong answers before the real participant</p></li>
+<li><p><strong>Question</strong>: Will the participant give the correct answer or conform?</p></li>
+</ol>
+<p><strong>Example trial:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Target: medium length
+A: medium (CORRECT)
+B: long (WRONG)
+C: short (WRONG)
+
+Confederates all say: &quot;B&quot;
+What does participant say?
+</pre></div>
+</div>
+<p><strong>Historical results:</strong></p>
+<ul class="simple">
+<li><p>~75% of participants conformed at least once</p></li>
+<li><p>~32% of all trials showed conformity</p></li>
+<li><p>Stronger conformity with more confederates</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="format-of-behavioral-data-for-centaur">
+<h2>Format of Behavioral Data for Centaur<a class="headerlink" href="#format-of-behavioral-data-for-centaur" title="Link to this heading">#</a></h2>
+<p>Centaur is trained on prompts that include:</p>
+<ol class="arabic simple">
+<li><p><strong>Task instructions</strong> (what the experiment is about)</p></li>
+<li><p><strong>Full trial history</strong> (all previous choices by this participant)</p></li>
+<li><p><strong>Current trial</strong> (the situation now)</p></li>
+<li><p><strong>Question</strong> (what should they choose next?)</p></li>
+</ol>
+<p><strong>Key insight</strong>: The model learns patterns from how humans respond across many trials, not just isolated choices.</p>
+<p>Let’s see an example:</p>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example Asch conformity prompt (following Centaur format)</span>
+<span class="n">asch_prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">You will see a target line and three comparison lines labeled A, B, and C.</span>
+<span class="s2">In each trial, press the key for the line that matches the target in length.</span>
+
+<span class="s2">Target: medium. A: medium, B: long, C: short. Others say: B B B B B B. You press &lt;&lt;A&gt;&gt;.</span>
+<span class="s2">Target: short. A: long, B: short, C: medium. Others say: B B B B B B. You press &lt;&lt;B&gt;&gt;.</span>
+<span class="s2">Target: long. A: long, B: short, C: medium. Others say: C C C C C C. You press &lt;&lt;A&gt;&gt;.</span>
+<span class="s2">Target: medium. A: medium, B: long, C: short. Others say: B B B B B B. You press &lt;&lt;B&gt;&gt;.</span>
+<span class="s2">Target: short. A: short, B: medium, C: long. Others say: C C C C C C. You press &lt;&lt;</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Example Prompt for Centaur:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">asch_prompt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="generate-predictions-with-mini-centaur">
+<h2>Generate Predictions with Mini Centaur<a class="headerlink" href="#generate-predictions-with-mini-centaur" title="Link to this heading">#</a></h2>
+<p>Now let’s see what the model predicts:</p>
+<p><strong>The model will:</strong></p>
+<ol class="arabic simple">
+<li><p>Read the full trial history</p></li>
+<li><p>Notice the pattern of conformity/resistance</p></li>
+<li><p>Consider the social pressure (“Others say: C C C C C C”)</p></li>
+<li><p>Generate the next choice token (A, B, or C)</p></li>
+</ol>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate prediction</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating model prediction...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">output</span> <span class="o">=</span> <span class="n">pipe</span><span class="p">(</span><span class="n">asch_prompt</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;generated_text&#39;</span><span class="p">]</span>
+<span class="n">predicted_choice</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">asch_prompt</span><span class="p">):]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Predicted choice: </span><span class="si">{</span><span class="n">predicted_choice</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Parse the choice</span>
+<span class="k">if</span> <span class="s1">&#39;A&#39;</span> <span class="ow">in</span> <span class="n">predicted_choice</span><span class="p">:</span>
+    <span class="n">choice_letter</span> <span class="o">=</span> <span class="s1">&#39;A&#39;</span>
+    <span class="n">interpretation</span> <span class="o">=</span> <span class="s2">&quot;INDEPENDENT (correct answer)&quot;</span>
+<span class="k">elif</span> <span class="s1">&#39;C&#39;</span> <span class="ow">in</span> <span class="n">predicted_choice</span><span class="p">:</span>
+    <span class="n">choice_letter</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span>
+    <span class="n">interpretation</span> <span class="o">=</span> <span class="s2">&quot;CONFORMITY (followed group)&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">choice_letter</span> <span class="o">=</span> <span class="n">predicted_choice</span>
+    <span class="n">interpretation</span> <span class="o">=</span> <span class="s2">&quot;UNCLEAR&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interpretation: </span><span class="si">{</span><span class="n">interpretation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Correct: A | Group: C | Model: </span><span class="si">{</span><span class="n">choice_letter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="run-multiple-trials">
+<h2>Run Multiple Trials<a class="headerlink" href="#run-multiple-trials" title="Link to this heading">#</a></h2>
+<p>Let’s simulate a full participant’s session:</p>
+<ul class="simple">
+<li><p>Multiple trials with varying conformity pressure</p></li>
+<li><p>Track conformity rate over time</p></li>
+<li><p>Compare to human behavioral patterns</p></li>
+</ul>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run_asch_trial</span><span class="p">(</span><span class="n">trial_history</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">correct_option</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">group_says</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run a single Asch conformity trial</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        trial_history: String of previous trials</span>
+<span class="sd">        target: Description of target line</span>
+<span class="sd">        correct_option: Which option (A/B/C) is correct</span>
+<span class="sd">        options: Dict mapping A/B/C to descriptions</span>
+<span class="sd">        group_says: What option the confederates choose</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: (chosen_option, conformed)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Build trial prompt</span>
+    <span class="n">trial_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Target: </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">. A: </span><span class="si">{</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, B: </span><span class="si">{</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;B&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, C: </span><span class="si">{</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;C&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">. Others say: </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">group_says</span><span class="p">]</span><span class="o">*</span><span class="mi">6</span><span class="p">)</span><span class="si">}</span><span class="s2">. You press &lt;&lt;&quot;</span>
+    
+    <span class="c1"># Full prompt with history</span>
+    <span class="n">full_prompt</span> <span class="o">=</span> <span class="n">trial_history</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">trial_text</span> <span class="k">if</span> <span class="n">trial_history</span> <span class="k">else</span> <span class="n">trial_text</span>
+    
+    <span class="c1"># Generate prediction</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">pipe</span><span class="p">(</span><span class="n">full_prompt</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;generated_text&#39;</span><span class="p">]</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">full_prompt</span><span class="p">):]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    
+    <span class="c1"># Parse choice</span>
+    <span class="k">if</span> <span class="s1">&#39;A&#39;</span> <span class="ow">in</span> <span class="n">prediction</span><span class="p">:</span>
+        <span class="n">choice</span> <span class="o">=</span> <span class="s1">&#39;A&#39;</span>
+    <span class="k">elif</span> <span class="s1">&#39;B&#39;</span> <span class="ow">in</span> <span class="n">prediction</span><span class="p">:</span>
+        <span class="n">choice</span> <span class="o">=</span> <span class="s1">&#39;B&#39;</span>
+    <span class="k">elif</span> <span class="s1">&#39;C&#39;</span> <span class="ow">in</span> <span class="n">prediction</span><span class="p">:</span>
+        <span class="n">choice</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">choice</span> <span class="o">=</span> <span class="s1">&#39;INVALID&#39;</span>
+    
+    <span class="c1"># Check if conformed</span>
+    <span class="n">conformed</span> <span class="o">=</span> <span class="p">(</span><span class="n">choice</span> <span class="o">==</span> <span class="n">group_says</span> <span class="ow">and</span> <span class="n">choice</span> <span class="o">!=</span> <span class="n">correct_option</span><span class="p">)</span>
+    
+    <span class="c1"># Add to history</span>
+    <span class="n">response_text</span> <span class="o">=</span> <span class="n">trial_text</span> <span class="o">+</span> <span class="n">choice</span> <span class="o">+</span> <span class="s2">&quot;&gt;&gt;.&quot;</span>  
+    
+    <span class="k">return</span> <span class="n">choice</span><span class="p">,</span> <span class="n">conformed</span><span class="p">,</span> <span class="n">response_text</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Trial simulation function defined&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run a simulated participant session</span>
+<span class="n">instructions</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;You will see a target line and three comparison lines labeled A, B, and C.</span>
+<span class="s2">In each trial, press the key for the line that matches the target in length.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="c1"># Define trial sequence (mix of conformity pressure and control trials)</span>
+<span class="n">trials</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># Trial 1: Control (group gives correct answer)</span>
+    <span class="p">{</span><span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="s1">&#39;medium&#39;</span><span class="p">,</span> <span class="s1">&#39;correct&#39;</span><span class="p">:</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;options&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="s1">&#39;medium&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="s1">&#39;long&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="s1">&#39;short&#39;</span><span class="p">},</span> <span class="s1">&#39;group&#39;</span><span class="p">:</span> <span class="s1">&#39;A&#39;</span><span class="p">},</span>
+    
+    <span class="c1"># Trial 2: Conformity pressure (group gives wrong answer)</span>
+    <span class="p">{</span><span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="s1">&#39;short&#39;</span><span class="p">,</span> <span class="s1">&#39;correct&#39;</span><span class="p">:</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;options&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="s1">&#39;long&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="s1">&#39;short&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="s1">&#39;medium&#39;</span><span class="p">},</span> <span class="s1">&#39;group&#39;</span><span class="p">:</span> <span class="s1">&#39;C&#39;</span><span class="p">},</span>
+    
+    <span class="c1"># Trial 3: Conformity pressure</span>
+    <span class="p">{</span><span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="s1">&#39;long&#39;</span><span class="p">,</span> <span class="s1">&#39;correct&#39;</span><span class="p">:</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;options&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="s1">&#39;long&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="s1">&#39;short&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="s1">&#39;medium&#39;</span><span class="p">},</span> <span class="s1">&#39;group&#39;</span><span class="p">:</span> <span class="s1">&#39;C&#39;</span><span class="p">},</span>
+    
+    <span class="c1"># Trial 4: Control</span>
+    <span class="p">{</span><span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="s1">&#39;short&#39;</span><span class="p">,</span> <span class="s1">&#39;correct&#39;</span><span class="p">:</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;options&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="s1">&#39;medium&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="s1">&#39;long&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="s1">&#39;short&#39;</span><span class="p">},</span> <span class="s1">&#39;group&#39;</span><span class="p">:</span> <span class="s1">&#39;C&#39;</span><span class="p">},</span>
+    
+    <span class="c1"># Trial 5: Strong conformity pressure</span>
+    <span class="p">{</span><span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="s1">&#39;medium&#39;</span><span class="p">,</span> <span class="s1">&#39;correct&#39;</span><span class="p">:</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;options&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="s1">&#39;medium&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="s1">&#39;long&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="s1">&#39;short&#39;</span><span class="p">},</span> <span class="s1">&#39;group&#39;</span><span class="p">:</span> <span class="s1">&#39;B&#39;</span><span class="p">},</span>
+    
+    <span class="c1"># Trial 6: Conformity pressure</span>
+    <span class="p">{</span><span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="s1">&#39;long&#39;</span><span class="p">,</span> <span class="s1">&#39;correct&#39;</span><span class="p">:</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;options&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="s1">&#39;short&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="s1">&#39;long&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="s1">&#39;medium&#39;</span><span class="p">},</span> <span class="s1">&#39;group&#39;</span><span class="p">:</span> <span class="s1">&#39;A&#39;</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="c1"># Run simulation</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running Asch Conformity Simulation&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="n">history</span> <span class="o">=</span> <span class="n">instructions</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">trial</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">choice</span><span class="p">,</span> <span class="n">conformed</span><span class="p">,</span> <span class="n">trial_text</span> <span class="o">=</span> <span class="n">run_asch_trial</span><span class="p">(</span>
+        <span class="n">history</span><span class="p">,</span>
+        <span class="n">trial</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">],</span>
+        <span class="n">trial</span><span class="p">[</span><span class="s1">&#39;correct&#39;</span><span class="p">],</span>
+        <span class="n">trial</span><span class="p">[</span><span class="s1">&#39;options&#39;</span><span class="p">],</span>
+        <span class="n">trial</span><span class="p">[</span><span class="s1">&#39;group&#39;</span><span class="p">]</span>
+    <span class="p">)</span>
+    
+    <span class="c1"># Record result</span>
+    <span class="n">is_pressure_trial</span> <span class="o">=</span> <span class="p">(</span><span class="n">trial</span><span class="p">[</span><span class="s1">&#39;group&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">trial</span><span class="p">[</span><span class="s1">&#39;correct&#39;</span><span class="p">])</span>
+    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s1">&#39;trial&#39;</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span>
+        <span class="s1">&#39;correct&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="p">[</span><span class="s1">&#39;correct&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;group_says&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="p">[</span><span class="s1">&#39;group&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;model_chose&#39;</span><span class="p">:</span> <span class="n">choice</span><span class="p">,</span>
+        <span class="s1">&#39;conformed&#39;</span><span class="p">:</span> <span class="n">conformed</span><span class="p">,</span>
+        <span class="s1">&#39;pressure_trial&#39;</span><span class="p">:</span> <span class="n">is_pressure_trial</span>
+    <span class="p">})</span>
+    
+    <span class="c1"># Display</span>
+    <span class="n">pressure_str</span> <span class="o">=</span> <span class="s2">&quot;[PRESSURE]&quot;</span> <span class="k">if</span> <span class="n">is_pressure_trial</span> <span class="k">else</span> <span class="s2">&quot;[CONTROL]&quot;</span>
+    <span class="n">conform_str</span> <span class="o">=</span> <span class="s2">&quot;→ CONFORMED&quot;</span> <span class="k">if</span> <span class="n">conformed</span> <span class="k">else</span> <span class="s2">&quot;→ independent&quot;</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Trial </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">pressure_str</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Correct: </span><span class="si">{</span><span class="n">trial</span><span class="p">[</span><span class="s1">&#39;correct&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> | Group: </span><span class="si">{</span><span class="n">trial</span><span class="p">[</span><span class="s1">&#39;group&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> | Model: </span><span class="si">{</span><span class="n">choice</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">conform_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+    
+    <span class="c1"># Update history</span>
+    <span class="n">history</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">trial_text</span>
+    
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># Slight delay between trials</span>
+
+<span class="c1"># Summary</span>
+<span class="n">results_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+<span class="n">pressure_trials</span> <span class="o">=</span> <span class="n">results_df</span><span class="p">[</span><span class="n">results_df</span><span class="p">[</span><span class="s1">&#39;pressure_trial&#39;</span><span class="p">]]</span>
+<span class="n">conformity_rate</span> <span class="o">=</span> <span class="n">pressure_trials</span><span class="p">[</span><span class="s1">&#39;conformed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Summary:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Total trials: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">results_df</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Conformity pressure trials: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pressure_trials</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Conformity rate: </span><span class="si">{</span><span class="n">conformity_rate</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  Historical human conformity rate: ~32%&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Model&#39;s conformity rate: </span><span class="si">{</span><span class="n">conformity_rate</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="comparing-approaches-zero-shot-vs-fine-tuned">
+<h2>Comparing Approaches: Zero-shot vs. Fine-tuned<a class="headerlink" href="#comparing-approaches-zero-shot-vs-fine-tuned" title="Link to this heading">#</a></h2>
+<p>We’ve now seen both approaches:</p>
+<section id="part-1-zero-shot-hewitt-et-al">
+<h3>Part 1: Zero-shot (Hewitt et al.)<a class="headerlink" href="#part-1-zero-shot-hewitt-et-al" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Input</strong>: Demographic description + experimental setup</p></li>
+<li><p><strong>Model</strong>: General-purpose GPT-4</p></li>
+<li><p><strong>Output</strong>: Predicted survey response</p></li>
+<li><p><strong>Strength</strong>: Fast, flexible, no training needed</p></li>
+<li><p><strong>Weakness</strong>: May miss subtle psychological mechanisms</p></li>
+</ul>
+</section>
+<section id="part-2-fine-tuned-centaur">
+<h3>Part 2: Fine-tuned (Centaur)<a class="headerlink" href="#part-2-fine-tuned-centaur" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Input</strong>: Full trial history in task-specific format</p></li>
+<li><p><strong>Model</strong>: Llama 3.1 fine-tuned on behavioral data</p></li>
+<li><p><strong>Output</strong>: Next choice given history</p></li>
+<li><p><strong>Strength</strong>: Learns from real human behavior patterns</p></li>
+<li><p><strong>Weakness</strong>: Requires behavioral corpus, domain-specific</p></li>
+</ul>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visual comparison</span>
+<span class="n">comparison_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
+    <span class="p">{</span><span class="s1">&#39;Approach&#39;</span><span class="p">:</span> <span class="s1">&#39;Zero-shot (GPT-4)&#39;</span><span class="p">,</span> <span class="s1">&#39;Speed&#39;</span><span class="p">:</span> <span class="s1">&#39;Fast&#39;</span><span class="p">,</span> <span class="s1">&#39;Flexibility&#39;</span><span class="p">:</span> <span class="s1">&#39;High&#39;</span><span class="p">,</span> <span class="s1">&#39;Accuracy&#39;</span><span class="p">:</span> <span class="s1">&#39;Medium&#39;</span><span class="p">,</span> <span class="s1">&#39;Training&#39;</span><span class="p">:</span> <span class="s1">&#39;None&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;Approach&#39;</span><span class="p">:</span> <span class="s1">&#39;Fine-tuned (Centaur)&#39;</span><span class="p">,</span> <span class="s1">&#39;Speed&#39;</span><span class="p">:</span> <span class="s1">&#39;Medium&#39;</span><span class="p">,</span> <span class="s1">&#39;Flexibility&#39;</span><span class="p">:</span> <span class="s1">&#39;Low&#39;</span><span class="p">,</span> <span class="s1">&#39;Accuracy&#39;</span><span class="p">:</span> <span class="s1">&#39;High&#39;</span><span class="p">,</span> <span class="s1">&#39;Training&#39;</span><span class="p">:</span> <span class="s1">&#39;Required&#39;</span><span class="p">}</span>
+<span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Comparison of Approaches&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">comparison_data</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="summary-and-best-practices">
+<h2>Summary and Best Practices<a class="headerlink" href="#summary-and-best-practices" title="Link to this heading">#</a></h2>
+<p><strong>Key takeaways:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>LLMs can predict experimental outcomes</strong> with varying accuracy</p></li>
+<li><p><strong>Two approaches</strong>: Zero-shot (fast, flexible) vs. Fine-tuned (precise, domain-specific)</p></li>
+<li><p><strong>Best use</strong>: Pre-testing designs, exploring heterogeneity, power analysis</p></li>
+<li><p><strong>Always validate</strong> with real human data before publishing</p></li>
+</ol>
+<p><strong>Best practices:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Use simulation for exploration</strong>, not substitution</p></li>
+<li><p><strong>Document everything</strong>: Prompts, models, parameters, seeds</p></li>
+<li><p><strong>Test sensitivity</strong>: Try multiple prompts and models</p></li>
+<li><p><strong>Compare to theory</strong>: Do predictions make psychological sense?</p></li>
+<li><p><strong>Report limitations</strong>: Be transparent about simulation boundaries</p></li>
+</ol>
+<p><strong>Ethical considerations:</strong></p>
+<ul class="simple">
+<li><p>Don’t claim simulated results are real human data</p></li>
+<li><p>Clearly label predictions vs. actual findings</p></li>
+<li><p>Be cautious with novel phenomena (LLMs may be wrong)</p></li>
+<li><p>Consider training data biases (WEIRD populations)</p></li>
+<li><p>Always get real human data for final claims</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="further-exploration">
+<h2>Further Exploration<a class="headerlink" href="#further-exploration" title="Link to this heading">#</a></h2>
+<p><strong>Try this yourself:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Modify the Connors study</strong>:</p>
+<ul class="simple">
+<li><p>Add different privacy conditions</p></li>
+<li><p>Test other demographic moderators</p></li>
+<li><p>Try different outcome measures</p></li>
+</ul>
+</li>
+<li><p><strong>Explore other experiments</strong>:</p>
+<ul class="simple">
+<li><p>Find preregistered studies at <a class="reference external" href="https://tessexperiments.org">tessexperiments.org</a></p></li>
+<li><p>Simulate before reading results</p></li>
+<li><p>Compare LLM predictions to actual findings</p></li>
+</ul>
+</li>
+<li><p><strong>Fine-tune your own model</strong>:</p>
+<ul class="simple">
+<li><p>Collect trial-by-trial behavioral data</p></li>
+<li><p>Format as Centaur-style prompts</p></li>
+<li><p>Use QLoRA to fine-tune efficiently</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Resources:</strong></p>
+<ul class="simple">
+<li><p><strong>Centaur model</strong>: <a class="reference external" href="https://huggingface.co/marcelbinz/Llama-3.1-Minitaur-8B-adapter">marcelbinz/Llama-3.1-Minitaur-8B-adapter</a></p></li>
+<li><p><strong>Interactive demo</strong>: <a class="reference external" href="https://huggingface.co/spaces/marcelbinz/Centaur">https://huggingface.co/spaces/marcelbinz/Centaur</a></p></li>
+<li><p><strong>TESS experiments</strong>: <a class="reference external" href="https://tessexperiments.org">https://tessexperiments.org</a></p></li>
+</ul>
+<hr class="docutils" />
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="week09_simulation_agents.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">LLMs for Simulation I: Generative Agents</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">LLMs for Simulation II: Experiments</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-two-approaches-to-experimental-simulation">Introduction: Two Approaches to Experimental Simulation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-1-zero-shot-prediction-hewitt-et-al">Approach 1: Zero-shot prediction (Hewitt et al.)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approach-2-fine-tuned-behavioral-model-centaur">Approach 2: Fine-tuned behavioral model (Centaur)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-zero-shot-experimental-prediction">Part 1: Zero-shot Experimental Prediction</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-define-the-experimental-setup">Step 1: Define the Experimental Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-create-demographic-profiles">Step 2: Create Demographic Profiles</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-simulate-experimental-responses">Step 3: Simulate Experimental Responses</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-analyze-predicted-treatment-effects">Step 4: Analyze Predicted Treatment Effects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-compare-to-actual-results">Step 5: Compare to Actual Results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reflections-on-zero-shot-prediction">Reflections on Zero-shot Prediction</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-fine-tuned-behavioral-models-mini-centaur">Part 2: Fine-tuned Behavioral Models (Mini Centaur)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-for-mini-centaur">Setup for Mini Centaur</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-mini-centaur-model">Load the Mini Centaur Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-asch-conformity-experiment">The Asch Conformity Experiment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#format-of-behavioral-data-for-centaur">Format of Behavioral Data for Centaur</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-predictions-with-mini-centaur">Generate Predictions with Mini Centaur</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-multiple-trials">Run Multiple Trials</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-approaches-zero-shot-vs-fine-tuned">Comparing Approaches: Zero-shot vs. Fine-tuned</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-zero-shot-hewitt-et-al">Part 1: Zero-shot (Hewitt et al.)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-fine-tuned-centaur">Part 2: Fine-tuned (Centaur)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-and-best-practices">Summary and Best Practices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-exploration">Further Exploration</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Christopher Barrie
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

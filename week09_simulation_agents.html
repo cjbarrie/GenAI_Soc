@@ -1,0 +1,2108 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>LLMs for Simulation I: Generative Agents &#8212; GenAI for Sociology</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'week09_simulation_agents';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="LLMs for Synthetic Data II - Behavioral Tests" href="week08_interactive_experiments.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">GenAI for Sociology</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    GenAI for Sociology
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="week04_llms.html">LLMs for Annotation I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week05_qualitative.html">LLMs for Annotation II</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week06_annotation.html">LLMs for Annotation III</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week07_silicon_sampling.html">LLMs for Synthetic Data I: Simulating Survey Respondents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week08_interactive_experiments.html">LLMs for Synthetic Data II - Behavioral Tests</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">LLMs for Simulation I: Generative Agents</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/cjbarrie/GenAI_Soc/blob/main/genai_book/week09_simulation_agents.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cjbarrie/GenAI_Soc" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cjbarrie/GenAI_Soc/issues/new?title=Issue%20on%20page%20%2Fweek09_simulation_agents.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/week09_simulation_agents.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>LLMs for Simulation I: Generative Agents</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-why-simulate-social-media">Introduction: Why Simulate Social Media?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-creating-realistic-personas">Part 1: Creating Realistic Personas</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-persona-to-prompt-format">Convert persona to prompt format</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-news-headlines-and-content">Part 2: News Headlines and Content</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-agent-actions-posting-liking-commenting">Part 3: Agent Actions - Posting, Liking, Commenting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#test-agent-behavior">Test agent behavior</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-platform-algorithms">Part 4: Platform Algorithms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-1-echo-chamber-following-engagement">Platform 1: Echo Chamber (Following + Engagement)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-2-global-feed-all-users-engagement">Platform 2: Global Feed (All Users + Engagement)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-3-bridging-algorithm-cross-partisan-likes">Platform 3: Bridging Algorithm (Cross-Partisan Likes)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-running-the-simulation">Part 5: Running the Simulation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-simulation-simplified-version">Run simulation (simplified version)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-6-measuring-outcomes">Part 6: Measuring Outcomes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#e-i-index-external-internal-index">E-I Index (External-Internal Index)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-results-with-mock-data">Visualize results (with mock data)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-source-alternatives">Open-Source Alternatives</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-ollama">Using Ollama</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-hugging-face">Using Hugging Face</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="llms-for-simulation-i-generative-agents">
+<h1>LLMs for Simulation I: Generative Agents<a class="headerlink" href="#llms-for-simulation-i-generative-agents" title="Link to this heading">#</a></h1>
+<p><strong>Learning objectives:</strong></p>
+<ul class="simple">
+<li><p>Understand how LLMs can enhance agent-based models (ABMs)</p></li>
+<li><p>Create realistic personas for simulated social media users</p></li>
+<li><p>Implement multi-agent simulations with realistic(ish) discourse</p></li>
+<li><p>Test alternative platform algorithms (echo chambers vs bridging)</p></li>
+<li><p>Measure emergent properties (toxicity, cross-partisan engagement)</p></li>
+<li><p>Evaluate social media interventions through simulation</p></li>
+</ul>
+<p><strong>How to run this notebook:</strong></p>
+<ul class="simple">
+<li><p><strong>Google Colab</strong> (recommended): Works for all parts</p></li>
+<li><p><strong>OpenAI API key needed</strong>: For agent conversations</p></li>
+</ul>
+<p><strong>Key paper:</strong> Törnberg et al. (2023). “Simulating Social Media Using Large Language Models to Evaluate Alternative News Feed Algorithms.” <a class="reference external" href="https://arxiv.org/abs/2310.05984">arXiv:2310.05984</a></p>
+<hr class="docutils" />
+<section id="introduction-why-simulate-social-media">
+<h2>Introduction: Why Simulate Social Media?<a class="headerlink" href="#introduction-why-simulate-social-media" title="Link to this heading">#</a></h2>
+<p>Social media platforms face a fundamental challenge: <strong>How do you design algorithms that promote healthy public discourse?</strong></p>
+<p><strong>The problem with existing research methods:</strong></p>
+<ul class="simple">
+<li><p><strong>Observational studies</strong>: Can’t test non-existent alternatives</p></li>
+<li><p><strong>Field experiments</strong>: Expensive, risky, limited by platform cooperation</p></li>
+<li><p><strong>Lab experiments</strong>: Can’t capture emergent group dynamics</p></li>
+<li><p><strong>Traditional ABMs</strong>: Agents follow simple rules, can’t engage in realistic discourse</p></li>
+</ul>
+<p><strong>The LLM + ABM solution:</strong></p>
+<ul class="simple">
+<li><p>Combine the <strong>emergence</strong> of agent-based models</p></li>
+<li><p>With the <strong>linguistic realism</strong> of large language models</p></li>
+<li><p>Create synthetic social media platforms to test “what if” scenarios</p></li>
+<li><p>Rapid, safe, and cost-effective exploration of design space</p></li>
+</ul>
+<p><strong>What we’ll build:</strong>
+A simplified version of Törnberg et al. (2023) that simulates a social media platform with:</p>
+<ul class="simple">
+<li><p>20 agents with realistic personas based on (made-up) survey data</p></li>
+<li><p>Real news headlines</p></li>
+<li><p>Three different newsfeed algorithms</p></li>
+<li><p>Posting, liking, and commenting behaviors</p></li>
+<li><p>Measurement of toxicity and cross-partisan engagement</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install packages</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>-q<span class="w"> </span>openai<span class="w"> </span>pandas<span class="w"> </span>numpy<span class="w"> </span>matplotlib<span class="w"> </span>seaborn<span class="w"> </span>networkx
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">getpass</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">Counter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="c1"># Set API key</span>
+<span class="k">if</span> <span class="s2">&quot;OPENAI_API_KEY&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getpass</span><span class="p">(</span><span class="s2">&quot;Enter your OpenAI API key: &quot;</span><span class="p">)</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">()</span>
+
+<span class="c1"># Set plotting style</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Setup complete!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="part-1-creating-realistic-personas">
+<h2>Part 1: Creating Realistic Personas<a class="headerlink" href="#part-1-creating-realistic-personas" title="Link to this heading">#</a></h2>
+<p>Following Törnberg et al. (2023), we create agent personas based on (made-up) survey data. In the original study, they used the American National Election Study (ANES) to generate 500 personas. For this tutorial, we’ll create a smaller set of 6 diverse personas.</p>
+<p><strong>Key persona components:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Demographics</strong>: Age, gender, race, education, income, location</p></li>
+<li><p><strong>Political identity</strong>: Party affiliation, voting history</p></li>
+<li><p><strong>Attitudes</strong>: Feelings toward political figures and groups</p></li>
+<li><p><strong>Interests</strong>: Non-political hobbies, sports teams, TV shows</p></li>
+<li><p><strong>Personality</strong>: Traits generated by LLM to enrich the persona</p></li>
+</ol>
+<p><strong>Why survey data?</strong></p>
+<ul class="simple">
+<li><p>Ensures demographic representativeness</p></li>
+<li><p>Captures correlations between attributes (e.g., age and party—though not my presentation on this subject)</p></li>
+<li><p>Provides realistic distributions of political attitudes</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample personas representing diverse US electorate</span>
+<span class="c1"># In a full study, these would come from ANES survey data</span>
+<span class="n">SAMPLE_PERSONAS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;John Smith&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">45</span><span class="p">,</span>
+        <span class="s2">&quot;gender&quot;</span><span class="p">:</span> <span class="s2">&quot;male&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;race&quot;</span><span class="p">:</span> <span class="s2">&quot;White&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;education&quot;</span><span class="p">:</span> <span class="s2">&quot;High school&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;income&quot;</span><span class="p">:</span> <span class="s2">&quot;middle&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;Iowa&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;religion&quot;</span><span class="p">:</span> <span class="s2">&quot;Evangelical Protestant&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;party&quot;</span><span class="p">:</span> <span class="s2">&quot;Strong Republican&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;voted_for&quot;</span><span class="p">:</span> <span class="s2">&quot;Donald Trump in 2020&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;loves&quot;</span><span class="p">:</span> <span class="s2">&quot;Republicans, Donald Trump, Christians, NRA, Christian Fundamentalists, conservatives&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hates&quot;</span><span class="p">:</span> <span class="s2">&quot;Democrats, Joe Biden, Black Lives Matter, Anthony Fauci, liberals&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hobbies&quot;</span><span class="p">:</span> <span class="s2">&quot;Hunting, fishing, woodworking&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sports_team&quot;</span><span class="p">:</span> <span class="s2">&quot;Iowa Hawkeyes (college football)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;political_opinions&quot;</span><span class="p">:</span> <span class="s2">&quot;Supports strict immigration policies, opposes abortion rights, believes in limited government intervention&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;personality&quot;</span><span class="p">:</span> <span class="s2">&quot;Patriotic, traditionalist, family-oriented&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Maria Garcia&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+        <span class="s2">&quot;gender&quot;</span><span class="p">:</span> <span class="s2">&quot;female&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;race&quot;</span><span class="p">:</span> <span class="s2">&quot;Hispanic&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;education&quot;</span><span class="p">:</span> <span class="s2">&quot;Bachelor&#39;s degree&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;income&quot;</span><span class="p">:</span> <span class="s2">&quot;middle&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;California&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;religion&quot;</span><span class="p">:</span> <span class="s2">&quot;Catholic&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;party&quot;</span><span class="p">:</span> <span class="s2">&quot;Strong Democrat&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;voted_for&quot;</span><span class="p">:</span> <span class="s2">&quot;Joe Biden in 2020&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;loves&quot;</span><span class="p">:</span> <span class="s2">&quot;Democrats, Joe Biden, immigration rights activists, healthcare workers, teachers&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hates&quot;</span><span class="p">:</span> <span class="s2">&quot;Republicans, Donald Trump, ICE, anti-immigrant rhetoric&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hobbies&quot;</span><span class="p">:</span> <span class="s2">&quot;Volunteering, reading, cooking&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sports_team&quot;</span><span class="p">:</span> <span class="s2">&quot;LA Dodgers&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;political_opinions&quot;</span><span class="p">:</span> <span class="s2">&quot;Supports immigration reform, universal healthcare, climate action&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;personality&quot;</span><span class="p">:</span> <span class="s2">&quot;Compassionate, community-focused, socially conscious&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;James Thompson&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">58</span><span class="p">,</span>
+        <span class="s2">&quot;gender&quot;</span><span class="p">:</span> <span class="s2">&quot;male&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;race&quot;</span><span class="p">:</span> <span class="s2">&quot;Black&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;education&quot;</span><span class="p">:</span> <span class="s2">&quot;Some college&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;income&quot;</span><span class="p">:</span> <span class="s2">&quot;lower-middle&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;Georgia&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;religion&quot;</span><span class="p">:</span> <span class="s2">&quot;Baptist&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;party&quot;</span><span class="p">:</span> <span class="s2">&quot;Democrat&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;voted_for&quot;</span><span class="p">:</span> <span class="s2">&quot;Joe Biden in 2020&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;loves&quot;</span><span class="p">:</span> <span class="s2">&quot;Democrats, civil rights activists, Black Lives Matter, community leaders&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hates&quot;</span><span class="p">:</span> <span class="s2">&quot;Republicans, systemic racism, police brutality&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hobbies&quot;</span><span class="p">:</span> <span class="s2">&quot;Church activities, basketball, mentoring youth&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sports_team&quot;</span><span class="p">:</span> <span class="s2">&quot;Atlanta Hawks&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;political_opinions&quot;</span><span class="p">:</span> <span class="s2">&quot;Supports criminal justice reform, voting rights, racial equity&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;personality&quot;</span><span class="p">:</span> <span class="s2">&quot;Faith-driven, resilient, community advocate&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Sarah Johnson&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">28</span><span class="p">,</span>
+        <span class="s2">&quot;gender&quot;</span><span class="p">:</span> <span class="s2">&quot;female&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;race&quot;</span><span class="p">:</span> <span class="s2">&quot;White&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;education&quot;</span><span class="p">:</span> <span class="s2">&quot;Master&#39;s degree&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;income&quot;</span><span class="p">:</span> <span class="s2">&quot;upper-middle&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;New York&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;religion&quot;</span><span class="p">:</span> <span class="s2">&quot;Atheist&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;party&quot;</span><span class="p">:</span> <span class="s2">&quot;Independent (leans Democrat)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;voted_for&quot;</span><span class="p">:</span> <span class="s2">&quot;Joe Biden in 2020&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;loves&quot;</span><span class="p">:</span> <span class="s2">&quot;Science, evidence-based policy, environmental activism&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hates&quot;</span><span class="p">:</span> <span class="s2">&quot;Anti-vaxxers, climate change deniers, political extremism&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hobbies&quot;</span><span class="p">:</span> <span class="s2">&quot;Hiking, photography, craft beer&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sports_team&quot;</span><span class="p">:</span> <span class="s2">&quot;Not interested in sports&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;political_opinions&quot;</span><span class="p">:</span> <span class="s2">&quot;Supports climate action, science funding, secular government&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;personality&quot;</span><span class="p">:</span> <span class="s2">&quot;Analytical, environmentally conscious, pragmatic&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Michael Chen&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span>
+        <span class="s2">&quot;gender&quot;</span><span class="p">:</span> <span class="s2">&quot;male&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;race&quot;</span><span class="p">:</span> <span class="s2">&quot;Asian&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;education&quot;</span><span class="p">:</span> <span class="s2">&quot;Bachelor&#39;s degree&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;income&quot;</span><span class="p">:</span> <span class="s2">&quot;upper-middle&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;Washington&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;religion&quot;</span><span class="p">:</span> <span class="s2">&quot;No religion&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;party&quot;</span><span class="p">:</span> <span class="s2">&quot;Independent&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;voted_for&quot;</span><span class="p">:</span> <span class="s2">&quot;Did not vote in 2020&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;loves&quot;</span><span class="p">:</span> <span class="s2">&quot;Technology, innovation, economic growth&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hates&quot;</span><span class="p">:</span> <span class="s2">&quot;Government overreach, bureaucracy&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hobbies&quot;</span><span class="p">:</span> <span class="s2">&quot;Gaming, coding, investing&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sports_team&quot;</span><span class="p">:</span> <span class="s2">&quot;Seattle Seahawks&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;political_opinions&quot;</span><span class="p">:</span> <span class="s2">&quot;Fiscally conservative, socially moderate, pro-technology&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;personality&quot;</span><span class="p">:</span> <span class="s2">&quot;Tech-savvy, libertarian-leaning, entrepreneurial&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Linda Davis&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">52</span><span class="p">,</span>
+        <span class="s2">&quot;gender&quot;</span><span class="p">:</span> <span class="s2">&quot;female&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;race&quot;</span><span class="p">:</span> <span class="s2">&quot;White&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;education&quot;</span><span class="p">:</span> <span class="s2">&quot;Associate degree&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;income&quot;</span><span class="p">:</span> <span class="s2">&quot;middle&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;Ohio&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;religion&quot;</span><span class="p">:</span> <span class="s2">&quot;Methodist&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;party&quot;</span><span class="p">:</span> <span class="s2">&quot;Independent&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;voted_for&quot;</span><span class="p">:</span> <span class="s2">&quot;Donald Trump in 2020&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;loves&quot;</span><span class="p">:</span> <span class="s2">&quot;Small businesses, local communities, traditional values&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hates&quot;</span><span class="p">:</span> <span class="s2">&quot;Big corporations, political elites, cancel culture&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hobbies&quot;</span><span class="p">:</span> <span class="s2">&quot;Gardening, baking, quilting&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sports_team&quot;</span><span class="p">:</span> <span class="s2">&quot;Ohio State Buckeyes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;political_opinions&quot;</span><span class="p">:</span> <span class="s2">&quot;Supports small business, skeptical of both parties&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;personality&quot;</span><span class="p">:</span> <span class="s2">&quot;Down-to-earth, independent-minded, community-oriented&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="c1"># For demonstration, we&#39;ll use 6 agents</span>
+<span class="n">NUM_AGENTS</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">SAMPLE_PERSONAS</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created </span><span class="si">{</span><span class="n">NUM_AGENTS</span><span class="si">}</span><span class="s2"> agent personas:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">SAMPLE_PERSONAS</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">yo </span><span class="si">{</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;gender&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>Creates a diverse sample of agent personas with:</p>
+<ul class="simple">
+<li><p><strong>Demographic diversity</strong>: Different ages, races, genders, regions</p></li>
+<li><p><strong>Political diversity</strong>: Republicans, Democrats, Independents</p></li>
+<li><p><strong>Rich attributes</strong>: Beyond demographics to include values, interests, personality</p></li>
+</ul>
+<p><strong>Key design principle from Törnberg et al.:</strong></p>
+<ul class="simple">
+<li><p><strong>Dynamic persona generation</strong>: Only include relevant attributes</p>
+<ul>
+<li><p>Political agents: Include party, attitudes toward figures</p></li>
+<li><p>Non-political agents: Emphasize hobbies, interests</p></li>
+<li><p>This prevents “overpoliticization” of all agents</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Scaling up:</strong></p>
+<ul class="simple">
+<li><p>For a full study: 100-500 agents from survey data</p></li>
+<li><p>Each additional agent adds cost but increases diversity (in theory)</p></li>
+<li><p>Trade-off: Complexity vs. computational resources</p></li>
+</ul>
+<section id="convert-persona-to-prompt-format">
+<h3>Convert persona to prompt format<a class="headerlink" href="#convert-persona-to-prompt-format" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_persona_prompt</span><span class="p">(</span><span class="n">persona</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert persona dict into prompt format for LLM</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        persona: Dictionary with persona attributes</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Formatted persona prompt</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.</span>
+
+<span class="s2">Demographics:</span>
+<span class="s2">- Age: </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">- Gender: </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;gender&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">- Race: </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">- Education: </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">- Income: </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;income&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> income</span>
+<span class="s2">- Region: </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">- Religion: </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;religion&#39;</span><span class="p">]</span><span class="si">}</span>
+
+<span class="s2">Political Identity:</span>
+<span class="s2">- Party: </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">- You voted for </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;voted_for&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">- You love: </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;loves&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">- You dislike: </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;hates&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">- Political views: </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;political_opinions&#39;</span><span class="p">]</span><span class="si">}</span>
+
+<span class="s2">Interests:</span>
+<span class="s2">- Hobbies: </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;hobbies&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">- Sports: </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;sports_team&#39;</span><span class="p">]</span><span class="si">}</span>
+
+<span class="s2">Personality: </span><span class="si">{</span><span class="n">persona</span><span class="p">[</span><span class="s1">&#39;personality&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">prompt</span>
+
+<span class="c1"># Example</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Example persona prompt:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">create_persona_prompt</span><span class="p">(</span><span class="n">SAMPLE_PERSONAS</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="part-2-news-headlines-and-content">
+<h2>Part 2: News Headlines and Content<a class="headerlink" href="#part-2-news-headlines-and-content" title="Link to this heading">#</a></h2>
+<p>Agents need something to react to. Törnberg et al. used real news headlines from July 1, 2020 - a particularly contentious moment in US politics:</p>
+<ul class="simple">
+<li><p>COVID-19 pandemic ongoing</p></li>
+<li><p>Black Lives Matter protests</p></li>
+<li><p>Presidential election campaign</p></li>
+</ul>
+<p>For this simulation, we’ll use a simplified set of headlines representing different news sources and topics.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample news headlines from July 2020</span>
+<span class="c1"># In the full study, these came from newsapi.ai with 100-word summaries</span>
+<span class="n">NEWS_HEADLINES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;CNN&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;headline&quot;</span><span class="p">:</span> <span class="s2">&quot;Trump calls Black Lives Matter a &#39;symbol of hate&#39;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;President Trump defended his refusal to paint &#39;Black Lives Matter&#39; on Fifth Avenue, calling it a &#39;symbol of hate.&#39; The mayor of New York announced plans to paint the slogan on the street in front of Trump Tower.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;political_slant&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;Fox News&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;headline&quot;</span><span class="p">:</span> <span class="s2">&quot;Seattle CHOP zone closes after shootings, violence&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Seattle police moved in to clear the Capitol Hill Organized Protest zone after weeks of violence, including multiple shootings. Mayor Jenny Durkan ordered the area cleared following the death of a teenager.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;political_slant&quot;</span><span class="p">:</span> <span class="s2">&quot;right&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;ABC News&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;headline&quot;</span><span class="p">:</span> <span class="s2">&quot;Alabama students throwing &#39;COVID parties&#39; to see who gets infected first&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;City officials report that students in Tuscaloosa have been organizing parties where attendees deliberately expose themselves to COVID-19, with a prize going to the first person who tests positive.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;political_slant&quot;</span><span class="p">:</span> <span class="s2">&quot;neutral&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;New York Times&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;headline&quot;</span><span class="p">:</span> <span class="s2">&quot;Minor League Baseball Season Is Canceled for the First Time&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Minor League Baseball announced the cancellation of its 2020 season, affecting 160 teams. This marks the first time in the league&#39;s history that a season has been called off entirely.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;political_slant&quot;</span><span class="p">:</span> <span class="s2">&quot;neutral&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;NPR&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;headline&quot;</span><span class="p">:</span> <span class="s2">&quot;Supreme Court Rules Trump Cannot Block Critics On Twitter&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;The Supreme Court ruled that President Trump violated the First Amendment by blocking critics on Twitter, saying public officials cannot exclude people from online forums based on their views.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;political_slant&quot;</span><span class="p">:</span> <span class="s2">&quot;neutral&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;Fox News&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;headline&quot;</span><span class="p">:</span> <span class="s2">&quot;Kristin Chenoweth says country music is &#39;becoming more open&#39; to LGBTQ inclusion&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Singer and actress Kristin Chenoweth praised country music for becoming more inclusive of LGBTQ artists and themes, highlighting recent statements of support from major country music stars.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;political_slant&quot;</span><span class="p">:</span> <span class="s2">&quot;right&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;HuffPost&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;headline&quot;</span><span class="p">:</span> <span class="s2">&quot;Terry Crews Panned Online For His Cautionary Tweet On Black Lives Matter&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Actor Terry Crews faced backlash on social media after tweeting that Black Lives Matter should not become &#39;Black Lives Better,&#39; warning against what he called &#39;Black supremacy.&#39; Critics accused him of misunderstanding the movement.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;political_slant&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">NEWS_HEADLINES</span><span class="p">)</span><span class="si">}</span><span class="s2"> news headlines:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">news</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">NEWS_HEADLINES</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. [</span><span class="si">{</span><span class="n">news</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">news</span><span class="p">[</span><span class="s1">&#39;headline&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this represents:</strong></p>
+<ul class="simple">
+<li><p><strong>Diverse news sources</strong>: CNN, Fox News, NPR, etc. (left, right, center)</p></li>
+<li><p><strong>Contentious topics</strong>: BLM, COVID, Trump, social issues</p></li>
+<li><p><strong>Non-political content</strong>: Sports, entertainment (not everything is political)</p></li>
+</ul>
+<p><strong>Matching personas to news sources:</strong>
+In Törnberg et al., agents only see news from sources they consume according to ANES data:</p>
+<ul class="simple">
+<li><p>Conservatives → Fox News, Breitbart</p></li>
+<li><p>Liberals → CNN, MSNBC, NYT</p></li>
+<li><p>Moderates → Mix of sources</p></li>
+</ul>
+<p>This creates <strong>selective exposure</strong> - agents naturally see news aligned with their views.</p>
+</section>
+<hr class="docutils" />
+<section id="part-3-agent-actions-posting-liking-commenting">
+<h2>Part 3: Agent Actions - Posting, Liking, Commenting<a class="headerlink" href="#part-3-agent-actions-posting-liking-commenting" title="Link to this heading">#</a></h2>
+<p>Now we implement the core agent behaviors:</p>
+<ol class="arabic simple">
+<li><p><strong>Read news</strong> → Select article of interest</p></li>
+<li><p><strong>Post</strong> → Share article with comment</p></li>
+<li><p><strong>See timeline</strong> → View posts from others (algorithm-dependent)</p></li>
+<li><p><strong>Like</strong> → React positively to posts</p></li>
+<li><p><strong>Comment</strong> → Reply to posts</p></li>
+</ol>
+<p>These actions are implemented as API calls where agents use their persona to decide what to do.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SocialMediaAgent</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An LLM-powered agent that can post, like, and comment on social media</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">persona</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">persona</span> <span class="o">=</span> <span class="n">persona</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">persona</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">party</span> <span class="o">=</span> <span class="n">persona</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;party&#39;</span><span class="p">,</span> <span class="s1">&#39;Independent&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">persona_prompt</span> <span class="o">=</span> <span class="n">create_persona_prompt</span><span class="p">(</span><span class="n">persona</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">posts</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Posts this agent has made</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">likes</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Post IDs this agent has liked</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comments</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Comments this agent has made</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">share_news</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">news_articles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span> <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Agent reads news headlines and decides which to share with a comment</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            news_articles: List of news articles to choose from</span>
+<span class="sd">            max_tokens: Maximum length of comment</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict with selected article and comment, or None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Format news list</span>
+        <span class="n">news_list</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">. [</span><span class="si">{</span><span class="n">article</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">article</span><span class="p">[</span><span class="s1">&#39;headline&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">   </span><span class="si">{</span><span class="n">article</span><span class="p">[</span><span class="s1">&#39;summary&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">article</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">news_articles</span><span class="p">)</span>
+        <span class="p">])</span>
+        
+        <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Here are today&#39;s news headlines:</span>
+
+<span class="si">{</span><span class="n">news_list</span><span class="si">}</span>
+
+<span class="s2">Choose ONE headline that interests you most based on your values and opinions. Write a brief comment (2-3 sentences) sharing your reaction to share on social media.</span>
+
+<span class="s2">Format your response as:</span>
+<span class="s2">HEADLINE_NUMBER: [number]</span>
+<span class="s2">COMMENT: [your 2-3 sentence comment]</span>
+<span class="s2">&quot;&quot;&quot;</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+                    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">persona_prompt</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}</span>
+                <span class="p">],</span>
+                <span class="n">temperature</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+                <span class="n">max_tokens</span><span class="o">=</span><span class="n">max_tokens</span>
+            <span class="p">)</span>
+            
+            <span class="n">content</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+            
+            <span class="c1"># Parse response</span>
+            <span class="n">headline_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;HEADLINE_NUMBER:\s*(\d+)&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+            <span class="n">comment_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;COMMENT:\s*(.+)&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">headline_match</span> <span class="ow">and</span> <span class="n">comment_match</span><span class="p">:</span>
+                <span class="n">headline_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">headline_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">headline_idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">news_articles</span><span class="p">):</span>
+                    <span class="n">post</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                        <span class="s2">&quot;party&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">party</span><span class="p">,</span>
+                        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="n">news_articles</span><span class="p">[</span><span class="n">headline_idx</span><span class="p">],</span>
+                        <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="n">comment_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+                        <span class="s2">&quot;likes&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="s2">&quot;comments&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                        <span class="s2">&quot;likes_by_party&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Democrat&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Republican&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Independent&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+                    <span class="p">}</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">post</span>
+        
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in share_news for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="kc">None</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">decide_likes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">posts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Agent sees posts and decides which to like</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            posts: List of posts to consider</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            List of indices of posts to like</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">posts</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        
+        <span class="c1"># Format posts</span>
+        <span class="n">posts_text</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+            <span class="sa">f</span><span class="s2">&quot;Post </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> by </span><span class="si">{</span><span class="n">post</span><span class="p">[</span><span class="s1">&#39;author&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="se">\n\&quot;</span><span class="si">{</span><span class="n">post</span><span class="p">[</span><span class="s1">&#39;comment&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\&quot;\n</span><span class="s2">(About: </span><span class="si">{</span><span class="n">post</span><span class="p">[</span><span class="s1">&#39;article&#39;</span><span class="p">][</span><span class="s1">&#39;headline&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">post</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">posts</span><span class="p">)</span>
+        <span class="p">])</span>
+        
+        <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You see these posts on social media:</span>
+
+<span class="si">{</span><span class="n">posts_text</span><span class="si">}</span>
+
+<span class="s2">Which posts do you want to LIKE?</span>
+
+<span class="s2">Respond with comma-separated post numbers (e.g., &quot;1, 3, 5&quot;) or &quot;none&quot; if you don&#39;t like any.&quot;&quot;&quot;</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+                    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">persona_prompt</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}</span>
+                <span class="p">],</span>
+                <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+                <span class="n">max_tokens</span><span class="o">=</span><span class="mi">50</span>
+            <span class="p">)</span>
+            
+            <span class="n">content</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            
+            <span class="k">if</span> <span class="s2">&quot;none&quot;</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[]</span>
+            
+            <span class="c1"># Extract numbers</span>
+            <span class="n">numbers</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+            <span class="n">liked_indices</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">numbers</span> <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">posts</span><span class="p">)]</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">likes</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">posts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">liked_indices</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">liked_indices</span>
+        
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in decide_likes for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_comment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">80</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Agent writes a comment on a post</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            post: Post to comment on</span>
+<span class="sd">            max_tokens: Maximum comment length</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Comment text or None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You see this post:</span>
+
+<span class="s2">Author: </span><span class="si">{</span><span class="n">post</span><span class="p">[</span><span class="s1">&#39;author&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">Post: &quot;</span><span class="si">{</span><span class="n">post</span><span class="p">[</span><span class="s1">&#39;comment&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="s2">Article: </span><span class="si">{</span><span class="n">post</span><span class="p">[</span><span class="s1">&#39;article&#39;</span><span class="p">][</span><span class="s1">&#39;headline&#39;</span><span class="p">]</span><span class="si">}</span>
+
+<span class="s2">Write a brief reply (1-2 sentences) responding to this post.&quot;&quot;&quot;</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+                    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">persona_prompt</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}</span>
+                <span class="p">],</span>
+                <span class="n">temperature</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+                <span class="n">max_tokens</span><span class="o">=</span><span class="n">max_tokens</span>
+            <span class="p">)</span>
+            
+            <span class="n">comment_text</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            
+            <span class="n">comment</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;party&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">party</span><span class="p">,</span>
+                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">comment_text</span>
+            <span class="p">}</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">comment</span>
+        
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in write_comment for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ SocialMediaAgent class defined&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>Implements a complete social media agent with three key behaviors:</p>
+<ol class="arabic simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">share_news()</span></code></strong>: Agent as content creator</p>
+<ul class="simple">
+<li><p>Reads multiple news headlines</p></li>
+<li><p>Selects one based on their interests/values</p></li>
+<li><p>Writes authentic comment (2-3 sentences)</p></li>
+<li><p>Temperature = 0.9 (allows personality variation)</p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">decide_likes()</span></code></strong>: Agent as consumer</p>
+<ul class="simple">
+<li><p>Sees posts from others in timeline</p></li>
+<li><p>Decides which posts to like</p></li>
+<li><p>Only likes content they genuinely support</p></li>
+<li><p>Returns list of post indices</p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">write_comment()</span></code></strong>: Agent as discussant</p>
+<ul class="simple">
+<li><p>Reads a specific post</p></li>
+<li><p>Writes reply (agree, disagree, nuance)</p></li>
+<li><p>Temperature = 0.9 (authentic reactions)</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Key design decisions:</strong></p>
+<ul class="simple">
+<li><p><strong>System message</strong>: Full persona context for all actions</p></li>
+<li><p><strong>Structured outputs</strong>: Parse responses to extract decisions</p></li>
+<li><p><strong>Error handling</strong>: Build in handling for e.g., API failures</p></li>
+<li><p><strong>Tracking</strong>: Store posts, likes, comments for analysis</p></li>
+</ul>
+<p><strong>Limitations:</strong></p>
+<ul class="simple">
+<li><p>No memory of previous interactions (could add with context)</p></li>
+<li><p>Each action is independent API call (expensive)</p></li>
+<li><p>Simplified emotion model (real humans more complex)</p></li>
+</ul>
+<section id="test-agent-behavior">
+<h3>Test agent behavior<a class="headerlink" href="#test-agent-behavior" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create test agent</span>
+<span class="n">test_agent</span> <span class="o">=</span> <span class="n">SocialMediaAgent</span><span class="p">(</span><span class="n">SAMPLE_PERSONAS</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Testing </span><span class="si">{</span><span class="n">test_agent</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Party: </span><span class="si">{</span><span class="n">test_agent</span><span class="o">.</span><span class="n">party</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Sharing news...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+
+<span class="n">post</span> <span class="o">=</span> <span class="n">test_agent</span><span class="o">.</span><span class="n">share_news</span><span class="p">(</span><span class="n">NEWS_HEADLINES</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">post</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Selected article: [</span><span class="si">{</span><span class="n">post</span><span class="p">[</span><span class="s1">&#39;article&#39;</span><span class="p">][</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">post</span><span class="p">[</span><span class="s1">&#39;article&#39;</span><span class="p">][</span><span class="s1">&#39;headline&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Comment: </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">post</span><span class="p">[</span><span class="s1">&#39;comment&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(Failed to generate post)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="part-4-platform-algorithms">
+<h2>Part 4: Platform Algorithms<a class="headerlink" href="#part-4-platform-algorithms" title="Link to this heading">#</a></h2>
+<p>The core innovation of Törnberg et al. is comparing <strong>three different newsfeed algorithms</strong>:</p>
+<section id="platform-1-echo-chamber-following-engagement">
+<h3>Platform 1: Echo Chamber (Following + Engagement)<a class="headerlink" href="#platform-1-echo-chamber-following-engagement" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Users only see posts from accounts they follow</p></li>
+<li><p>Posts ranked by likes + comments (engagement)</p></li>
+<li><p><strong>Hypothesis</strong>: Low cross-partisan interaction, low toxicity</p></li>
+<li><p><strong>Mechanism</strong>: Homophily → filter bubble</p></li>
+</ul>
+</section>
+<section id="platform-2-global-feed-all-users-engagement">
+<h3>Platform 2: Global Feed (All Users + Engagement)<a class="headerlink" href="#platform-2-global-feed-all-users-engagement" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Users see all high-engagement posts</p></li>
+<li><p>Not limited to who they follow</p></li>
+<li><p><strong>Hypothesis</strong>: More cross-partisan interaction, higher toxicity</p></li>
+<li><p><strong>Mechanism</strong>: Exposure to opposing views → conflict</p></li>
+</ul>
+</section>
+<section id="platform-3-bridging-algorithm-cross-partisan-likes">
+<h3>Platform 3: Bridging Algorithm (Cross-Partisan Likes)<a class="headerlink" href="#platform-3-bridging-algorithm-cross-partisan-likes" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Posts ranked by <strong>likes from opposing party members</strong></p></li>
+<li><p>Amplifies consensus, not outrage</p></li>
+<li><p><strong>Hypothesis</strong>: High cross-partisan interaction, low toxicity</p></li>
+<li><p><strong>Mechanism</strong>: Rewards civility and common ground</p></li>
+</ul>
+<p>Let’s implement these algorithms.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_social_network</span><span class="p">(</span><span class="n">agents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SocialMediaAgent</span><span class="p">],</span> <span class="n">homophily</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create social network where agents follow each other based on homophily</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        agents: List of agents</span>
+<span class="sd">        homophily: Probability of following similar others (0-1)</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Dict mapping agent name to list of followed agent names</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">network</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">agents</span><span class="p">}</span>
+    
+    <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">agents</span><span class="p">:</span>
+        <span class="c1"># Follow some agents</span>
+        <span class="n">n_follows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">agents</span><span class="p">)))</span>  <span class="c1"># Follow 3-8 people</span>
+        
+        <span class="c1"># Calculate similarity scores (simplified - based on party)</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">agents</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">agent</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+        
+        <span class="c1"># Probability proportional to homophily</span>
+        <span class="n">probs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">agent</span><span class="o">.</span><span class="n">party</span> <span class="o">==</span> <span class="n">candidate</span><span class="o">.</span><span class="n">party</span><span class="p">:</span>
+                <span class="n">prob</span> <span class="o">=</span> <span class="n">homophily</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">prob</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">homophily</span>
+            <span class="n">probs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+        
+        <span class="c1"># Normalize</span>
+        <span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">probs</span><span class="p">)</span>
+        <span class="n">probs</span> <span class="o">=</span> <span class="n">probs</span> <span class="o">/</span> <span class="n">probs</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        
+        <span class="c1"># Sample follows</span>
+        <span class="n">follows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">n_follows</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">)),</span> 
+                                  <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">probs</span><span class="p">)</span>
+        <span class="n">network</span><span class="p">[</span><span class="n">agent</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">follows</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">network</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">platform_1_timeline</span><span class="p">(</span><span class="n">posts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span> <span class="n">agent</span><span class="p">:</span> <span class="n">SocialMediaAgent</span><span class="p">,</span> 
+                       <span class="n">network</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Platform 1: Echo chamber - only see posts from followed users</span>
+<span class="sd">    Ranked by engagement (likes + comments)</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        posts: All posts on platform</span>
+<span class="sd">        agent: Agent viewing timeline</span>
+<span class="sd">        network: Social network (who follows whom)</span>
+<span class="sd">        top_k: Number of posts to show</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        List of top posts for this agent</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">followed</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">[])</span>
+    
+    <span class="c1"># Filter to followed users only</span>
+    <span class="n">relevant_posts</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">posts</span> <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;author&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">followed</span><span class="p">]</span>
+    
+    <span class="c1"># Rank by engagement</span>
+    <span class="n">ranked</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">relevant_posts</span><span class="p">,</span> 
+                   <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;likes&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;comments&#39;</span><span class="p">]),</span>
+                   <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">ranked</span><span class="p">[:</span><span class="n">top_k</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">platform_2_timeline</span><span class="p">(</span><span class="n">posts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span> <span class="n">agent</span><span class="p">:</span> <span class="n">SocialMediaAgent</span><span class="p">,</span> 
+                       <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Platform 2: Global feed - see all high-engagement posts</span>
+<span class="sd">    Not limited by following</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        posts: All posts on platform</span>
+<span class="sd">        agent: Agent viewing timeline</span>
+<span class="sd">        top_k: Number of posts to show</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        List of top posts for this agent</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Rank all posts by engagement</span>
+    <span class="n">ranked</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">posts</span><span class="p">,</span> 
+                   <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;likes&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;comments&#39;</span><span class="p">]),</span>
+                   <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">ranked</span><span class="p">[:</span><span class="n">top_k</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">platform_3_timeline</span><span class="p">(</span><span class="n">posts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span> <span class="n">agent</span><span class="p">:</span> <span class="n">SocialMediaAgent</span><span class="p">,</span>
+                       <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Platform 3: Bridging algorithm - posts ranked by CROSS-PARTISAN likes</span>
+<span class="sd">    Amplifies content liked by opposing party members</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        posts: All posts on platform</span>
+<span class="sd">        agent: Agent viewing timeline</span>
+<span class="sd">        top_k: Number of posts to show</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        List of top posts for this agent</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Calculate bridging score for each post</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">bridging_score</span><span class="p">(</span><span class="n">post</span><span class="p">):</span>
+        <span class="c1"># For a Republican post, count Democrat likes (and vice versa)</span>
+        <span class="n">post_party</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="s1">&#39;Republican&#39;</span> <span class="ow">in</span> <span class="n">post_party</span><span class="p">:</span>
+            <span class="c1"># Count Democrat likes</span>
+            <span class="k">return</span> <span class="n">post</span><span class="p">[</span><span class="s1">&#39;likes_by_party&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Democrat&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;Democrat&#39;</span> <span class="ow">in</span> <span class="n">post_party</span><span class="p">:</span>
+            <span class="c1"># Count Republican likes</span>
+            <span class="k">return</span> <span class="n">post</span><span class="p">[</span><span class="s1">&#39;likes_by_party&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Republican&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Independent: count likes from both parties</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">post</span><span class="p">[</span><span class="s1">&#39;likes_by_party&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Democrat&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> 
+                   <span class="n">post</span><span class="p">[</span><span class="s1">&#39;likes_by_party&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Republican&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    
+    <span class="c1"># Rank by bridging score</span>
+    <span class="n">ranked</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">posts</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">bridging_score</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">ranked</span><span class="p">[:</span><span class="n">top_k</span><span class="p">]</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Platform algorithms defined&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Platform 1: Echo chamber (following + engagement)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Platform 2: Global feed (all posts + engagement)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Platform 3: Bridging (cross-partisan likes)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p>Implements three distinct recommendation algorithms:</p>
+<p><strong>Platform 1 - Echo Chamber:</strong></p>
+<ul class="simple">
+<li><p>Filters posts to only followed accounts</p></li>
+<li><p>Ranks by total engagement (likes + comments)</p></li>
+<li><p><strong>Mirrors Twitter pre-2023</strong> (chronological → engagement ranking)</p></li>
+<li><p><strong>Expected outcome</strong>: Minimal exposure to opposing views</p></li>
+</ul>
+<p><strong>Platform 2 - Global Feed:</strong></p>
+<ul class="simple">
+<li><p>Shows ALL posts regardless of following</p></li>
+<li><p>Ranks purely by engagement</p></li>
+<li><p><strong>Mirrors Twitter post-2023</strong> (“For You” tab)</p></li>
+<li><p><strong>Expected outcome</strong>: More cross-partisan exposure, more conflict</p></li>
+</ul>
+<p><strong>Platform 3 - Bridging Algorithm:</strong></p>
+<ul class="simple">
+<li><p>NEW approach proposed by Törnberg et al.</p></li>
+<li><p>Ranks by cross-partisan likes only:</p>
+<ul>
+<li><p>Republican post → Count Democrat likes</p></li>
+<li><p>Democrat post → Count Republican likes</p></li>
+</ul>
+</li>
+<li><p><strong>Theory</strong>: Rewards civility, consensus, common ground</p></li>
+<li><p><strong>Expected outcome</strong>: Cross-partisan engagement without toxicity</p></li>
+</ul>
+<p><strong>Why bridging might work:</strong></p>
+<ul class="simple">
+<li><p>Extremists can’t gain visibility (their own side likes, but not opponents)</p></li>
+<li><p>Moderate voices amplified (appeal across divide)</p></li>
+<li><p>Shared concerns surface (healthcare, economy, etc.)</p></li>
+<li><p>Trolls/provocateurs marginalized</p></li>
+</ul>
+<p><strong>Implementation notes:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">top_k=5</span></code>: Show 5 posts per timeline (manageable for agents to process)</p></li>
+<li><p>Social network created with homophily (like follows like)</p></li>
+<li><p>All algorithms see same underlying posts (fair comparison)</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="part-5-running-the-simulation">
+<h2>Part 5: Running the Simulation<a class="headerlink" href="#part-5-running-the-simulation" title="Link to this heading">#</a></h2>
+<p>Now we put it all together. The simulation proceeds in steps:</p>
+<ol class="arabic simple">
+<li><p><strong>Initialize</strong>: Create agents and social network</p></li>
+<li><p><strong>Posting phase</strong>: Agents read news and create posts</p></li>
+<li><p><strong>Engagement phase</strong>: Agents see timeline (algorithm-dependent) and like/comment</p></li>
+<li><p><strong>Repeat</strong>: For multiple rounds</p></li>
+<li><p><strong>Analyze</strong>: Measure toxicity and cross-partisan engagement</p></li>
+</ol>
+<p><strong>Note</strong>: This is computationally expensive (many API calls). For demonstration, we’ll run a simplified version.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run_simulation</span><span class="p">(</span><span class="n">agents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SocialMediaAgent</span><span class="p">],</span> 
+                  <span class="n">news_headlines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span>
+                  <span class="n">platform_algorithm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;bridging&quot;</span><span class="p">,</span>
+                  <span class="n">n_posting_rounds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                  <span class="n">n_engagement_rounds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run social media simulation</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        agents: List of agents</span>
+<span class="sd">        news_headlines: List of news articles</span>
+<span class="sd">        platform_algorithm: &quot;echo&quot;, &quot;global&quot;, or &quot;bridging&quot;</span>
+<span class="sd">        n_posting_rounds: How many rounds of posting</span>
+<span class="sd">        n_engagement_rounds: How many rounds of engagement per post</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Dict with simulation results</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Running simulation with </span><span class="si">{</span><span class="n">platform_algorithm</span><span class="si">}</span><span class="s2"> algorithm...&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Agents: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">agents</span><span class="p">)</span><span class="si">}</span><span class="s2">, News: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">news_headlines</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+    
+    <span class="c1"># Create social network (for Platform 1)</span>
+    <span class="n">network</span> <span class="o">=</span> <span class="n">create_social_network</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">homophily</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+    
+    <span class="n">all_posts</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="c1"># PHASE 1: Posting</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Phase 1: Agents posting news...&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">round_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_posting_rounds</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Round </span><span class="si">{</span><span class="n">round_num</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">n_posting_rounds</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">agent</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">agents</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">  Round </span><span class="si">{</span><span class="n">round_num</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">n_posting_rounds</span><span class="si">}</span><span class="s2"> - Agent </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">agents</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">post</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">share_news</span><span class="p">(</span><span class="n">news_headlines</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">post</span><span class="p">:</span>
+                <span class="n">all_posts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># Rate limiting</span>
+        <span class="nb">print</span><span class="p">()</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  ✓ </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_posts</span><span class="p">)</span><span class="si">}</span><span class="s2"> posts created&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># PHASE 2: Engagement (liking and commenting)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Phase 2: Agents engaging with posts...&quot;</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">round_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_engagement_rounds</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Round </span><span class="si">{</span><span class="n">round_num</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">n_engagement_rounds</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">agent</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">agents</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">    Agent </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">agents</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            
+            <span class="c1"># Get timeline based on algorithm</span>
+            <span class="k">if</span> <span class="n">platform_algorithm</span> <span class="o">==</span> <span class="s2">&quot;echo&quot;</span><span class="p">:</span>
+                <span class="n">timeline</span> <span class="o">=</span> <span class="n">platform_1_timeline</span><span class="p">(</span><span class="n">all_posts</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">network</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">platform_algorithm</span> <span class="o">==</span> <span class="s2">&quot;global&quot;</span><span class="p">:</span>
+                <span class="n">timeline</span> <span class="o">=</span> <span class="n">platform_2_timeline</span><span class="p">(</span><span class="n">all_posts</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># bridging</span>
+                <span class="n">timeline</span> <span class="o">=</span> <span class="n">platform_3_timeline</span><span class="p">(</span><span class="n">all_posts</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">timeline</span><span class="p">:</span>
+                <span class="k">continue</span>
+            
+            <span class="c1"># Agent decides which posts to like</span>
+            <span class="n">liked_indices</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">decide_likes</span><span class="p">(</span><span class="n">timeline</span><span class="p">)</span>
+            
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">liked_indices</span><span class="p">:</span>
+                <span class="n">post</span> <span class="o">=</span> <span class="n">timeline</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+                <span class="n">post</span><span class="p">[</span><span class="s1">&#39;likes&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="c1"># Track likes by party for bridging algorithm</span>
+                <span class="n">liker_party</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">party</span>
+                <span class="k">if</span> <span class="s1">&#39;Democrat&#39;</span> <span class="ow">in</span> <span class="n">liker_party</span><span class="p">:</span>
+                    <span class="n">post</span><span class="p">[</span><span class="s1">&#39;likes_by_party&#39;</span><span class="p">][</span><span class="s1">&#39;Democrat&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="s1">&#39;Republican&#39;</span> <span class="ow">in</span> <span class="n">liker_party</span><span class="p">:</span>
+                    <span class="n">post</span><span class="p">[</span><span class="s1">&#39;likes_by_party&#39;</span><span class="p">][</span><span class="s1">&#39;Republican&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">post</span><span class="p">[</span><span class="s1">&#39;likes_by_party&#39;</span><span class="p">][</span><span class="s1">&#39;Independent&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+            <span class="c1"># Agent might comment on one post</span>
+            <span class="k">if</span> <span class="n">timeline</span> <span class="ow">and</span> <span class="n">liked_indices</span><span class="p">:</span>
+                <span class="c1"># Comment on a liked post</span>
+                <span class="n">comment_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">liked_indices</span><span class="p">)</span>
+                <span class="n">comment</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">write_comment</span><span class="p">(</span><span class="n">timeline</span><span class="p">[</span><span class="n">comment_idx</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">comment</span><span class="p">:</span>
+                    <span class="n">timeline</span><span class="p">[</span><span class="n">comment_idx</span><span class="p">][</span><span class="s1">&#39;comments&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
+            
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># Rate limiting</span>
+        <span class="nb">print</span><span class="p">()</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  ✓ Engagement complete&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Compile results</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;platform&quot;</span><span class="p">:</span> <span class="n">platform_algorithm</span><span class="p">,</span>
+        <span class="s2">&quot;posts&quot;</span><span class="p">:</span> <span class="n">all_posts</span><span class="p">,</span>
+        <span class="s2">&quot;agents&quot;</span><span class="p">:</span> <span class="n">agents</span><span class="p">,</span>
+        <span class="s2">&quot;network&quot;</span><span class="p">:</span> <span class="n">network</span><span class="p">,</span>
+        <span class="s2">&quot;n_posts&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_posts</span><span class="p">),</span>
+        <span class="s2">&quot;total_likes&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;likes&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">all_posts</span><span class="p">),</span>
+        <span class="s2">&quot;total_comments&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;comments&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">all_posts</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Simulation complete!&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Posts: </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;n_posts&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Likes: </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;total_likes&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Comments: </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;total_comments&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">results</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Simulation function defined&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="run-simulation-simplified-version">
+<h3>Run simulation (simplified version)<a class="headerlink" href="#run-simulation-simplified-version" title="Link to this heading">#</a></h3>
+<p><strong>Cost warning</strong>: Running the full simulation with 6 agents will result in a large number of API calls. The code below is commented out to prevent accidental spending. Uncomment to run.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create agents</span>
+<span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="n">SocialMediaAgent</span><span class="p">(</span><span class="n">persona</span><span class="p">)</span> <span class="k">for</span> <span class="n">persona</span> <span class="ow">in</span> <span class="n">SAMPLE_PERSONAS</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">agents</span><span class="p">)</span><span class="si">}</span><span class="s2"> agents&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">To run simulation, uncomment the code below:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;# Run with bridging algorithm&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;# results = run_simulation(&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#     agents,&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#     NEWS_HEADLINES,&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#     platform_algorithm=&#39;bridging&#39;,&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#     n_posting_rounds=1,&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#     n_engagement_rounds=1&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;# )&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Commented out to prevent API costs]&quot;</span><span class="p">)</span>
+
+<span class="c1"># Uncomment below to run:</span>
+<span class="c1"># results = run_simulation(</span>
+<span class="c1">#     agents,</span>
+<span class="c1">#     NEWS_HEADLINES,</span>
+<span class="c1">#     platform_algorithm=&#39;bridging&#39;,</span>
+<span class="c1">#     n_posting_rounds=1,</span>
+<span class="c1">#     n_engagement_rounds=1</span>
+<span class="c1"># )</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What the simulation does:</strong></p>
+<p><strong>Phase 1: Posting</strong> (Content creation)</p>
+<ul class="simple">
+<li><p>Each agent independently reads news headlines</p></li>
+<li><p>Selects article aligned with their values</p></li>
+<li><p>Writes authentic comment from their perspective</p></li>
+<li><p>All posts added to shared platform</p></li>
+</ul>
+<p><strong>Phase 2: Engagement</strong> (Content consumption)</p>
+<ul class="simple">
+<li><p>Each agent sees timeline (algorithm-dependent)</p></li>
+<li><p>Decides which posts to like</p></li>
+<li><p>Writes comments on some posts</p></li>
+<li><p>Likes and comments update post engagement scores</p></li>
+</ul>
+<p><strong>Key mechanisms:</strong></p>
+<ul class="simple">
+<li><p><strong>Emergence</strong>: Timeline updates based on engagement</p>
+<ul>
+<li><p>Platform 1: Following determines visibility</p></li>
+<li><p>Platform 2: Engagement determines visibility</p></li>
+<li><p>Platform 3: Cross-partisan likes determine visibility</p></li>
+</ul>
+</li>
+<li><p><strong>Feedback loops</strong>: Popular posts get more visible → more engagement</p></li>
+<li><p><strong>Agent heterogeneity</strong>: Different personas react differently</p></li>
+</ul>
+<p><strong>Computational cost:</strong></p>
+<ul class="simple">
+<li><p>6 agents × 1 post each = 6 API calls</p></li>
+<li><p>6 agents × (5 timeline posts × decide_likes) = 6 calls</p></li>
+<li><p>~3-4 agents × comment = 3-4 calls</p></li>
+<li><p><strong>Total</strong>: ~15-16 API calls per simulation</p></li>
+<li><p>At <span class="math notranslate nohighlight">\(0.15/1M input + \)</span>0.60/1M output tokens: ~$0.50-1.00</p></li>
+</ul>
+<p><strong>Scaling:</strong></p>
+<ul class="simple">
+<li><p>Original study: 500 agents, multiple rounds</p></li>
+<li><p>Cost scales linearly with agents × rounds</p></li>
+<li><p>Trade-off: Realism vs. budget</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="part-6-measuring-outcomes">
+<h2>Part 6: Measuring Outcomes<a class="headerlink" href="#part-6-measuring-outcomes" title="Link to this heading">#</a></h2>
+<p>Törnberg et al. measured two key outcomes:</p>
+<ol class="arabic simple">
+<li><p><strong>Toxicity</strong>: Using Perspective API to score text</p></li>
+<li><p><strong>Cross-partisan engagement</strong>: E-I Index of interactions</p></li>
+</ol>
+<section id="e-i-index-external-internal-index">
+<h3>E-I Index (External-Internal Index)<a class="headerlink" href="#e-i-index-external-internal-index" title="Link to this heading">#</a></h3>
+<p>Measures the balance of within-group vs between-group interactions:</p>
+<div class="math notranslate nohighlight">
+\[E-I = \frac{E - I}{E + I}\]</div>
+<p>Where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(E\)</span> = External (cross-party) interactions</p></li>
+<li><p><span class="math notranslate nohighlight">\(I\)</span> = Internal (within-party) interactions</p></li>
+</ul>
+<p>Range: -1 to +1</p>
+<ul class="simple">
+<li><p>-1 = All interactions within-party (echo chamber)</p></li>
+<li><p>0 = Equal mix</p></li>
+<li><p>+1 = All interactions cross-party (bridging)</p></li>
+</ul>
+<p>For simplicity, we’ll implement the E-I index. Toxicity scoring requires additional API (Perspective) which we’ll skip here.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">calculate_ei_index</span><span class="p">(</span><span class="n">interactions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">tuple</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate E-I index for interactions</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        interactions: List of (source_party, target_party) tuples</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: E-I index (-1 to 1)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">interactions</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    
+    <span class="n">external</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Cross-party</span>
+    <span class="n">internal</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Within-party</span>
+    
+    <span class="k">for</span> <span class="n">source_party</span><span class="p">,</span> <span class="n">target_party</span> <span class="ow">in</span> <span class="n">interactions</span><span class="p">:</span>
+        <span class="c1"># Normalize party labels</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;Democrat&#39;</span> <span class="k">if</span> <span class="s1">&#39;Democrat&#39;</span> <span class="ow">in</span> <span class="n">source_party</span> <span class="k">else</span> <span class="p">(</span><span class="s1">&#39;Republican&#39;</span> <span class="k">if</span> <span class="s1">&#39;Republican&#39;</span> <span class="ow">in</span> <span class="n">source_party</span> <span class="k">else</span> <span class="s1">&#39;Independent&#39;</span><span class="p">)</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;Democrat&#39;</span> <span class="k">if</span> <span class="s1">&#39;Democrat&#39;</span> <span class="ow">in</span> <span class="n">target_party</span> <span class="k">else</span> <span class="p">(</span><span class="s1">&#39;Republican&#39;</span> <span class="k">if</span> <span class="s1">&#39;Republican&#39;</span> <span class="ow">in</span> <span class="n">target_party</span> <span class="k">else</span> <span class="s1">&#39;Independent&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">source</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+            <span class="n">internal</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">external</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+    <span class="n">total</span> <span class="o">=</span> <span class="n">external</span> <span class="o">+</span> <span class="n">internal</span>
+    <span class="k">if</span> <span class="n">total</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    
+    <span class="n">ei_index</span> <span class="o">=</span> <span class="p">(</span><span class="n">external</span> <span class="o">-</span> <span class="n">internal</span><span class="p">)</span> <span class="o">/</span> <span class="n">total</span>
+    <span class="k">return</span> <span class="n">ei_index</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">analyze_results</span><span class="p">(</span><span class="n">results</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analyze simulation results</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        results: Output from run_simulation()</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Dict with analysis metrics</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">posts</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;posts&#39;</span><span class="p">]</span>
+    
+    <span class="c1"># Track interactions (who liked whose post)</span>
+    <span class="n">like_interactions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">comment_interactions</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="c1"># Get agent party mapping</span>
+    <span class="n">agent_parties</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">agent</span><span class="o">.</span><span class="n">party</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;agents&#39;</span><span class="p">]}</span>
+    
+    <span class="c1"># Count likes by party</span>
+    <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">posts</span><span class="p">:</span>
+        <span class="n">post_author_party</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span>
+        
+        <span class="c1"># Reconstruct likes (simplified - in real version, track each liker)</span>
+        <span class="k">for</span> <span class="n">party</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">post</span><span class="p">[</span><span class="s1">&#39;likes_by_party&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">):</span>
+                <span class="n">like_interactions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">party</span><span class="p">,</span> <span class="n">post_author_party</span><span class="p">))</span>
+        
+        <span class="c1"># Comments</span>
+        <span class="k">for</span> <span class="n">comment</span> <span class="ow">in</span> <span class="n">post</span><span class="p">[</span><span class="s1">&#39;comments&#39;</span><span class="p">]:</span>
+            <span class="n">comment_interactions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">comment</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">],</span> <span class="n">post_author_party</span><span class="p">))</span>
+    
+    <span class="c1"># Calculate E-I indices</span>
+    <span class="n">ei_likes</span> <span class="o">=</span> <span class="n">calculate_ei_index</span><span class="p">(</span><span class="n">like_interactions</span><span class="p">)</span>
+    <span class="n">ei_comments</span> <span class="o">=</span> <span class="n">calculate_ei_index</span><span class="p">(</span><span class="n">comment_interactions</span><span class="p">)</span>
+    
+    <span class="c1"># Party distribution of posts</span>
+    <span class="n">party_counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">([</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;party&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">posts</span><span class="p">])</span>
+    
+    <span class="n">analysis</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;platform&#39;</span><span class="p">:</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;platform&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;n_posts&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">posts</span><span class="p">),</span>
+        <span class="s1">&#39;n_likes&#39;</span><span class="p">:</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;total_likes&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;n_comments&#39;</span><span class="p">:</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;total_comments&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;ei_index_likes&#39;</span><span class="p">:</span> <span class="n">ei_likes</span><span class="p">,</span>
+        <span class="s1">&#39;ei_index_comments&#39;</span><span class="p">:</span> <span class="n">ei_comments</span><span class="p">,</span>
+        <span class="s1">&#39;party_distribution&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">party_counts</span><span class="p">),</span>
+        <span class="s1">&#39;like_interactions&#39;</span><span class="p">:</span> <span class="n">like_interactions</span><span class="p">,</span>
+        <span class="s1">&#39;comment_interactions&#39;</span><span class="p">:</span> <span class="n">comment_interactions</span>
+    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="n">analysis</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">print_analysis</span><span class="p">(</span><span class="n">analysis</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print analysis results in readable format</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ANALYSIS: </span><span class="si">{</span><span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;platform&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> PLATFORM&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Content:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Posts: </span><span class="si">{</span><span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;n_posts&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Likes: </span><span class="si">{</span><span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;n_likes&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Comments: </span><span class="si">{</span><span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;n_comments&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Party Distribution of Posts:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">party</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;party_distribution&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">party</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Cross-Partisan Engagement (E-I Index):&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Likes: </span><span class="si">{</span><span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;ei_index_likes&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Comments: </span><span class="si">{</span><span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;ei_index_comments&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Interpretation:&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;ei_index_likes&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  → Likes: Strong ECHO CHAMBER (mostly within-party)&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;ei_index_likes&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.3</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  → Likes: Strong BRIDGING (mostly cross-party)&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  → Likes: MIXED (balance of within/cross-party)&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;ei_index_comments&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  → Comments: Strong ECHO CHAMBER (mostly within-party)&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;ei_index_comments&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.3</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  → Comments: Strong BRIDGING (mostly cross-party)&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  → Comments: MIXED (balance of within/cross-party)&quot;</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Analysis functions defined&quot;</span><span class="p">)</span>
+
+<span class="c1"># Example with mock data</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Example E-I Index calculation:&quot;</span><span class="p">)</span>
+<span class="n">mock_interactions</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;Democrat&#39;</span><span class="p">,</span> <span class="s1">&#39;Democrat&#39;</span><span class="p">),</span>  <span class="c1"># Internal</span>
+    <span class="p">(</span><span class="s1">&#39;Democrat&#39;</span><span class="p">,</span> <span class="s1">&#39;Republican&#39;</span><span class="p">),</span>  <span class="c1"># External</span>
+    <span class="p">(</span><span class="s1">&#39;Republican&#39;</span><span class="p">,</span> <span class="s1">&#39;Democrat&#39;</span><span class="p">),</span>  <span class="c1"># External</span>
+    <span class="p">(</span><span class="s1">&#39;Republican&#39;</span><span class="p">,</span> <span class="s1">&#39;Republican&#39;</span><span class="p">),</span>  <span class="c1"># Internal</span>
+<span class="p">]</span>
+<span class="n">ei</span> <span class="o">=</span> <span class="n">calculate_ei_index</span><span class="p">(</span><span class="n">mock_interactions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interactions: 2 internal, 2 external&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;E-I Index: </span><span class="si">{</span><span class="n">ei</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> (perfectly balanced)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>What this code does:</strong></p>
+<p><strong>E-I Index calculation:</strong></p>
+<ul class="simple">
+<li><p>Tracks all interactions (likes, comments)</p></li>
+<li><p>Classifies each as internal (same party) or external (different party)</p></li>
+<li><p>Calculates balance:</p>
+<ul>
+<li><p>-1.0 = Complete echo chamber</p></li>
+<li><p>0.0 = Perfect balance</p></li>
+<li><p>+1.0 = Complete bridging</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Expected results from Törnberg et al. (2023):</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Platform</p></th>
+<th class="head"><p>E-I Likes</p></th>
+<th class="head"><p>E-I Comments</p></th>
+<th class="head"><p>Toxicity</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1 (Echo)</p></td>
+<td><p>-0.97</p></td>
+<td><p>-0.89</p></td>
+<td><p>0.09</p></td>
+</tr>
+<tr class="row-odd"><td><p>2 (Global)</p></td>
+<td><p>-0.78</p></td>
+<td><p>-0.70</p></td>
+<td><p>0.13</p></td>
+</tr>
+<tr class="row-even"><td><p>3 (Bridging)</p></td>
+<td><p>-0.18</p></td>
+<td><p>+0.33</p></td>
+<td><p>0.07</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Key findings:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Platform 1</strong>: Near-total echo chamber, low toxicity</p></li>
+<li><p><strong>Platform 2</strong>: Still mostly echo chamber (despite global feed!), higher toxicity</p></li>
+<li><p><strong>Platform 3</strong>: Substantial cross-party engagement, LOWEST toxicity</p></li>
+</ol>
+</section>
+<section id="visualize-results-with-mock-data">
+<h3>Visualize results (with mock data)<a class="headerlink" href="#visualize-results-with-mock-data" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create mock results matching Törnberg et al. findings</span>
+<span class="n">mock_results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
+    <span class="p">{</span><span class="s1">&#39;Platform&#39;</span><span class="p">:</span> <span class="s1">&#39;Platform 1</span><span class="se">\n</span><span class="s1">(Echo Chamber)&#39;</span><span class="p">,</span> <span class="s1">&#39;E-I Index (Likes)&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.97</span><span class="p">,</span> <span class="s1">&#39;E-I Index (Comments)&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.89</span><span class="p">,</span> <span class="s1">&#39;Toxicity&#39;</span><span class="p">:</span> <span class="mf">0.09</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;Platform&#39;</span><span class="p">:</span> <span class="s1">&#39;Platform 2</span><span class="se">\n</span><span class="s1">(Global Feed)&#39;</span><span class="p">,</span> <span class="s1">&#39;E-I Index (Likes)&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.78</span><span class="p">,</span> <span class="s1">&#39;E-I Index (Comments)&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.70</span><span class="p">,</span> <span class="s1">&#39;Toxicity&#39;</span><span class="p">:</span> <span class="mf">0.13</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;Platform&#39;</span><span class="p">:</span> <span class="s1">&#39;Platform 3</span><span class="se">\n</span><span class="s1">(Bridging)&#39;</span><span class="p">,</span> <span class="s1">&#39;E-I Index (Likes)&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.18</span><span class="p">,</span> <span class="s1">&#39;E-I Index (Comments)&#39;</span><span class="p">:</span> <span class="mf">0.33</span><span class="p">,</span> <span class="s1">&#39;Toxicity&#39;</span><span class="p">:</span> <span class="mf">0.07</span><span class="p">},</span>
+<span class="p">])</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="c1"># Plot 1: E-I Indices</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mock_results</span><span class="p">))</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mf">0.35</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">mock_results</span><span class="p">[</span><span class="s1">&#39;E-I Index (Likes)&#39;</span><span class="p">],</span> <span class="n">width</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Likes&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;steelblue&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">mock_results</span><span class="p">[</span><span class="s1">&#39;E-I Index (Comments)&#39;</span><span class="p">],</span> <span class="n">width</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Comments&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;coral&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;E-I Index&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Platform&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Cross-Partisan Engagement by Platform</span><span class="se">\n</span><span class="s1">(Törnberg et al. 2023 findings)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">mock_results</span><span class="p">[</span><span class="s1">&#39;Platform&#39;</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Balanced&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="c1"># Add interpretation labels</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;Echo</span><span class="se">\n</span><span class="s1">Chamber&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;Cross-Party</span><span class="se">\n</span><span class="s1">Bridging&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1"># Plot 2: Toxicity</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="s1">&#39;coral&#39;</span><span class="p">,</span> <span class="s1">&#39;lightgreen&#39;</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">mock_results</span><span class="p">[</span><span class="s1">&#39;Platform&#39;</span><span class="p">],</span> <span class="n">mock_results</span><span class="p">[</span><span class="s1">&#39;Toxicity&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Toxicity Score&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Platform&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Toxicity by Platform</span><span class="se">\n</span><span class="s1">(Törnberg et al. 2023 findings)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="c1"># Add reference line</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mf">0.13</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;US Twitter average&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Key Insights:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;1. Platform 1 (Echo Chamber):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   • Minimal cross-partisan engagement (E-I ≈ -0.9)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   • Low toxicity (0.09) - but at cost of isolation&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2. Platform 2 (Global Feed):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   • Still mostly echo chamber (E-I ≈ -0.7)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   • HIGHEST toxicity (0.13) - matches Twitter average&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   • Breaking bubbles ≠ healthy discourse&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;3. Platform 3 (Bridging Algorithm):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   • Substantial cross-party engagement (E-I comments = +0.33!)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   • LOWEST toxicity (0.07) - healthiest discourse&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   • Achieves both goals: bridging + civility&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Conclusion: Bridging algorithm succeeds where others fail.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;It&#39;s not enough to break echo chambers - need smarter algorithms.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="open-source-alternatives">
+<h2>Open-Source Alternatives<a class="headerlink" href="#open-source-alternatives" title="Link to this heading">#</a></h2>
+<p>The simulation above uses OpenAI’s API. Here’s how to run it with open-source models.</p>
+<section id="using-ollama">
+<h3>Using Ollama<a class="headerlink" href="#using-ollama" title="Link to this heading">#</a></h3>
+<p>Ollama provides a local alternative with OpenAI-compatible API.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install and use Ollama</span>
+<span class="c1"># !pip install -q ollama</span>
+
+<span class="c1"># from ollama import Client as OllamaClient</span>
+<span class="c1"># ollama_client = OllamaClient(host=&#39;http://localhost:11434&#39;)</span>
+
+<span class="c1"># Modify SocialMediaAgent to use Ollama:</span>
+<span class="c1"># Simply replace `client.chat.completions.create()` with:</span>
+<span class="c1"># ollama_client.chat(model=&quot;llama3.2&quot;, messages=[...])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;To use Ollama:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;1. Install: https://ollama.com/download&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2. Pull model: ollama pull llama3.2&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;3. Modify SocialMediaAgent class to use ollama_client&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Advantages:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Free (runs locally)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Private (no data sent to API)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Reproducible (fixed model weights)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Disadvantages:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Slower (depends on your hardware)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Lower quality (smaller models than GPT-4)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Requires local installation&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-hugging-face">
+<h3>Using Hugging Face<a class="headerlink" href="#using-hugging-face" title="Link to this heading">#</a></h3>
+<p>For full control, use Hugging Face Transformers directly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># from transformers import AutoTokenizer, AutoModelForCausalLM</span>
+<span class="c1"># import torch</span>
+
+<span class="c1"># device = &quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;</span>
+<span class="c1"># model_name = &quot;microsoft/Phi-3-mini-4k-instruct&quot;</span>
+
+<span class="c1"># tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)</span>
+<span class="c1"># model = AutoModelForCausalLM.from_pretrained(</span>
+<span class="c1">#     model_name,</span>
+<span class="c1">#     torch_dtype=torch.float16,</span>
+<span class="c1">#     trust_remote_code=True</span>
+<span class="c1"># ).to(device)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;To use Hugging Face:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;1. Load model with transformers library&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2. Modify SocialMediaAgent to use model.generate()&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;3. Apply chat template for proper formatting&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best models for this task:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Llama 3.2 (8B): Good balance&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Mistral 7B: Fast and capable&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Phi-3-mini: Smallest (3.8B), still decent&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Requires:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • GPU with 8-16GB VRAM (or use CPU slowly)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  • Google Colab: Use T4 GPU (free tier)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p><strong>What we learned:</strong></p>
+<ol class="arabic simple">
+<li><p>✓ How to create <strong>realistic agent personas</strong> from survey data</p></li>
+<li><p>✓ How to implement <strong>agent-based simulations</strong> with LLMs</p></li>
+<li><p>✓ How to test <strong>alternative platform algorithms</strong> (echo, global, bridging)</p></li>
+<li><p>✓ How to measure <strong>emergent properties</strong> (cross-partisan engagement, toxicity)</p></li>
+<li><p>✓ How LLMs enable <strong>realistic discourse</strong> in simulations</p></li>
+</ol>
+<p><strong>Key findings from Törnberg et al. (2023):</strong></p>
+<ul class="simple">
+<li><p><strong>Echo chambers</strong>: Isolated but civil</p></li>
+<li><p><strong>Global feeds</strong>: Exposure doesn’t guarantee healthy discourse</p></li>
+<li><p><strong>Bridging algorithms</strong>: Can achieve both cross-partisan engagement AND civility</p></li>
+<li><p><strong>Mechanism</strong>: Rewarding consensus (not just engagement) changes incentives</p></li>
+</ul>
+<p><strong>Advantages of LLM-based simulation:</strong></p>
+<ul class="simple">
+<li><p>✓ <strong>Rapid prototyping</strong>: Test ideas before expensive field work</p></li>
+<li><p>✓ <strong>Realistic discourse</strong>: Agents can actually converse</p></li>
+<li><p>✓ <strong>Ethical</strong>: No risk to human subjects</p></li>
+<li><p>✓ <strong>Counterfactuals</strong>: Test non-existent alternatives</p></li>
+<li><p>✓ <strong>Transparency</strong>: Full visibility into agent reasoning</p></li>
+</ul>
+<p><strong>Limitations to remember:</strong></p>
+<ul class="simple">
+<li><p>⚠ <strong>External validity</strong>: Do LLMs predict human behavior?</p></li>
+<li><p>⚠ <strong>Training data bias</strong>: LLMs reflect internet discourse (potentially toxic)</p></li>
+<li><p>⚠ <strong>Simplifications</strong>: Real social media more complex (images, videos, networks)</p></li>
+<li><p>⚠ <strong>Cost</strong>: API calls add up quickly with many agents</p></li>
+<li><p>⚠ <strong>Reproducibility</strong>: Proprietary models may change over time</p></li>
+</ul>
+<p><strong>When to use this approach:</strong></p>
+<ul class="simple">
+<li><p>✓ Exploring design space of interventions</p></li>
+<li><p>✓ Testing theoretical mechanisms</p></li>
+<li><p>✓ Generating hypotheses for human studies</p></li>
+<li><p>✗ As sole evidence for claims about humans</p></li>
+<li><p>✗ Without validation against real data</p></li>
+</ul>
+<p><strong>Best practices:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Ground in data</strong>: Use survey data for personas (ANES, etc.)</p></li>
+<li><p><strong>Validate outcomes</strong>: Compare to real social media metrics</p></li>
+<li><p><strong>Document everything</strong>: Model versions, prompts, parameters</p></li>
+<li><p><strong>Run sensitivity analyses</strong>: Test robustness to parameters</p></li>
+<li><p><strong>Complement with human studies</strong>: Simulations guide, not replace</p></li>
+</ol>
+<p><strong>Future directions:</strong></p>
+<ul class="simple">
+<li><p>Longer timeframes (multi-day simulations)</p></li>
+<li><p>Larger agent populations (100-1000+)</p></li>
+<li><p>Richer social networks (weighted, dynamic)</p></li>
+<li><p>Memory and learning (agents change over time)</p></li>
+<li><p>Multi-modal content (images, memes)</p></li>
+<li><p>Platform combinations (multiple algorithms)</p></li>
+<li><p>Human-in-the-loop validation</p></li>
+</ul>
+<p><strong>Related applications:</strong></p>
+<ul class="simple">
+<li><p>Testing content moderation policies</p></li>
+<li><p>Studying misinformation spread</p></li>
+<li><p>Designing recommendation algorithms</p></li>
+<li><p>Evaluating polarization interventions</p></li>
+<li><p>Simulating online communities</p></li>
+<li><p>Prototyping new social platforms</p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>Next steps:</strong></p>
+<ul class="simple">
+<li><p>Try running the simulation with different parameters</p></li>
+<li><p>Compare results across all three platforms</p></li>
+<li><p>Extend with your own algorithms, personas, or simulation scenarios</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="week08_interactive_experiments.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">LLMs for Synthetic Data II - Behavioral Tests</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-why-simulate-social-media">Introduction: Why Simulate Social Media?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-creating-realistic-personas">Part 1: Creating Realistic Personas</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-persona-to-prompt-format">Convert persona to prompt format</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-news-headlines-and-content">Part 2: News Headlines and Content</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-agent-actions-posting-liking-commenting">Part 3: Agent Actions - Posting, Liking, Commenting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#test-agent-behavior">Test agent behavior</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-platform-algorithms">Part 4: Platform Algorithms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-1-echo-chamber-following-engagement">Platform 1: Echo Chamber (Following + Engagement)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-2-global-feed-all-users-engagement">Platform 2: Global Feed (All Users + Engagement)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-3-bridging-algorithm-cross-partisan-likes">Platform 3: Bridging Algorithm (Cross-Partisan Likes)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-running-the-simulation">Part 5: Running the Simulation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-simulation-simplified-version">Run simulation (simplified version)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-6-measuring-outcomes">Part 6: Measuring Outcomes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#e-i-index-external-internal-index">E-I Index (External-Internal Index)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-results-with-mock-data">Visualize results (with mock data)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-source-alternatives">Open-Source Alternatives</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-ollama">Using Ollama</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-hugging-face">Using Hugging Face</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Christopher Barrie
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
