@@ -1,0 +1,4 @@
+- source: week10.qmd
+  quarto-pub:
+    - id: 855a3a65-74c6-44da-baf4-cbd2cc64c113
+      url: https://cjbarrie.quarto.pub/week10genai

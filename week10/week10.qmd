@@ -1,0 +1,571 @@
+---
+title: "Week 10: Gen AI for Sociology"
+format:
+  revealjs:
+    toc: false
+    slide-number: true
+    incremental: true
+    transition: fade
+    code-line-numbers: true
+---
+
+## This week
+
+**LLMs for Simulation II: Simulating Experimental Outcomes**
+
+- Using LLMs to predict and simulate experimental results
+- Foundation models of human cognition
+
+---
+
+## What we'll cover & why it matters
+
+- **Predicting experiments**: Using LLMs to forecast treatment effects before running studies
+- **Foundation models**: Training models on massive behavioral data corpora
+
+---
+
+## Lecture aims
+
+By the end of this session, you will:
+
+::: {.incremental}
+1. Understand how LLMs can **predict experimental outcomes** before data collection
+2. Learn about **Centaur**: a foundation model trained on 160+ behavioral experiments
+:::
+
+---
+
+## Why it matters
+
+Traditional experimental research is:
+
+- **Expensive**: Running large-scale experiments costs $10,000s-$100,000s
+- **Slow**: Months from design to results
+- **Risky**: No guarantee of finding effects after investment
+- **Limited**: Can't easily test 100s of treatment variants
+
+---
+
+## Why it matters
+
+LLMs offer new possibilities:
+
+::: {.incremental}
+- **Rapid forecasting** of likely treatment effects
+- **Massive-scale simulation** at near-zero marginal cost
+- **Pre-testing** designs before expensive fieldwork
+- **But**: Serious questions about **validity** and **generalization** + **forking paths**
+:::
+
+---
+
+## Two approaches to experimental simulation
+
+::: {.incremental}
+1. **Predicting Results**: Use general LLM to forecast effects
+2. **Centaur**: Fine-tune on massive behavioral corpus
+:::
+
+---
+
+## Reading 1 — Predicting Results of Social Science Experiments (2024)
+
+**Key contribution**: Using a **general-purpose LLM** (no fine-tuning) to forecast treatment effects in real survey experiments.
+
+**Research question**: Can GPT-4 predict the results of experiments?
+
+---
+
+## Predicting Results: Study design
+
+**Corpus of real experiments**:
+
+::: {.incremental}
+- **70 preregistered experiments**
+- **476 treatment effects** to predict
+- Experiments from: political science, psychology, behavioral economics
+- **Plus**: Megastudies with 100s of treatment variants
+:::
+
+---
+
+##
+
+![Predicting experimental results workflow. From: Hewitt, Ashokkumar et al. (2024)](images/hewitt_design.png){fig-align="center"}
+
+---
+
+## Predicting Results: Method
+
+**Prompt-based simulation**:
+
+::: {.incremental}
+1. Feed GPT-4 the **study context**: research question, setting
+2. Provide **treatment descriptions**: what participants see in each condition
+3. Include **outcome measures**: survey items and scales
+4. Give **demographic profiles**: representative sample characteristics
+5. Generate **simulated responses** for treatment and control
+6. Compute **LLM-predicted effect size** by contrasting conditions
+:::
+
+---
+
+## Predicting Results: Example prompt structure
+
+```python
+prompt = f"""
+You are a {demographic_profile}.
+
+Study context: {study_description}
+
+You should read: {treatment_text}
+
+Please answer the following questions:
+{outcome_items}
+
+"""
+```
+
+---
+
+## Predicting Results: Full code example
+
+```python
+from openai import OpenAI
+import numpy as np
+
+client = OpenAI()
+
+# Define the experiment
+study_context = """
+We're studying political attitudes. You'll read a brief message
+about immigration policy and then answer questions about your views.
+"""
+
+treatment = """
+A recent report shows that immigrants contribute $1.3 trillion
+annually to the U.S. economy through taxes and entrepreneurship.
+Studies find that immigration has minimal impact on native workers'
+wages while filling critical labor shortages.
+"""
+
+control = """
+[No message shown - participants proceed directly to questions]
+"""
+
+outcome_item = """
+On a scale from 1 (Strongly Oppose) to 7 (Strongly Support),
+how much do you support increasing legal immigration to the U.S.?
+
+Respond with only a number from 1 to 7.
+"""
+```
+
+---
+
+## Predicting Results: Full code example (cont.)
+
+```python
+def simulate_response(condition_text, demographic, n_sims=50):
+    """Simulate responses for one experimental condition"""
+    responses = []
+
+    for _ in range(n_sims):
+        prompt = f"""You are a {demographic}.
+
+{study_context}
+
+{condition_text}
+
+{outcome_item}"""
+
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=1.0  # Important: use temperature > 0 for variation
+        )
+
+        # Extract numeric response
+        try:
+            score = int(response.choices[0].message.content.strip())
+            if 1 <= score <= 7:
+                responses.append(score)
+        except:
+            pass  # Skip invalid responses
+
+    return responses
+```
+
+---
+
+## Predicting Results: Full code example (cont.)
+
+```python
+# Simulate both conditions for one demographic group
+demographic = "a 45-year-old white male from suburban Ohio with a college degree"
+
+print("Simulating treatment condition...")
+treatment_responses = simulate_response(treatment, demographic, n_sims=50)
+
+print("Simulating control condition...")
+control_responses = simulate_response(control, demographic, n_sims=50)
+
+# Compute predicted treatment effect
+treatment_mean = np.mean(treatment_responses)
+control_mean = np.mean(control_responses)
+predicted_effect = treatment_mean - control_mean
+
+print(f"\nPredicted Treatment Effect:")
+print(f"Treatment mean: {treatment_mean:.2f}")
+print(f"Control mean: {control_mean:.2f}")
+print(f"Effect size: {predicted_effect:.2f} points")
+print(f"Effect in SD units: {predicted_effect / np.std(control_responses):.2f}")
+
+```
+
+---
+
+## Predicting Results: What this code does
+
+::: {.incremental}
+- **Simulates N participants** per condition (e.g., 50-100)
+- **Extracts numeric responses** from LLM outputs
+- **Computes mean difference** between treatment and control
+- Can test **multiple demographic groups** by changing the profile
+- **Predicted effect** is then correlated with actual experimental results
+:::
+
+---
+
+## Predicting Results: Key results
+
+::: {.incremental}
+- **Correlation between predicted and observed effects**: r ≈ 0.5-0.7
+- Predictions significantly **better than chance**
+- Works across **diverse experimental paradigms**
+- **Subpopulation predictions**: Can forecast effects for demographic groups
+- **Megastudy validation**: Tested on 100s of treatment variants
+:::
+
+---
+
+##
+
+![Predicted vs. observed effect sizes. From: Hewitt, Ashokkumar et al. (2024)](images/hewitt_results.png){fig-align="center"}
+
+---
+
+## Predicting Results: When does it fail?
+
+**Prediction failures**:
+
+::: {.incremental}
+- Heterogeneous treatment effects
+  - Interpretation?
+:::
+
+---
+
+## Predicting Results: Practical applications
+
+**How researchers might use this**:
+
+::: {.incremental}
+1. **Pre-test pilot designs**: Eliminate obviously bad treatments (?)
+2. **Power analysis**: Estimate required sample sizes (?)
+3. **Resource allocation**: Prioritize promising experiments (?)
+4. **Theory testing**: Quickly explore parameter space (?)
+:::
+
+---
+
+## Predicting Results: Limitations
+
+::: {.incremental}
+- **No fine-tuning**: Relies on base model's "knowledge"
+- **Training data bias**: Overrepresents WEIRD populations
+- **Correlation ≠ calibration**: May be systematically off
+- **Publication bias**: Trained on published (positive) results
+- **Unknown unknowns**: Can't predict truly novel findings
+:::
+
+---
+
+## Reading 2 — Centaur: Foundation Model of Human Cognition (Nature 2025)
+
+**Key contribution**: First foundation model that can predict and simulate human behavior across diverse experimental paradigms.
+
+**Research question**: Can a single model generalize across 160+ different psychological experiments?
+
+---
+
+## Centaur: The Psych-101 Corpus
+
+**Massive behavioral data collection**:
+
+::: {.incremental}
+- **160 experiments** spanning cognitive psychology
+- **60,000+ participants**
+- **10 million+ trial-level choices**
+- Each experiment **transcribed to natural language**
+- Covers: decision-making, memory, learning, reasoning, perception
+:::
+
+---
+
+##
+
+![Centaur architecture and training. From: Binz & Schulz et al. (2025)](images/centaur_design.png){fig-align="center"}
+
+---
+
+## Centaur: Approach
+
+**Fine-tuning strategy**:
+
+::: {.incremental}
+1. Start with state-of-the-art base LLM
+2. Fine-tune on **trial-by-trial choices** from human participants
+3. Each trial includes: task description, context, choice options
+4. Model learns to **predict next choice** given experimental context
+5. Generate **open-loop simulations** by iterating predictions
+:::
+
+---
+
+## Centaur: Fine-tuning procedure
+
+**QLoRA (Quantized Low-Rank Adaptation)**:
+
+::: {.incremental}
+- **Efficient fine-tuning** method that dramatically reduces memory requirements
+- Uses **low-rank adapters** instead of updating all model weights
+- Allows fine-tuning large models on consumer GPUs
+- **Key insight**: Most fine-tuning information can be captured in low-dimensional updates
+- Centaur uses QLoRA to fine-tune on the Psych-101 corpus
+:::
+
+---
+
+## Centaur: The exact data format
+
+**Each training example = one participant's full session**:
+
+```text
+<INSTRUCTIONS / COVER STORY>
+In this task, you have to repeatedly choose between two slot
+machines labelled B and C. When you select one of the machines,
+you will win or lose points. Your goal is to choose the slot
+machines that will give you the most points.
+```
+
+---
+
+## Centaur: The exact data format
+
+**Trial-by-trial history for one participant**:
+
+```text
+<TRIAL-BY-TRIAL HISTORY>
+You press <<C>> and get –8 points.
+You press <<B>> and get 0 points.
+You press <<B>> and get 1 points.
+You press <<C>> and get 3 points.
+...
+[continues for full session]
+```
+
+---
+
+## Centaur: The exact data format
+
+**Question prompting next response**:
+
+```text
+<QUESTION>
+Which machine do you press next?
+Answer with <<B>> or <<C>> only.
+```
+
+**Training target**: The human's actual next response (e.g., `<<B>>`)
+
+---
+
+## Centaur: Loss masking
+
+**Critical detail**: Loss applied **only to human response tokens**
+
+::: {.incremental}
+- All instructions and trial history tokens: **masked** (no gradient)
+- Only the final response tokens (e.g., `<<B>>`): **supervised**
+- This focuses learning on **predicting human behavior**, not copying instructions
+- Each prompt includes **entire session** (up to ~32k token limit)
+- Prompts manually **transcribed to natural language** from original experiments
+:::
+
+---
+
+## Centaur: Key results
+
+::: {.incremental}
+- **Outperforms domain-specific cognitive models** on held-out tasks
+- **Generalizes to new experiments** not in training corpus
+- **Transfers across modifications**: new cover stories, structural changes
+- **Cross-domain generalization**: predicts behavior in completely new domains
+- Internal representations become **more aligned with human neural activity**
+:::
+
+---
+
+##
+
+![Centaur generalization performance. From: Binz & Schulz et al. (2025)](images/centaur_results.png){fig-align="center"}
+
+---
+
+##
+
+![Centaur generalization performance. From: Binz & Schulz et al. (2025)](images/centaur_results2.png){fig-align="center"}
+
+---
+
+## Centaur: Try it yourself!
+
+**Interactive demo available**:
+
+[https://huggingface.co/spaces/marcelbinz/Centaur](https://huggingface.co/spaces/marcelbinz/Centaur)
+
+::: {.incremental}
+- Play classic cognitive psychology experiments
+- See how your choices compare to Centaur's predictions
+- Explore different experimental paradigms
+- **Hands-on experience** with foundation model of cognition
+:::
+
+---
+
+## Centaur: Code walkthrough
+
+::: {.incremental}
+- **Smaller, tractable version** of Centaur you can actually run
+- Demonstrates the **Asch conformity experiment** (group pressure)
+:::
+
+---
+
+## Centaur: Implications
+
+**What this means**:
+
+::: {.incremental}
+- **Unified model** vs. separate models per task
+- **Data-driven** rather than theory-driven
+- Can simulate **individual differences** (personality, cognitive style)
+- Potential to **predict new experimental outcomes** without collecting data
+:::
+
+---
+
+## Centaur: Limitations
+
+::: {.incremental}
+- **Black box**: Hard to extract psychological mechanisms. Theory absent?
+- **Training cost**: Expensive to fine-tune large models
+- **Coverage**: Limited to tasks representable in natural language
+- **Individual variation**: How well does it capture heterogeneity?
+:::
+
+---
+
+
+##
+
+![Centaur criticisms. From: Bowers et al. (2025)](images/centaur_bowers.png){fig-align="center"}
+
+---
+
+
+
+
+
+
+
+
+
+## Cross-cutting themes
+
+**Validation challenges**:
+
+::: {.incremental}
+1. **External validity**: When do simulations match reality?
+2. **Calibration**: Are magnitudes accurate or just directions?
+3. **Generalization**: Do findings transfer to new contexts?
+4. **Mechanisms**: What psychological processes are captured?
+:::
+
+---
+
+## Cross-cutting themes
+
+**Practical utility**:
+
+::: {.incremental}
+1. **Exploration**: Rapidly test many scenarios/parameters
+2. **Pre-testing**: Eliminate bad designs before data collection
+3. **Theory building**: Generate and test hypotheses
+4. **Education**: Demonstrate concepts without human subjects
+:::
+
+---
+
+## Cross-cutting themes
+
+**Ethical considerations**:
+
+::: {.incremental}
+1. **Replacement vs. augmentation**: Should we trust simulations over humans?
+2. **Bias amplification**: Do simulations reinforce existing stereotypes?
+3. **Responsibility**: Who's accountable for automated findings?
+4. **Transparency**: How to document and share simulation code?
+:::
+
+---
+
+## Future directions
+
+::: {.incremental}
+- **Hybrid approaches**: Combine fine-tuning + SCMs + multi-agent
+- **Active learning**: Simulations guide data collection priorities
+- **Counterfactual reasoning**: Test scenarios impossible with humans
+- **Cross-cultural validation**: Expand beyond WEIRD populations
+- **Longitudinal simulations**: Model behavior change over time
+:::
+
+---
+
+## Open questions
+
+::: {.incremental}
+1. **Validity boundaries**: When can we trust simulations?
+2. **Sample size**: How many LLM runs equivalent to one human?
+3. **Individual differences**: Can we simulate personality variation?
+4. **Social dynamics**: Do agent interactions capture emergence?
+5. **Generative fidelity**: Can we discover truly novel phenomena?
+:::
+
+---
+
+## Critical perspective
+
+**Risks of over-reliance on simulation**:
+
+::: {.incremental}
+- **Substitution**: Replacing human subjects research entirely
+- **Confirmation bias**: Finding only what LLM "knows"
+- **Training data bias**: WEIRD, published results only
+- **Mechanism opacity**: Black box = hard to learn *why*
+- **Credibility crisis**: Publication of unvalidated simulations
+:::
+
+---

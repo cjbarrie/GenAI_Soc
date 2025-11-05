@@ -21,3 +21,5 @@ Slides are still linked below.
 - Week 6 slides: [https://cjbarrie.quarto.pub/week6genai](https://cjbarrie.quarto.pub/week6genai)
 - Week 7 slides: [https://cjbarrie.quarto.pub/week7genai](https://cjbarrie.quarto.pub/week7genai)
 - Week 8 slides: [https://cjbarrie.quarto.pub/week8genai](https://cjbarrie.quarto.pub/week8genai)
+- Week 9 slides: [https://cjbarrie.quarto.pub/nyudatasciencefrontiers](https://cjbarrie.quarto.pub/nyudatasciencefrontiers)
+- Week 10 slides: [https://cjbarrie.quarto.pub/week10genai](https://cjbarrie.quarto.pub/week10genai)

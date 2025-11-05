@@ -11,4 +11,8 @@ chapters:
   - file: week07_silicon_sampling
     title: "LLMs for Synthetic Data I: Simulating Survey Respondents"
   - file: week08_interactive_experiments
-    title: "LLMs for Synthetic Data II: Interactive Experiments and Persuasion"
+    title: "LLMs for Synthetic Data II - Behavioral Tests"
+  - file: week09_simulation_agents
+    title: "LLMs for Simulation I: Generative Agents"
+  - file: week10_simulation_experiments
+    title: "LLMs for Simulation II: Experiments"
