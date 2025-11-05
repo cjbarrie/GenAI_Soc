@@ -1,0 +1,962 @@
+---
+title: "Probing Survey Response Networks in Large Language Models"
+author: "Christopher Barrie and Roberto Cerina"
+date: "2025-10-15"
+format:
+  revealjs:
+    incremental: false
+    slide-number: true
+    chalkboard: true
+    preview-links: auto
+    logo: ""
+    transition: slide
+    background-transition: fade
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## The Central Question {.center .smaller}
+
+<br>
+
+### Can LLMs simulate human political opinions?
+
+<br>
+
+::: incremental
+-   LLMs are increasingly used to **model public opinion**
+-   Companies use them to **test messaging**
+-   Researchers use them to **simulate populations**
+-   Policymakers consult them about **voter attitudes**
+:::
+
+<br>
+
+:::: fragment
+::: callout-important
+## But do they actually think like humans?
+:::
+::::
+
+------------------------------------------------------------------------
+
+## Some background {.smaller}
+
+::: incremental
+-   Initially interested in reasoning models
+-   Was talking about cognition but everyone hated me for it
+-   Noticed weird patterns in reasoning traces
+-   Reminded me of network conceptions of political belief
+-   The rest is history (/the next 30 mins.)
+:::
+
+------------------------------------------------------------------------
+
+## What am I talking about? {.smaller}
+
+From anthropic_claude-opus-4.1:
+
+```         
+Let me analyze this persona:
+- Conservative Democrat (moderate/conservative leaning)
+- Describes politics as conservative
+- 65+ year old white woman
+- Catholic, attends church weekly
+- High school education
+- Midwest, suburban
+- Middle income ($70-80k household)
+- Married
+
+This persona represents someone who is a Democrat but leans conservative, which is somewhat unusual but not uncommon among older Democrats. Being conservative, Catholic, and from the Midwest, she would likely lean toward supporting reduced immigration, though perhaps not as strongly as a Republican would. Her conservative values and religious background would likely make her more supportive of immigration restrictions, but being a Democrat might moderate this somewhat.
+
+Given these factors, I'd expect her to be somewhat supportive (4) rather than strongly supportive (5) of reducing immigration.
+```
+
+------------------------------------------------------------------------
+
+## What am I talking about? {.smaller}
+
+From mistralai_magistral-medium-2506_thinking:
+
+```         
+Okay, I need to respond to a survey question about my attitude towards same-sex marriage. I'm supposed to give my personal attitude on a 1-5 Likert scale, where 1 means strongly oppose and 5 means strongly support. I also need to indicate my polarity (for, against, or neutral) and provide a brief rationale.
+
+First, let's recall my persona details:
+- I'm a conservative Republican.
+- I describe my politics as very conservative.
+- I'm Catholic, although I only attend church a few times a year.
+- I'm a 50-64 year old man, married, living in a metro area in the Mountain division of the West region.
+- I have a college degree and a household income of $100,000 or more.
+
+Given my conservative political views and Catholic background, I might lean towards opposing same-sex marriage. However, I'm not extremely religious since I only attend church a few times a year. Also, living in a metro area might expose me to more diverse viewpoints.
+
+But, considering my strong conservative stance, it's likely that I would oppose same-sex marriage. I might not strongly oppose it, but I would probably lean towards oppose.
+
+On the Likert scale:
+1. Strongly oppose
+2. Oppose
+3. Neutral/mixed
+4. Support
+5. Strongly support
+
+Given my conservative views, I think I would fall somewhere between 1 and 2. Since I'm not extremely religious, I might not strongly oppose it, so perhaps a 2.
+
+For polarity, since I'm leaning towards oppose, it would be "against".
+
+For the rationale, it could be something along the lines of traditional values or religious beliefs, even if I'm not very active in my faith.
+
+So, putting it all together:
+- Likert: 2 (oppose)
+- Polarity: against
+- Rationale: "I believe in traditional marriage values."
+
+But, I need to make sure this aligns with my persona. As a conservative Republican, I might have more traditional views on marriage. However, since I'm not extremely religious, I might not strongly oppose it. Maybe I'm neutral or mixed.
+
+Wait, I'm very conservative, so perhaps I do strongly oppose it. But I'm not sure. Maybe I should think about it differently.
+
+Let me consider that as a conservative Republican, I might believe in traditional family values, which could lead me to oppose same-sex marriage. But since I'm not extremely religious, I might not feel as strongly about it.
+
+Perhaps a 2 is appropriate, indicating opposition but not strong opposition.
+
+But, considering that I'm very conservative, maybe I should go with 1, strongly oppose.
+
+I think, given my strong conservative stance, I would strongly oppose same-sex marriage. So, Likert: 1.
+
+Polarity: against.
+
+Rationale: "I believe in traditional marriage values based on my conservative beliefs."
+
+But, I'm not sure if my conservative beliefs necessarily mean I strongly oppose same-sex marriage. Maybe I should think about it more.
+
+I recall that some conservatives might support same-sex marriage, but given that I'm very conservative, it's more likely that I oppose it.
+
+I think I'll stick with:
+
+Likert: 2 (oppose)
+Polarity: against
+Rationale: "I believe in traditional marriage values."
+
+But, to be more accurate, since I'm very conservative, perhaps I should choose 1 (strongly oppose).
+
+I think I'll go with:
+
+Likert: 1
+Polarity: against
+Rationale: "As a very conservative Republican, I believe in traditional marriage values."
+
+But, I'm not sure if my political
+```
+
+------------------------------------------------------------------------
+
+## What I expected to see here {.smaller}
+
+:::: fragment
+::: {.callout-note icon="false"}
+
+- `partyid` or `polviews` just dominates the "decision-making" of the model.
+:::
+::::
+
+## How do we study this better? {.smaller}
+
+<br>
+
+Think of political beliefs as a **social network**:
+
+<br>
+
+::: fragment
+**Nodes** = attitudes or identities
+:::
+
+::: fragment
+**Edges** = correlations (who believes what together)
+:::
+
+<br>
+
+:::: fragment
+::: {.callout-note icon="false"}
+## Example
+
+If people who support gun control also support abortion rights, there's
+an **edge** between those nodes.
+
+If Democrats and liberals hold similar views, `partyid` connects to
+`polviews`.
+:::
+::::
+
+------------------------------------------------------------------------
+
+## Why Use Networks? {.center .smaller}
+
+<br>
+
+Networks reveal **structure** beyond simple correlations, e.g.:
+
+<br>
+
+::: incremental
+-   Which attitudes **cluster together** into domains?
+-   Which beliefs act as **bridges** connecting different domains?
+-   Do **identities** (party, demographics) organize attitudes?
+-   How **centralized** vs. **distributed** is the structure?
+:::
+
+<br>
+
+:::: fragment
+::: callout-important
+Real humans don't just have correlated beliefs — they **organize beliefs
+around identities**.
+
+**Do LLMs capture this structure?**
+:::
+::::
+
+------------------------------------------------------------------------
+
+## 
+
+![Boutyline and Vaisey 2017](images/bouty.png)
+
+---
+
+## 
+
+![Baldassarri and Goldberg 2014](images/baldas.png)
+
+---
+
+## 
+
+![Conover and Feldman 1984](images/conover.png)
+
+---
+
+## 
+
+![Converse 1964](images/converse.png)
+
+---
+
+## Why This Matters for Synthetic Data {.center .smaller}
+
+<br>
+
+::: {.callout-important icon="false"}
+## The Current Paradigm
+
+A lot of synthetic data generation uses **prompt-based personas**:
+
+*"You are \[demographics + party ID + ideology\]. How do you feel about
+\[issue\]?"*
+:::
+
+------------------------------------------------------------------------
+
+## 
+
+![Argyle et al. 2024](images/argyle.png)
+
+---
+
+## 
+
+![Kaiser et al. 2025](images/kaiser.png)
+
+---
+
+## 
+
+![Anthis et al. 2025](images/anthis.png)
+
+---
+
+## 
+
+![Park et al. 2023](images/park.png)
+
+---
+
+## 
+
+![Ge et al. 2025](images/ge.png)
+
+---
+
+## 
+
+![Ashery et al. 2025](images/ashery.png)
+---
+
+## 
+
+![Barrie and Törnberg. 2025](images/barrie.png)
+
+---
+
+## Why This Matters for Synthetic Data {.smaller}
+
+<br>
+
+::: incremental
+**Our findings show:**
+
+1.  **Prompts alone can't instill social structure**—LLMs don't
+    internalize identity as a organizing principle
+
+2.  **Hyperconstraint without mediation**—All attitudes correlate but
+    not through identity pathways
+:::
+
+<br>
+
+------------------------------------------------------------------------
+
+## How do we show this? {.smaller}
+
+<br>
+
+::: incremental
+1.  **Take real survey data**: General Social Survey (GSS) 2024: 600
+    diverse Americans answering 52 political questions
+
+2.  **Create "persona" descriptions**: *"You are a 45-year-old white
+    female Democrat..."*
+
+3.  **Query 17 different LLMs**: Each model answers all 52 questions as
+    each of 600 personas
+
+4.  **Compare network structures**: Do LLM simulations match real human
+    patterns?
+:::
+
+------------------------------------------------------------------------
+
+## Building a Network: Step by Step {.smaller}
+
+### 1. Measure Correlations
+
+For every pair of variables, calculate correlation
+
+*`gunlaw` ↔ `abhlth`: r = 0.65*
+
+*`partyid` ↔ `affrmact`: r = 0.58*
+
+------------------------------------------------------------------------
+
+## Building a Network: Step by Step {.smaller}
+
+### 2. Create Edges
+
+Keep only strong correlations (\|r\| ≥ 0.20)
+
+Filters out weak/random connections
+
+------------------------------------------------------------------------
+
+## Building a Network: Step by Step {.smaller}
+
+### 3. Analyze Structure
+
+- **Constraint**
+- **Centralization**
+- **Mediation**
+
+------------------------------------------------------------------------
+
+## The Data: 52 Attitude Questions {.smaller}
+
+<br>
+
+### 30 "Culture War" Items:
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; line-height: 1.35;">
+
+<div>
+
+- **Abortion** (4)  
+- **Guns / Crime** (2)  
+- **Sexual Morality** (4)  
+- **Drugs** (1)
+</div>
+
+<div>
+- **Gender Roles** (3)  
+- **Economic** (2)  
+- **Immigration** (3)  
+- **Free Speech** (6)  
+- **Religion** (2)  
+- **Institutional Confidence** (3)
+</div>
+
+</div>
+
+------------------------------------------------------------------------
+
+## The Data: 52 Attitude Questions {.smaller}
+
+### 22 "Non-Culture War" Items
+
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; line-height: 1.35;">
+
+<div>
+
+- **Public Spending** (8)  
+- **Institutional Trust** (6)  
+- **Social Trust** (3)
+</div>
+
+<div>
+- **Economic Outlook** (3)  
+- **Work** (2)
+</div>
+
+</div>
+
+------------------------------------------------------------------------
+
+## The Data: Persona Prompts {.smaller}
+
+### 10 "Persona" Variables:
+
+`party ID`, `ideology`, `age`, `sex`, `race`, `education`, `income`, `marital status`,
+`religion`, `attendance`
+
+------------------------------------------------------------------------
+
+## 
+
+> I am 60 years old. I am female. I am Black or African American. I am
+> married. I had 2 years of college education. My family income is
+> \$17,500 to \$19,999. I am a not very strong Democrat. I am moderate
+> (middle of the road). I attend religious services every week.
+
+------------------------------------------------------------------------
+
+## The Models: 17 Leading LLMs {.center .smaller}
+
+<br>
+
+**OpenAI** — GPT-4o • GPT-4o-mini • GPT-OSS-120b
+
+**Anthropic** — Claude Sonnet 4.5 • Claude 3.7 Sonnet
+
+**Google** — Gemini 2.5 Flash • Gemma 3 12B
+
+**Meta** — Llama 3.3 70B • Llama 3.1 8B • Llama 4 Maverick
+
+**Mistral AI** — Mistral Medium 3.1 • Mistral Small 3.2 24B
+
+**Others** — DeepSeek Chat v3.1 • Qwen 2.5 72B • GLM 4.6 • Grok 4 Fast •
+AFM 4.5B
+
+<br>
+
+:::: fragment
+::: {.callout-tip icon="false"}
+## Total Scale
+
+600 personas × 52 questions × 17 models = **530,400 annotations**
+:::
+::::
+
+---
+
+##
+
+```
+prompt = f"""It is now {year}. You are answering survey questions as the following person, who is living in the United States:
+
+{persona}
+
+Question: {question}
+
+Options:
+{options_text}
+
+Respond with ONLY the number of your answer (e.g., "1" or "2"). Do not explain your reasoning."""
+```
+------------------------------------------------------------------------
+
+# Analysis 1: How Tightly Bundled Are Attitudes?
+
+------------------------------------------------------------------------
+
+## What Is "Constraint"? {.smaller}
+
+::: incremental
+-   **High constraint** = If I know your view on abortion, I can predict
+    your views on guns, immigration, marijuana, etc.
+    -   Attitudes form a tight "package deal"
+    -   Politics is one-dimensional (left vs. right)
+-   **Low constraint** = Your attitudes are more independent
+    -   Knowing your abortion view doesn't tell me much about your gun
+        view
+    -   Politics is multi-dimensional (many "issue publics")
+-   **Measurement**: % of variance explained by first principal
+    component (PC1)
+    -   PC1 = the single dimension that captures the most variation
+    -   Higher PC1% = more constraint
+:::
+
+:::: fragment
+::: callout
+## Interpretation
+
+High constraint = ideological thinking. Low constraint = independent
+thinking on each issue.
+:::
+::::
+
+------------------------------------------------------------------------
+
+## Results: LLMs Show 2-3× Higher Constraint {.smaller}
+
+| Model           | PC1 Variance | vs. Human           |
+|-----------------|--------------|---------------------|
+| **Human GSS**   | **14.3%**    | **1.0× (baseline)** |
+| Llama 3.1 8B    | 16.1%        | 1.1×                |
+| DeepSeek v3.1   | 29.2%        | 2.0×                |
+| Gemini 2.5      | 35.7%        | 2.5×                |
+| GPT-4o          | 39.5%        | 2.8×                |
+| **Grok 4 Fast** | **42.4%**    | **3.0×**            |
+
+::: incremental
+-   **16 of 17 LLMs** exceed human constraint
+-   **Median LLM**: 2.7× more constrained than humans
+-   LLMs treat politics as a **one-dimensional spectrum** much more
+    rigidly than real Americans
+:::
+
+------------------------------------------------------------------------
+
+## 
+
+![](scripts_comprehensive/network_analysis_comprehensive/year_2024/_plots/pca_constraint_networks_2024.png)
+
+------------------------------------------------------------------------
+
+## 
+
+![](scripts_comprehensive/network_analysis_comprehensive/year_2024/_plots/pca_human_vs_avgllm_2024_thr0.20.png)
+
+------------------------------------------------------------------------
+
+## Interpretation: "Hyperconstrained" {.smaller}
+
+### What Real Humans Are Like
+
+-   Moderately constrained (14.3%)
+-   Hold some "cross-cutting" positions
+-   Democrat who's pro-gun
+-   Republican who supports climate action
+
+------------------------------------------------------------------------
+
+## What LLMs Simulate {.smaller}
+
+-   Extremely constrained (37-42%)
+-   "Package deal" ideologues
+-   If liberal on abortion → liberal on ALMOST EVERYTHING
+-   If conservative on guns → conservative on ALMOST EVERYTHING
+
+:::: fragment
+::: callout-warning
+## Implication
+
+LLMs don't capture the complexity and inconsistency of real political
+attitudes. They generate **maximally coherent ideologues**, not
+realistic Americans.
+:::
+::::
+
+------------------------------------------------------------------------
+
+## Analysis 2: Are Some Beliefs More Central Than Others?
+
+------------------------------------------------------------------------
+
+## What Is "Betweenness"? {.smaller}
+
+::: incremental
+**Betweenness centrality**:
+
+-   How often a node lies on **shortest paths** between other nodes.
+-   Intuition: a node’s **bridging power** or **brokerage**.
+-   A route from `abortion` → `environment` may pass through `partyid`.
+-   If **many** shortest routes pass through `partyid`, its betweenness
+    is **high**.
+-   **Shortest path** = the route with the **smallest total edge
+    length**.
+-   **Edge length** = 1 / (abs(correlation) + epsilon): stronger
+    correlation ⇒ **shorter** edge.
+:::
+
+------------------------------------------------------------------------
+
+## What Is "Betweenness"? {.smaller}
+
+::: incremental
+**Network-level view**
+
+-   **Freeman Centralization**: how **unequally** betweenness is
+    distributed across nodes.
+    -   **High** centralization → a few nodes dominate as bridges
+        (hub-and-spoke).
+    -   **Low** centralization → bridging is spread out (flat network).
+:::
+
+------------------------------------------------------------------------
+
+## Why This Matters {.smaller}
+
+### In Real Humans
+
+We expect **political identity** (e.g., `partyid`, `polviews`) to have
+**high betweenness**:
+
+::: incremental
+-   Political views help organize views on **abortion**.
+-   Political views organizes views on e.g., **civic trust**.
+-   So `polviews` often **mediates** the connection between these
+    domains.
+:::
+
+------------------------------------------------------------------------
+
+## In LLMs? {.smaller}
+
+If LLMs **lack** this structure:
+
+::: incremental
+-   **Attitudes connect directly** to attitudes (few identity bridges).
+-   **Identity mediation** is weak or absent.
+-   The network becomes **flat**—low centralization, few standout
+    bridges.
+:::
+
+------------------------------------------------------------------------
+
+## Results: LLMs Show Considerably Lower Centralization {.smaller}
+
+| Model            | Centralization | vs. Human           |
+|------------------|----------------|---------------------|
+| **Human GSS**    | **0.253**      | **1.0× (baseline)** |
+| GPT-4o           | 0.029          | 0.12×               |
+| Llama 4 Maverick | 0.033          | 0.13×               |
+| Most LLMs        | 0.05-0.09      | 0.20-0.36×          |
+| Llama 3.1 8B     | 0.195          | 0.77×               |
+
+::: incremental
+-   **All LLMs** show dramatically flatter structure
+-   Even the best (Llama 3.1) reaches only 77% of human centralization
+-   LLMs create **flattened networks** where all attitudes are equally
+    important
+-   They're missing the **hub-and-spoke** structure of real belief
+    systems
+:::
+
+------------------------------------------------------------------------
+
+## 
+
+![](scripts_comprehensive/network_analysis_comprehensive/year_2024/_plots/betweenness_centrality_networks_2024_thr0.20.png)
+
+------------------------------------------------------------------------
+
+## Interpretation: Humans — Identities as Anchors {.smaller}
+
+**Idea:** Identities (party/ideology) sit near the center and
+**mediate** between attitude domains.
+
+```{mermaid}
+graph LR
+  classDef persona fill:#fef3c7,stroke:#c2410c,stroke-width:1.2px,color:#7c2d12;
+  classDef attitude fill:#e6f0fb,stroke:#1f5aa6,stroke-width:1.0px,color:#113a72;
+
+  subgraph Identity spine
+    P["partyid"]:::persona
+    I["polviews"]:::persona
+  end
+
+  A["abortion"]:::attitude
+  G["guns"]:::attitude
+  M["immigration"]:::attitude
+  E["economy"]:::attitude
+  R["religion"]:::attitude
+
+  P --- A
+  P --- G
+  P --- M
+  P --- E
+  I --- A
+  I --- G
+  I --- R
+
+  %% lighter within-domain ties for context
+  A -. weak .- R
+  G -. weak .- E
+  M -. weak .- E
+```
+
+------------------------------------------------------------------------
+
+## Interpretation: LLMs — Attitudes Without Anchors {.smaller}
+
+**Idea:** Attitudes link **directly to other attitudes**; identity nodes
+don’t dominate routing.
+
+```{mermaid}
+graph LR
+  classDef persona fill:#fef3c7,stroke:#c2410c,stroke-width:1.2px,color:#7c2d12;
+  classDef attitude fill:#e6f0fb,stroke:#1f5aa6,stroke-width:1.0px,color:#113a72;
+
+  P["partyid"]:::persona
+  I["polviews"]:::persona
+
+  A["abortion"]:::attitude
+  G["guns"]:::attitude
+  M["immigration"]:::attitude
+  E["economy"]:::attitude
+  R["religion"]:::attitude
+
+  %% dense attitude-to-attitude mesh
+  A --- G
+  A --- M
+  G --- E
+  M --- E
+  R --- A
+  R --- G
+  R --- M
+
+  %% identities present but peripheral/diluted
+  P -. weak .- A
+  I -. weak .- G
+```
+
+------------------------------------------------------------------------
+
+## Why This Matters {.smaller}
+
+:::: fragment
+::: callout-note
+In real populations, **identities** are the **bridges** that knit issue
+domains together; most LLMs learn the **co-movement** but not the
+**identity-anchored routing**, so their belief maps are
+**over-constrained but under-structured**.
+:::
+::::
+
+------------------------------------------------------------------------
+
+# Analysis 3: Spine Diagnostics
+
+## Do Identities Bridge Attitude Domains?
+
+------------------------------------------------------------------------
+
+## What Is "Spine" Analysis? {.center .smaller}
+
+**The spine = structural backbone of the network**
+
+-   For each node, we measure TWO roles:
+    -   Bridge Score: Composite of: Betweenness centrality; Current-flow
+        betweenness; Participation coefficient; Inter-community path
+        coverage
+        -   **Interpretation:** How much does this node **connect
+            different domains**?
+    -   Hub Score: Composite of: Eigenvector centrality; PageRank;
+        K-core; and Within-module degree
+        -   **Interpretation:** How **central** is this node within its
+            domain?
+
+## Why are we doing this? {.center .smaller}
+
+::: fragment
+**Key Question:** Are the nodes with high bridge + high hub scores
+**identities** (party ID, demographics) or just random **attitudes**?
+:::
+
+------------------------------------------------------------------------
+
+## Routing Analysis {.smaller}
+
+- **X-axis:** Betweenness (path-based bridging) 
+- **Y-axis:** Eigenvector (connections to important nodes)
+
+---
+
+## 
+
+![](scripts_comprehensive/network_analysis_comprehensive/year_2024/_spine/spine_routing_human_vs_llmavg_2024.png){width="90%"}
+
+----
+
+## 
+
+![](scripts_comprehensive/network_analysis_comprehensive/year_2024/_spine/spine_routing_2024.png){width="90%"}
+
+---
+
+## 
+
+::: callout-tip
+## The Key Finding {.smaller}
+
+**In humans:** These elite positions are filled by **identities** (party
+ID, ideology, demographics) **In LLMs:** These positions are filled (if at all) by
+random **attitudes**
+
+This shows LLMs have learned *that* attitudes correlate, but not *how*
+(via identity mediation).
+:::
+
+----
+
+# Synthesis
+
+## The "Hyperconstraint Without Structure" Pattern
+
+---
+
+## Summary Across All Four Analyses {.smaller}
+
+| Metric | Human | Median LLM | Ratio | Interpretation |
+|---------------|---------------|---------------|---------------|---------------|
+| **PC1 Constraint** | 14.3% | 37-39% | 2.7× higher | LLMs show extreme ideological bundling |
+| **Freeman Centralization** | 0.253 | 0.06-0.09 | 0.25× lower | LLMs lack hierarchical hub structure |
+| **Persona Mediation** | 54.5% | 12-18% | 0.30× lower | LLMs bypass identity bridges |
+
+---
+
+
+## The Pattern
+
+::: callout-tip
+LLMs show **higher constraint** (more correlated attitudes) but **lower
+structure** (no identity organization, no modularity, no
+centralization).
+
+They've learned the **correlations** but not the **mechanism** that
+produces them.
+:::
+
+------------------------------------------------------------------------
+
+## What LLMs Have Learned {.smaller}
+
+::: incremental
+1.  **Surface statistics**: "In political text, if someone supports
+    abortion rights, they also support gun control"
+    -   ✅ This correlation is **real**
+2.  **Amplified pattern**: LLMs learn this more strongly than it exists
+    in reality
+    -   ⚠️ Result: 2.7× **hyperconstraint**
+3.  **But missing the structure**: WHY do these correlate?
+    -   ❌ Not because abortion **causes** gun views
+    -   ✅ Because **political identity** shapes both
+    -   ❌ LLMs connect attitudes **directly**
+    -   ✅ Humans connect attitudes **via identities**
+:::
+
+---
+
+## Why this matters {.smaller}
+
+::: incremental
+- LLMs don't simulate realistic attitudinal diversity
+- LLMs learn floating correlations without social grounding
+- Learned correlations ≠ learned mechanisms
+:::
+
+## Future Directions {.smaller}
+
+::: incremental
+- Why is this happening?    
+  - Training data
+  - Data generating process
+  - Model architecture
+- Dig into reasoning traces further
+- Generalizable diagnostic testing
+- Test interventions to instill network structure
+- Your suggestions...
+:::
+
+---
+
+## Thank you! {.center .smaller}
+
+---
+
+# Appendix: Metric Definitions
+
+---
+
+## Constraint (PC1 Variance) {.smaller}
+
+**What it measures:** How much attitudes collapse into a single left-right dimension
+
+**Calculation:**
+
+1. Compute correlation matrix $R$ for all 52 attitude variables + 10 persona variables
+2. Run Principal Component Analysis: decompose $R$ into eigenvalues $\lambda_1, \lambda_2, ..., \lambda_p$
+3. PC1 Constraint = $\frac{\lambda_1}{\sum_{i=1}^{p} \lambda_i}$ × 100%
+
+**Interpretation:** Higher % = more one-dimensional (all variables bundle together)
+
+---
+
+## Centralization (Freeman's Index) {.smaller}
+
+**What it measures:** How unequally betweenness is distributed across nodes
+
+**Calculation:**
+
+1. For each node $i$, compute betweenness: count of shortest paths passing through $i$
+   - Shortest paths use edge weights: $w_{ij} = 1/(|r_{ij}| + \epsilon)$
+2. Find maximum betweenness: $C_{max}$
+3. Centralization = $\frac{\sum_i (C_{max} - C_i)}{\text{max possible}}$
+
+**Interpretation:** High = hub-and-spoke (few central nodes). Low = flat network (no hubs)
+
+---
+
+## Persona Mediation {.smaller}
+
+**What it measures:** % of cross-domain paths that go through identity nodes
+
+**Calculation:**
+
+1. Run community detection (Louvain) to identify attitude domains
+2. For all pairs of nodes in **different** communities:
+   - Find shortest path between them
+3. Count paths that include ≥1 identity variable (party, demographics)
+4. Mediation = $\frac{\#\text{ paths with identity}}{\#\text{ total cross-domain paths}}$
+
+**Interpretation:** High = identities bridge domains. Low = attitudes connect directly
+
+---
+
+## Spine Analysis (Routing Plane) {.smaller}
+
+**What it measures:** Which nodes occupy structurally privileged positions
+
+**Calculation:**
+
+1. Compute betweenness centrality (paths through node)
+2. Compute eigenvector centrality (connections to important nodes)
+3. Plot nodes on 2D plane: betweenness (x) × eigenvector (y)
+4. Define "elite" as top-right quadrant (80th percentile on both)
+5. Count % of elite nodes that are identities vs. attitudes
+
+**Interpretation:** In humans, identities dominate elite positions. In LLMs, random attitudes fill them.
+
+---
+
+
