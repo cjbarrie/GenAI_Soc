@@ -1,1 +1,24 @@
 ../week8/.quarto/quarto-publish-worktree-*
+
+# Jupyter Book build artifacts
+_build/
+.jupyter_cache/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# macOS
+.DS_Store
+../.DS_Store
+../week*/.DS_Store
+
+# IDEs
+.vscode/
+.idea/
